@@ -89,12 +89,13 @@ namespace Volo.Docs.Documents
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x => x.ProjectId == projectId &&
-                                                                                                    x.Name == name &&
-                                                                                                    x.LanguageCode == languageCode &&
-                                                                                                    x.Version == version, GetCancellationToken(cancellationToken));
+            return await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x =>
+                x.ProjectId == projectId &&
+                x.Name == name &&
+                x.LanguageCode == languageCode &&
+                x.Version == version, GetCancellationToken(cancellationToken));
         }
-        
+
         public virtual async Task<Document> FindAsync(Guid projectId, List<string> possibleNames, string languageCode, string version,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
@@ -118,7 +119,6 @@ namespace Volo.Docs.Documents
                 .WhereIf(version != null, x => x.Version == version)
                 .WhereIf(name != null, x => x.Name == name)
                 .WhereIf(projectId.HasValue, x => x.ProjectId == projectId)
-                .As<IMongoQueryable<Document>>()
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -142,26 +142,25 @@ namespace Volo.Docs.Documents
             int skipCount = 0,
             CancellationToken cancellationToken = default)
         {
-
             return await
                 (await ApplyFilterForGetAll(
-                        await GetMongoQueryableAsync(cancellationToken),
-                        projectId: projectId,
-                        name: name,
-                        version: version,
-                        languageCode: languageCode,
-                        fileName: fileName,
-                        format: format,
-                        creationTimeMin: creationTimeMin,
-                        creationTimeMax: creationTimeMax,
-                        lastUpdatedTimeMin: lastUpdatedTimeMin,
-                        lastUpdatedTimeMax: lastUpdatedTimeMax,
-                        lastSignificantUpdateTimeMin: lastSignificantUpdateTimeMin,
-                        lastSignificantUpdateTimeMax: lastSignificantUpdateTimeMax,
-                        lastCachedTimeMin: lastCachedTimeMin, lastCachedTimeMax: lastCachedTimeMax))
-                    .OrderBy(string.IsNullOrWhiteSpace(sorting) ? "name asc" : sorting).As<IMongoQueryable<DocumentWithoutContent>>()
-                    .PageBy<DocumentWithoutContent, IMongoQueryable<DocumentWithoutContent>>(skipCount, maxResultCount)
-                    .ToListAsync(GetCancellationToken(cancellationToken));
+                    await GetMongoQueryableAsync(cancellationToken),
+                    projectId: projectId,
+                    name: name,
+                    version: version,
+                    languageCode: languageCode,
+                    fileName: fileName,
+                    format: format,
+                    creationTimeMin: creationTimeMin,
+                    creationTimeMax: creationTimeMax,
+                    lastUpdatedTimeMin: lastUpdatedTimeMin,
+                    lastUpdatedTimeMax: lastUpdatedTimeMax,
+                    lastSignificantUpdateTimeMin: lastSignificantUpdateTimeMin,
+                    lastSignificantUpdateTimeMax: lastSignificantUpdateTimeMax,
+                    lastCachedTimeMin: lastCachedTimeMin, lastCachedTimeMax: lastCachedTimeMax, cancellationToken: cancellationToken))
+                .OrderBy(string.IsNullOrWhiteSpace(sorting) ? "name asc" : sorting)
+                .PageBy<DocumentWithoutContent, IQueryable<DocumentWithoutContent>>(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<long> GetAllCountAsync(
@@ -184,36 +183,35 @@ namespace Volo.Docs.Documents
             int skipCount = 0,
             CancellationToken cancellationToken = default)
         {
-
-
             return await
                 (await ApplyFilterForGetAll(
-                        await GetMongoQueryableAsync(cancellationToken),
-                        projectId: projectId,
-                        name: name,
-                        version: version,
-                        languageCode: languageCode,
-                        fileName: fileName,
-                        format: format,
-                        creationTimeMin: creationTimeMin,
-                        creationTimeMax: creationTimeMax,
-                        lastUpdatedTimeMin: lastUpdatedTimeMin,
-                        lastUpdatedTimeMax: lastUpdatedTimeMax,
-                        lastSignificantUpdateTimeMin: lastSignificantUpdateTimeMin,
-                        lastSignificantUpdateTimeMax: lastSignificantUpdateTimeMax,
-                        lastCachedTimeMin: lastCachedTimeMin, lastCachedTimeMax: lastCachedTimeMax))
-                    .OrderBy(string.IsNullOrWhiteSpace(sorting) ? "name asc" : sorting).As<IMongoQueryable<Document>>()
-                    .PageBy<Document, IMongoQueryable<Document>>(skipCount, maxResultCount)
-                    .LongCountAsync(GetCancellationToken(cancellationToken));
+                    await GetMongoQueryableAsync(cancellationToken),
+                    projectId: projectId,
+                    name: name,
+                    version: version,
+                    languageCode: languageCode,
+                    fileName: fileName,
+                    format: format,
+                    creationTimeMin: creationTimeMin,
+                    creationTimeMax: creationTimeMax,
+                    lastUpdatedTimeMin: lastUpdatedTimeMin,
+                    lastUpdatedTimeMax: lastUpdatedTimeMax,
+                    lastSignificantUpdateTimeMin: lastSignificantUpdateTimeMin,
+                    lastSignificantUpdateTimeMax: lastSignificantUpdateTimeMax,
+                    lastCachedTimeMin: lastCachedTimeMin, lastCachedTimeMax: lastCachedTimeMax,
+                    cancellationToken: cancellationToken))
+                .OrderBy(string.IsNullOrWhiteSpace(sorting) ? "name asc" : sorting)
+                .PageBy(skipCount, maxResultCount)
+                .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<Document> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.Id == id).SingleAsync(GetCancellationToken(cancellationToken));
         }
-        
-        protected virtual async Task<IMongoQueryable<DocumentWithoutContent>> ApplyFilterForGetAll(
-            IMongoQueryable<Document> query,
+
+        protected virtual async Task<IQueryable<DocumentWithoutContent>> ApplyFilterForGetAll(
+            IQueryable<Document> query,
             Guid? projectId,
             string name,
             string version,
@@ -254,7 +252,7 @@ namespace Volo.Docs.Documents
             {
                 query = query.Where(d => d.FileName != null && d.FileName.Contains(fileName));
             }
-            
+
             if (format != null)
             {
                 query = query.Where(d => d.Format != null && d.Format == format);

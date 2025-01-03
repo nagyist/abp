@@ -192,12 +192,11 @@ public class MongoDbAuthorRepository
     {
         var queryable = await GetMongoQueryableAsync();
         return await queryable
-            .WhereIf<Author, IMongoQueryable<Author>>(
+            .WhereIf<Author, IQueryable<Author>>(
                 !filter.IsNullOrWhiteSpace(),
                 author => author.Name.Contains(filter)
             )
             .OrderBy(sorting)
-            .As<IMongoQueryable<Author>>()
             .Skip(skipCount)
             .Take(maxResultCount)
             .ToListAsync();

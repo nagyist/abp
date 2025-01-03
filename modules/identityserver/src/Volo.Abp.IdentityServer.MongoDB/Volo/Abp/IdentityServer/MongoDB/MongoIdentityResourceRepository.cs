@@ -25,15 +25,14 @@ public class MongoIdentityResourceRepository : MongoDbRepository<IAbpIdentitySer
                      x.Description.Contains(filter) ||
                      x.DisplayName.Contains(filter))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityResource.Name) : sorting)
-            .As<IMongoQueryable<IdentityResource>>()
-            .PageBy<IdentityResource, IMongoQueryable<IdentityResource>>(skipCount, maxResultCount)
+            .PageBy<IdentityResource, IQueryable<IdentityResource>>(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<IdentityResource, IMongoQueryable<IdentityResource>>(!filter.IsNullOrWhiteSpace(),
+            .WhereIf<IdentityResource, IQueryable<IdentityResource>>(!filter.IsNullOrWhiteSpace(),
                 x => x.Name.Contains(filter) ||
                      x.Description.Contains(filter) ||
                      x.DisplayName.Contains(filter))

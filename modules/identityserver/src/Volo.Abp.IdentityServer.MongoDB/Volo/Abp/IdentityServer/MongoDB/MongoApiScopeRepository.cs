@@ -45,15 +45,14 @@ public class MongoApiScopeRepository : MongoDbRepository<IAbpIdentityServerMongo
                      x.Description.Contains(filter) ||
                      x.DisplayName.Contains(filter))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(ApiScope.Name) : sorting)
-            .As<IMongoQueryable<ApiScope>>()
-            .PageBy<ApiScope, IMongoQueryable<ApiScope>>(skipCount, maxResultCount)
+            .PageBy<ApiScope, IQueryable<ApiScope>>(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<ApiScope, IMongoQueryable<ApiScope>>(!filter.IsNullOrWhiteSpace(),
+            .WhereIf<ApiScope, IQueryable<ApiScope>>(!filter.IsNullOrWhiteSpace(),
                 x => x.Name.Contains(filter) ||
                      x.Description.Contains(filter) ||
                      x.DisplayName.Contains(filter))

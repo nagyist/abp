@@ -65,12 +65,12 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         var favoriteUserFilteredEntityIds = await GetFavoriteEntityIdsByUserId(favoriteUserId, cancellationToken);
         
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(tagFilteredEntityIds.Any(), x => tagFilteredEntityIds.Contains(x.Id))
-            .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(favoriteUserFilteredEntityIds.Any(), x => favoriteUserFilteredEntityIds.Contains(x.Id))
-            .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
-            .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(blogId.HasValue, x => x.BlogId == blogId)
-            .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(authorId.HasValue, x => x.AuthorId == authorId)
-            .WhereIf<BlogPost, IMongoQueryable<BlogPost>>(statusFilter.HasValue, x => x.Status == statusFilter)
+            .WhereIf<BlogPost, IQueryable<BlogPost>>(tagFilteredEntityIds.Any(), x => tagFilteredEntityIds.Contains(x.Id))
+            .WhereIf<BlogPost, IQueryable<BlogPost>>(favoriteUserFilteredEntityIds.Any(), x => favoriteUserFilteredEntityIds.Contains(x.Id))
+            .WhereIf<BlogPost, IQueryable<BlogPost>>(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
+            .WhereIf<BlogPost, IQueryable<BlogPost>>(blogId.HasValue, x => x.BlogId == blogId)
+            .WhereIf<BlogPost, IQueryable<BlogPost>>(authorId.HasValue, x => x.AuthorId == authorId)
+            .WhereIf<BlogPost, IQueryable<BlogPost>>(statusFilter.HasValue, x => x.Status == statusFilter)
             .CountAsync(cancellationToken);
     }
 

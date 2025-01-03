@@ -51,8 +51,7 @@ public class MongoIdentitySecurityLogRepository :
         );
 
         return await query.OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(IdentitySecurityLog.CreationTime)} desc" : sorting)
-            .As<IMongoQueryable<IdentitySecurityLog>>()
-            .PageBy<IdentitySecurityLog, IMongoQueryable<IdentitySecurityLog>>(skipCount, maxResultCount)
+            .PageBy<IdentitySecurityLog, IQueryable<IdentitySecurityLog>>(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -83,8 +82,7 @@ public class MongoIdentitySecurityLogRepository :
             cancellationToken
         );
 
-        return await query.As<IMongoQueryable<IdentitySecurityLog>>()
-            .LongCountAsync(GetCancellationToken(cancellationToken));
+        return await query.LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
 

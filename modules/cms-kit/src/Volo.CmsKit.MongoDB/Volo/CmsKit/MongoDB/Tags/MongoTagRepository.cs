@@ -116,8 +116,7 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
     {
         return await (await GetQueryableByFilterAsync(filter, cancellationToken))
             .OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(Tag.CreationTime)}" : sorting)
-            .As<IMongoQueryable<Tag>>()
-            .PageBy<Tag, IMongoQueryable<Tag>>(skipCount, maxResultCount)
+            .PageBy<Tag, IQueryable<Tag>>(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -126,7 +125,7 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
         return await (await GetQueryableByFilterAsync(filter, cancellationToken)).CountAsync(GetCancellationToken(cancellationToken));
     }
 
-    private async Task<IMongoQueryable<Tag>> GetQueryableByFilterAsync(string filter, CancellationToken cancellationToken = default)
+    private async Task<IQueryable<Tag>> GetQueryableByFilterAsync(string filter, CancellationToken cancellationToken = default)
     {
         var mongoQueryable = await GetMongoQueryableAsync(cancellationToken: cancellationToken);
 

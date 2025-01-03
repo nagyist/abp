@@ -28,7 +28,6 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
                 x.Description.Contains(filter))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictScope.CreationTime) + " desc" : sorting)
             .PageBy(skipCount, maxResultCount)
-            .As<IMongoQueryable<OpenIddictScope>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -39,7 +38,6 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
                 x.Name.Contains(filter) ||
                 x.DisplayName.Contains(filter) ||
                 x.Description.Contains(filter))
-            .As<IMongoQueryable<OpenIddictScope>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -57,7 +55,6 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
     {
         return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => names.Contains(x.Name))
-            .As<IMongoQueryable<OpenIddictScope>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -65,7 +62,6 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
     {
         return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.Resources.Contains(resource))
-            .As<IMongoQueryable<OpenIddictScope>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -75,7 +71,6 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
             .OrderBy(x => x.Id)
             .SkipIf<OpenIddictScope, IQueryable<OpenIddictScope>>(offset.HasValue, offset)
             .TakeIf<OpenIddictScope, IQueryable<OpenIddictScope>>(count.HasValue, count)
-            .As<IMongoQueryable<OpenIddictScope>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

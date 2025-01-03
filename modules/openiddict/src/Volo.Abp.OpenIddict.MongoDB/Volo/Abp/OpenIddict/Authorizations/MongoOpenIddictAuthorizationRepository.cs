@@ -34,7 +34,6 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
             .WhereIf(client.HasValue, x => x.ApplicationId == client)
             .WhereIf(!status.IsNullOrWhiteSpace(), x => x.Status == status)
             .WhereIf(!type.IsNullOrWhiteSpace(), x => x.Type == type)
-            .As<IMongoQueryable<OpenIddictAuthorization>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -59,7 +58,7 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
             .OrderBy(authorization => authorization.Id!)
             .SkipIf<OpenIddictAuthorization, IQueryable<OpenIddictAuthorization>>(offset.HasValue, offset)
             .TakeIf<OpenIddictAuthorization, IQueryable<OpenIddictAuthorization>>(count.HasValue, count)
-            .As<IMongoQueryable<OpenIddictAuthorization>>().ToListAsync(GetCancellationToken(cancellationToken));
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<long> PruneAsync(DateTime date, CancellationToken cancellationToken = default)

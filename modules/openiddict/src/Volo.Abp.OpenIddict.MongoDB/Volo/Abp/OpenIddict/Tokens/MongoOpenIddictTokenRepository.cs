@@ -54,7 +54,6 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
             .WhereIf(client.HasValue, x => x.ApplicationId == client)
             .WhereIf(!status.IsNullOrWhiteSpace(), x => x.Status == status)
             .WhereIf(!type.IsNullOrWhiteSpace(), x => x.Type == type)
-            .As<IMongoQueryable<OpenIddictToken>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -62,7 +61,6 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
     {
         return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.ApplicationId == applicationId)
-            .As<IMongoQueryable<OpenIddictToken>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -70,7 +68,6 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
     {
         return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.AuthorizationId == authorizationId)
-            .As<IMongoQueryable<OpenIddictToken>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -88,7 +85,6 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
     {
         return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.Subject == subject)
-            .As<IMongoQueryable<OpenIddictToken>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -98,7 +94,6 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
             .OrderBy(x => x.Id)
             .SkipIf<OpenIddictToken, IQueryable<OpenIddictToken>>(offset.HasValue, offset)
             .TakeIf<OpenIddictToken, IQueryable<OpenIddictToken>>(count.HasValue, count)
-            .As<IMongoQueryable<OpenIddictToken>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 

@@ -50,15 +50,14 @@ public class MongoApiResourceRepository : MongoDbRepository<IAbpIdentityServerMo
                      x.Description.Contains(filter) ||
                      x.DisplayName.Contains(filter))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(ApiResource.Name) : sorting)
-            .As<IMongoQueryable<ApiResource>>()
-            .PageBy<ApiResource, IMongoQueryable<ApiResource>>(skipCount, maxResultCount)
+            .PageBy<ApiResource, IQueryable<ApiResource>>(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<ApiResource, IMongoQueryable<ApiResource>>(!filter.IsNullOrWhiteSpace(),
+            .WhereIf<ApiResource, IQueryable<ApiResource>>(!filter.IsNullOrWhiteSpace(),
             x => x.Name.Contains(filter) ||
                  x.Description.Contains(filter) ||
                  x.DisplayName.Contains(filter))

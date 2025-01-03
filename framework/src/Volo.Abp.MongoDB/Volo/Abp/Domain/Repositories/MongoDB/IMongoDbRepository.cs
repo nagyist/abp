@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -21,9 +22,9 @@ public interface IMongoDbRepository<TEntity> : IRepository<TEntity>
     Task<IMongoCollection<TEntity>> GetCollectionAsync(CancellationToken cancellationToken = default);
 
     [Obsolete("Use GetMongoQueryableAsync method.")]
-    IMongoQueryable<TEntity> GetMongoQueryable();
+    IQueryable<TEntity> GetMongoQueryable();
 
-    Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions? options = null);
+    Task<IQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions? options = null);
 
     Task<IAggregateFluent<TEntity>> GetAggregateAsync(CancellationToken cancellationToken = default, AggregateOptions? options = null);
 }

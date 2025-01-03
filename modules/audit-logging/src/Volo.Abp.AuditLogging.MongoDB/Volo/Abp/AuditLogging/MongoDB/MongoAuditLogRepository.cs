@@ -64,8 +64,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
 
         return await query
             .OrderBy(sorting.IsNullOrWhiteSpace() ? (nameof(AuditLog.ExecutionTime) + " DESC") : sorting)
-            .As<IMongoQueryable<AuditLog>>()
-            .PageBy<AuditLog, IMongoQueryable<AuditLog>>(skipCount, maxResultCount)
+            .PageBy<AuditLog, IQueryable<AuditLog>>(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -104,8 +103,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
             cancellationToken: cancellationToken
         );
 
-        var count = await query.As<IMongoQueryable<AuditLog>>()
-            .LongCountAsync(GetCancellationToken(cancellationToken));
+        var count = await query.LongCountAsync(GetCancellationToken(cancellationToken));
 
         return count;
     }
@@ -199,8 +197,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
 
         return await query
             .OrderBy(sorting.IsNullOrWhiteSpace() ? (nameof(EntityChange.ChangeTime) + " DESC") : sorting)
-            .As<IMongoQueryable<EntityChange>>()
-            .PageBy<EntityChange, IMongoQueryable<EntityChange>>(skipCount, maxResultCount)
+            .PageBy<EntityChange, IQueryable<EntityChange>>(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -215,7 +212,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
     {
         var query = await GetEntityChangeListQueryAsync(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName, cancellationToken);
 
-        var count = await query.As<IMongoQueryable<EntityChange>>().LongCountAsync(GetCancellationToken(cancellationToken));
+        var count = await query.LongCountAsync(GetCancellationToken(cancellationToken));
 
         return count;
     }
@@ -242,7 +239,6 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
     {
         var auditLogs = await (await GetMongoQueryableAsync(cancellationToken))
                         .Where(x => x.EntityChanges.Any(y => y.EntityId == entityId && y.EntityTypeFullName == entityTypeFullName))
-                        .As<IMongoQueryable<AuditLog>>()
                         .OrderByDescending(x => x.ExecutionTime)
                         .ToListAsync(GetCancellationToken(cancellationToken));
 

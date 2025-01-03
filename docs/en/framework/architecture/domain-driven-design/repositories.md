@@ -395,13 +395,13 @@ This method is suggested;
 
 #### MongoDB Case
 
-If you are using [MongoDB](../../data/mongodb), you need to add the [Volo.Abp.MongoDB](https://www.nuget.org/packages/Volo.Abp.MongoDB) NuGet package to your project. Even in this case, you can't directly use async LINQ extensions (like `ToListAsync`) because MongoDB doesn't provide async extension methods for `IQueryable<T>`, but provides for `IMongoQueryable<T>`. You need to cast the query to `IMongoQueryable<T>` first to be able to use the async extension methods.
+If you are using [MongoDB](../../data/mongodb), you need to add the [Volo.Abp.MongoDB](https://www.nuget.org/packages/Volo.Abp.MongoDB) NuGet package to your project. Even in this case, you can't directly use async LINQ extensions (like `ToListAsync`) because MongoDB doesn't provide async extension methods for `IQueryable<T>`, but provides for `IQueryable<T>`. You need to cast the query to `IQueryable<T>` first to be able to use the async extension methods.
 
-**Example: Cast `IQueryable<T>` to `IMongoQueryable<T>` and use `ToListAsync()`**
+**Example: Cast `IQueryable<T>` to `IQueryable<T>` and use `ToListAsync()`**
 
 ````csharp
 var queryable = await _personRepository.GetQueryableAsync();
-var people = ((IMongoQueryable<Person>) queryable
+var people = ((IQueryable<Person>) queryable
     .Where(p => p.Name.Contains(nameFilter)))
     .ToListAsync();
 ````

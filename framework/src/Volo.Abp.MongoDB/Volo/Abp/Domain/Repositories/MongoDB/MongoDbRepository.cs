@@ -481,8 +481,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
         return await (await GetMongoQueryableAsync(cancellationToken))
             .OrderByIf<TEntity, IQueryable<TEntity>>(!sorting.IsNullOrWhiteSpace(), sorting)
-            .As<IMongoQueryable<TEntity>>()
-            .PageBy<TEntity, IMongoQueryable<TEntity>>(skipCount, maxResultCount)
+            .PageBy<TEntity, IQueryable<TEntity>>(skipCount, maxResultCount)
             .ToListAsync(cancellationToken);
     }
 
@@ -548,7 +547,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     }
 
     [Obsolete("Use GetMongoQueryableAsync method.")]
-    public virtual IMongoQueryable<TEntity> GetMongoQueryable()
+    public virtual IQueryable<TEntity> GetMongoQueryable()
     {
         return ApplyDataFilters(
             SessionHandle != null
@@ -557,19 +556,19 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         );
     }
 
-    public virtual Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions? aggregateOptions = null)
+    public virtual Task<IQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions? aggregateOptions = null)
     {
         return GetMongoQueryableAsync<TEntity>(cancellationToken, aggregateOptions);
     }
 
-    protected virtual async Task<IMongoQueryable<TOtherEntity>> GetMongoQueryableAsync<TOtherEntity>(CancellationToken cancellationToken = default, AggregateOptions? aggregateOptions = null)
+    protected virtual async Task<IQueryable<TOtherEntity>> GetMongoQueryableAsync<TOtherEntity>(CancellationToken cancellationToken = default, AggregateOptions? aggregateOptions = null)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
         var dbContext = await GetDbContextAsync(cancellationToken);
         var collection = dbContext.Collection<TOtherEntity>();
 
-        return ApplyDataFilters<IMongoQueryable<TOtherEntity>, TOtherEntity>(
+        return ApplyDataFilters<IQueryable<TOtherEntity>, TOtherEntity>(
             dbContext.SessionHandle != null
                 ? collection.AsQueryable(dbContext.SessionHandle, aggregateOptions)
                 : collection.AsQueryable(aggregateOptions)

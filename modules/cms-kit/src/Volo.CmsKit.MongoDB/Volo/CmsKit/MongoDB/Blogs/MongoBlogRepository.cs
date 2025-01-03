@@ -44,8 +44,7 @@ public class MongoBlogRepository : MongoDbRepository<ICmsKitMongoDbContext, Blog
         var query = await GetListQueryAsync(filter, token);
 
         return await query.OrderBy(sorting.IsNullOrEmpty() ? "creationTime desc" : sorting)
-                  .As<IMongoQueryable<Blog>>()
-                  .PageBy<Blog, IMongoQueryable<Blog>>(skipCount, maxResultCount)
+                  .PageBy<Blog, IQueryable<Blog>>(skipCount, maxResultCount)
                   .ToListAsync(token);
     }
 
@@ -82,7 +81,7 @@ public class MongoBlogRepository : MongoDbRepository<ICmsKitMongoDbContext, Blog
 
         var query = await GetListQueryAsync(filter, token);
 
-        return await query.As<IMongoQueryable<Blog>>().LongCountAsync(token);
+        return await query.LongCountAsync(token);
     }
 
     public virtual Task<Blog> GetBySlugAsync([NotNull] string slug, CancellationToken cancellationToken = default)

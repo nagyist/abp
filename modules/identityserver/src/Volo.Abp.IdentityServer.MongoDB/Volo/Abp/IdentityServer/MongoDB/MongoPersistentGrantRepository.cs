@@ -87,7 +87,7 @@ public class MongoPersistentGrantRepository : MongoDbRepository<IAbpIdentityServ
         );
     }
 
-    private async Task<IMongoQueryable<PersistedGrant>> FilterAsync(
+    private async Task<IQueryable<PersistedGrant>> FilterAsync(
         string subjectId,
         string sessionId,
         string clientId,
@@ -95,10 +95,9 @@ public class MongoPersistentGrantRepository : MongoDbRepository<IAbpIdentityServ
         CancellationToken cancellationToken = default)
     {
         return (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
-            .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
-            .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
-            .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!type.IsNullOrWhiteSpace(), x => x.Type == type)
-            .As<IMongoQueryable<PersistedGrant>>();
+            .WhereIf<PersistedGrant, IQueryable<PersistedGrant>>(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
+            .WhereIf<PersistedGrant, IQueryable<PersistedGrant>>(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
+            .WhereIf<PersistedGrant, IQueryable<PersistedGrant>>(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+            .WhereIf<PersistedGrant, IQueryable<PersistedGrant>>(!type.IsNullOrWhiteSpace(), x => x.Type == type);
     }
 }

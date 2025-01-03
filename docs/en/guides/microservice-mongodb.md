@@ -99,7 +99,7 @@ Here we use `BookStore.ProductService` project as an example:
         {
             var query = ApplyFilter(await GetMongoQueryableAsync(cancellationToken), filterText, name, priceMin, priceMax);
             query = query.OrderBy(string.IsNullOrWhiteSpace(sorting) ? ProductConsts.GetDefaultSorting(false) : sorting);
-            return await query.As<IMongoQueryable<Product>>().PageBy<Product, IMongoQueryable<Product>>(skipCount, maxResultCount).ToListAsync(cancellationToken);
+            return await query.PageBy<Product, IQueryable<Product>>(skipCount, maxResultCount).ToListAsync(cancellationToken);
         }
 
         public async Task<long> GetCountAsync(
@@ -110,7 +110,7 @@ Here we use `BookStore.ProductService` project as an example:
             CancellationToken cancellationToken = default)
         {
             var query = ApplyFilter(await GetMongoQueryableAsync(cancellationToken), filterText, name, priceMin, priceMax);
-            return await query.As<IMongoQueryable<Product>>().LongCountAsync(GetCancellationToken(cancellationToken));
+            return await query.LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
         protected virtual IQueryable<Product> ApplyFilter(

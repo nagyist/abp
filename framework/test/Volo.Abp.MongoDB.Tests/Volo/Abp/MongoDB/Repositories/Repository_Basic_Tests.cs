@@ -18,9 +18,9 @@ public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModul
     public async Task ToMongoQueryable_Test()
     {
         (await PersonRepository.GetQueryableAsync()).ShouldNotBeNull();
-        (await PersonRepository.GetQueryableAsync()).As<IMongoQueryable<Person>>().ShouldNotBeNull();
-        ((IMongoQueryable<Person>)(await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas")).ShouldNotBeNull();
-        (await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas").As<IMongoQueryable<Person>>().ShouldNotBeNull();
+        (await PersonRepository.GetQueryableAsync()).ShouldNotBeNull();
+        ((IQueryable<Person>)(await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas")).ShouldNotBeNull();
+        (await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas").ShouldNotBeNull();
     }
 
     [Fact]

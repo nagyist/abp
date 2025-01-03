@@ -95,7 +95,6 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
             .WhereIf(!filter.IsNullOrWhiteSpace(),
                 x => x.Name.Contains(filter) ||
                      x.NormalizedName.Contains(filter))
-            .As<IMongoQueryable<IdentityRole>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -126,8 +125,7 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
                 x => x.Name.Contains(filter) ||
                      x.NormalizedName.Contains(filter))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityRole.CreationTime) + " desc" : sorting)
-            .As<IMongoQueryable<IdentityRole>>()
-            .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
+            .PageBy<IdentityRole, IQueryable<IdentityRole>>(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

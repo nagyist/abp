@@ -27,7 +27,6 @@ public class MongoIdentityUserDelegationRepository : MongoDbRepository<IAbpIdent
         return await (await GetMongoQueryableAsync(cancellationToken))
             .WhereIf(sourceUserId.HasValue, x => x.SourceUserId == sourceUserId)
             .WhereIf(targetUserId.HasValue, x => x.TargetUserId == targetUserId)
-            .As<IMongoQueryable<IdentityUserDelegation>>()
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
@@ -36,7 +35,6 @@ public class MongoIdentityUserDelegationRepository : MongoDbRepository<IAbpIdent
         return await (await GetMongoQueryableAsync(cancellationToken))
             .Where(x => x.TargetUserId == targetUserId)
             .Where(x => x.StartTime <= Clock.Now && x.EndTime >= Clock.Now)
-            .As<IMongoQueryable<IdentityUserDelegation>>()
             .ToListAsync(cancellationToken: cancellationToken);
     }
 

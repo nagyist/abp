@@ -61,8 +61,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
             token);
 
         var comments = await query.OrderBy(sorting.IsNullOrEmpty() ? "creationTime desc" : sorting)
-            .As<IMongoQueryable<Comment>>()
-            .PageBy<Comment, IMongoQueryable<Comment>>(skipCount, maxResultCount)
+            .PageBy<Comment, IQueryable<Comment>>(skipCount, maxResultCount)
             .ToListAsync(token);
 
         var commentIds = comments.Select(x => x.Id).ToList();
@@ -73,7 +72,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
             orderby comment.CreationTime
             select user;
 
-        var authors = await ApplyDataFilters<IMongoQueryable<CmsUser>, CmsUser>(authorsQuery).ToListAsync(token);
+        var authors = await ApplyDataFilters<IQueryable<CmsUser>, CmsUser>(authorsQuery).ToListAsync(token);
 
         return comments
             .Select(
@@ -104,8 +103,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
             commentApproveState,
             cancellationToken);
 
-        return await query.As<IMongoQueryable<Comment>>()
-            .LongCountAsync(GetCancellationToken(cancellationToken));
+        return await query.LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
@@ -123,7 +121,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
                            orderby comment.CreationTime
                            select user;
 
-        var authors = await ApplyDataFilters<IMongoQueryable<CmsUser>, CmsUser>(authorsQuery).ToListAsync(GetCancellationToken(cancellationToken));
+        var authors = await ApplyDataFilters<IQueryable<CmsUser>, CmsUser>(authorsQuery).ToListAsync(GetCancellationToken(cancellationToken));
 
         var commentsQuery = (await GetMongoQueryableAsync(cancellationToken))
         .Where(c => c.EntityId == entityId && c.EntityType == entityType);
