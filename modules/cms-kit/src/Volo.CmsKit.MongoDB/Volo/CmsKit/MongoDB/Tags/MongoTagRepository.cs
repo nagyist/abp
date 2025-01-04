@@ -116,7 +116,7 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
     {
         return await (await GetQueryableByFilterAsync(filter, cancellationToken))
             .OrderBy(sorting.IsNullOrEmpty() ? $"{nameof(Tag.CreationTime)}" : sorting)
-            .PageBy<Tag, IQueryable<Tag>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 

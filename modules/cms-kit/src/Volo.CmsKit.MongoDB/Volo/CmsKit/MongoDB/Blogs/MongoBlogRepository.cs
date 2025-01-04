@@ -44,7 +44,7 @@ public class MongoBlogRepository : MongoDbRepository<ICmsKitMongoDbContext, Blog
         var query = await GetListQueryAsync(filter, token);
 
         return await query.OrderBy(sorting.IsNullOrEmpty() ? "creationTime desc" : sorting)
-                  .PageBy<Blog, IQueryable<Blog>>(skipCount, maxResultCount)
+                  .PageBy(skipCount, maxResultCount)
                   .ToListAsync(token);
     }
 

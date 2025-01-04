@@ -201,7 +201,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
 
         return await query
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.CreationTime) + " desc" : sorting)
-            .PageBy<IdentityUser, IQueryable<IdentityUser>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -454,7 +454,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         }
 
         return  query
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.NormalizedUserName.Contains(upperFilter) ||
@@ -463,20 +463,20 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
                     (u.Surname != null && u.Surname.Contains(filter)) ||
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(name), x => x.Name == name)
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(!string.IsNullOrWhiteSpace(surname), x => x.Surname == surname)
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(isLockedOut.HasValue && isLockedOut.Value, x => x.LockoutEnabled && x.LockoutEnd != null && x.LockoutEnd > DateTimeOffset.UtcNow)
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(isLockedOut.HasValue && !isLockedOut.Value, x =>  !(x.LockoutEnabled && x.LockoutEnd != null && x.LockoutEnd > DateTimeOffset.UtcNow))
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(notActive.HasValue, x => x.IsActive == !notActive.Value)
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(emailConfirmed.HasValue, x => x.EmailConfirmed == emailConfirmed.Value)
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(isExternal.HasValue, x => x.IsExternal == isExternal.Value)
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(minCreationTime != null, p => p.CreationTime >= minCreationTime)
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime);
+            .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
+            .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
+            .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
+            .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
+            .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name == name)
+            .WhereIf(!string.IsNullOrWhiteSpace(surname), x => x.Surname == surname)
+            .WhereIf(isLockedOut.HasValue && isLockedOut.Value, x => x.LockoutEnabled && x.LockoutEnd != null && x.LockoutEnd > DateTimeOffset.UtcNow)
+            .WhereIf(isLockedOut.HasValue && !isLockedOut.Value, x =>  !(x.LockoutEnabled && x.LockoutEnd != null && x.LockoutEnd > DateTimeOffset.UtcNow))
+            .WhereIf(notActive.HasValue, x => x.IsActive == !notActive.Value)
+            .WhereIf(emailConfirmed.HasValue, x => x.EmailConfirmed == emailConfirmed.Value)
+            .WhereIf(isExternal.HasValue, x => x.IsExternal == isExternal.Value)
+            .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
+            .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
+            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
+            .WhereIf(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime);
     }
 }

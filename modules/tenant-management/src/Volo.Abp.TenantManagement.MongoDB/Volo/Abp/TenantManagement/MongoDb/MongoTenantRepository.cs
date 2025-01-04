@@ -51,20 +51,20 @@ public class MongoTenantRepository : MongoDbRepository<ITenantManagementMongoDbC
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<Tenant, IQueryable<Tenant>>(
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter)
             )
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting)
-            .PageBy<Tenant, IQueryable<Tenant>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<Tenant, IQueryable<Tenant>>(
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter)

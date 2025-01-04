@@ -125,7 +125,7 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
                 x => x.Name.Contains(filter) ||
                      x.NormalizedName.Contains(filter))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityRole.CreationTime) + " desc" : sorting)
-            .PageBy<IdentityRole, IQueryable<IdentityRole>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

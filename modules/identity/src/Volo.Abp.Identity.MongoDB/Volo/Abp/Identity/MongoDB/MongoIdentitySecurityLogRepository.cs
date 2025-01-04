@@ -51,7 +51,7 @@ public class MongoIdentitySecurityLogRepository :
         );
 
         return await query.OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(IdentitySecurityLog.CreationTime)} desc" : sorting)
-            .PageBy<IdentitySecurityLog, IQueryable<IdentitySecurityLog>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 

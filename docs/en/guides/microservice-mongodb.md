@@ -99,7 +99,7 @@ Here we use `BookStore.ProductService` project as an example:
         {
             var query = ApplyFilter(await GetMongoQueryableAsync(cancellationToken), filterText, name, priceMin, priceMax);
             query = query.OrderBy(string.IsNullOrWhiteSpace(sorting) ? ProductConsts.GetDefaultSorting(false) : sorting);
-            return await query.PageBy<Product, IQueryable<Product>>(skipCount, maxResultCount).ToListAsync(cancellationToken);
+            return await query.PageBy(skipCount, maxResultCount).ToListAsync(cancellationToken);
         }
 
         public async Task<long> GetCountAsync(

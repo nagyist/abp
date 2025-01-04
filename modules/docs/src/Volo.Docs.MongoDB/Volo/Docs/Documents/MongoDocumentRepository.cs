@@ -159,7 +159,7 @@ namespace Volo.Docs.Documents
                     lastSignificantUpdateTimeMax: lastSignificantUpdateTimeMax,
                     lastCachedTimeMin: lastCachedTimeMin, lastCachedTimeMax: lastCachedTimeMax, cancellationToken: cancellationToken))
                 .OrderBy(string.IsNullOrWhiteSpace(sorting) ? "name asc" : sorting)
-                .PageBy<DocumentWithoutContent, IQueryable<DocumentWithoutContent>>(skipCount, maxResultCount)
+                .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 

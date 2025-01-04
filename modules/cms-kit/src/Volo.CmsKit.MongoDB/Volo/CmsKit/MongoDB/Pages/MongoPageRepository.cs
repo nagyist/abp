@@ -27,7 +27,7 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
         var cancellation = GetCancellationToken(cancellationToken);
 
         return await (await GetMongoQueryableAsync(cancellation))
-            .WhereIf<Page, IQueryable<Page>>(
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Title.ToLower().Contains(filter.ToLower()) || u.Slug.Contains(filter)
@@ -44,11 +44,11 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
         var cancellation = GetCancellationToken(cancellationToken);
 
         return await (await GetMongoQueryableAsync(cancellation))
-            .WhereIf<Page, IQueryable<Page>>(
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u => u.Title.ToLower().Contains(filter) || u.Slug.Contains(filter))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(Page.Title) : sorting)
-            .PageBy<Page, IQueryable<Page>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(cancellation);
     }
 

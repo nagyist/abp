@@ -44,13 +44,13 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<IdentityClaimType, IQueryable<IdentityClaimType>>(
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter)
             )
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.CreationTime) + " desc" : sorting)
-            .PageBy<IdentityClaimType, IQueryable<IdentityClaimType>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -59,7 +59,7 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
         CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<IdentityClaimType, IQueryable<IdentityClaimType>>(
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter)

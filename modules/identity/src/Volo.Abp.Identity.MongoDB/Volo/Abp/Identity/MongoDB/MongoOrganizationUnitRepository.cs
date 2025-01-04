@@ -72,7 +72,7 @@ public class MongoOrganizationUnitRepository
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
                 .OrderBy(sorting.IsNullOrEmpty() ? nameof(OrganizationUnit.CreationTime) + " desc" : sorting)
-                .PageBy<OrganizationUnit, IQueryable<OrganizationUnit>>(skipCount, maxResultCount)
+                .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -102,7 +102,7 @@ public class MongoOrganizationUnitRepository
         return await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken))
             .Where(r => roleIds.Contains(r.Id))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
-            .PageBy<IdentityRole, IQueryable<IdentityRole>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -123,7 +123,7 @@ public class MongoOrganizationUnitRepository
         return await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken))
             .Where(r => roleIds.Contains(r.Id))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
-            .PageBy<IdentityRole, IQueryable<IdentityRole>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -151,7 +151,7 @@ public class MongoOrganizationUnitRepository
             .Where(r => !roleIds.Contains(r.Id))
             .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
-            .PageBy<IdentityRole, IQueryable<IdentityRole>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -181,7 +181,7 @@ public class MongoOrganizationUnitRepository
         var query = await CreateGetMembersFilteredQueryAsync(organizationUnit, filter, cancellationToken);
         return await query
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityUser.UserName) : sorting)
-            .PageBy<IdentityUser, IQueryable<IdentityUser>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(cancellationToken);
     }
 
@@ -215,7 +215,7 @@ public class MongoOrganizationUnitRepository
         return await
             (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
             .Where(u => !u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.UserName.Contains(filter) ||
@@ -223,7 +223,7 @@ public class MongoOrganizationUnitRepository
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
             )
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityUser.UserName) : sorting)
-            .PageBy<IdentityUser, IQueryable<IdentityUser>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -232,7 +232,7 @@ public class MongoOrganizationUnitRepository
     {
         return await (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
             .Where(u => !u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.UserName.Contains(filter) ||
@@ -271,7 +271,7 @@ public class MongoOrganizationUnitRepository
     {
         return (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
             .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
-            .WhereIf<IdentityUser, IQueryable<IdentityUser>>(
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.UserName.Contains(filter) ||

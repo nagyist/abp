@@ -64,7 +64,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
 
         return await query
             .OrderBy(sorting.IsNullOrWhiteSpace() ? (nameof(AuditLog.ExecutionTime) + " DESC") : sorting)
-            .PageBy<AuditLog, IQueryable<AuditLog>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -197,7 +197,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
 
         return await query
             .OrderBy(sorting.IsNullOrWhiteSpace() ? (nameof(EntityChange.ChangeTime) + " DESC") : sorting)
-            .PageBy<EntityChange, IQueryable<EntityChange>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 

@@ -46,7 +46,7 @@ public abstract class MongoUserRepositoryBase<TDbContext, TUser> : MongoDbReposi
     {
         cancellationToken = GetCancellationToken(cancellationToken);
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<TUser, IQueryable<TUser>>(
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.UserName.Contains(filter) ||
@@ -55,7 +55,7 @@ public abstract class MongoUserRepositoryBase<TDbContext, TUser> : MongoDbReposi
                     (u.Surname != null && u.Surname.Contains(filter))
             )
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IUserData.UserName) : sorting)
-            .PageBy<TUser, IQueryable<TUser>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(cancellationToken);
     }
 
@@ -63,7 +63,7 @@ public abstract class MongoUserRepositoryBase<TDbContext, TUser> : MongoDbReposi
     {
         cancellationToken = GetCancellationToken(cancellationToken);
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<TUser, IQueryable<TUser>>(
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.UserName.Contains(filter) ||

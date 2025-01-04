@@ -95,9 +95,9 @@ public class MongoPersistentGrantRepository : MongoDbRepository<IAbpIdentityServ
         CancellationToken cancellationToken = default)
     {
         return (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<PersistedGrant, IQueryable<PersistedGrant>>(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
-            .WhereIf<PersistedGrant, IQueryable<PersistedGrant>>(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
-            .WhereIf<PersistedGrant, IQueryable<PersistedGrant>>(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
-            .WhereIf<PersistedGrant, IQueryable<PersistedGrant>>(!type.IsNullOrWhiteSpace(), x => x.Type == type);
+            .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
+            .WhereIf(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
+            .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+            .WhereIf(!type.IsNullOrWhiteSpace(), x => x.Type == type);
     }
 }

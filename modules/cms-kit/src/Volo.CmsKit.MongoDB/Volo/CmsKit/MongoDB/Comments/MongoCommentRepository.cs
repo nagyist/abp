@@ -61,7 +61,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
             token);
 
         var comments = await query.OrderBy(sorting.IsNullOrEmpty() ? "creationTime desc" : sorting)
-            .PageBy<Comment, IQueryable<Comment>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(token);
 
         var commentIds = comments.Select(x => x.Id).ToList();
