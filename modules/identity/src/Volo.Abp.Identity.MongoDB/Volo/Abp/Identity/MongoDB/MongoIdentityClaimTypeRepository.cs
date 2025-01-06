@@ -24,13 +24,13 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
     {
         if (ignoredId == null)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken))
+            return await (await GetQueryableAsync(cancellationToken))
                 .Where(ct => ct.Name == name)
                 .AnyAsync(GetCancellationToken(cancellationToken));
         }
         else
         {
-            return await (await GetMongoQueryableAsync(cancellationToken))
+            return await (await GetQueryableAsync(cancellationToken))
                 .Where(ct => ct.Id != ignoredId && ct.Name == name)
                 .AnyAsync(GetCancellationToken(cancellationToken));
         }
@@ -43,7 +43,7 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
         string filter,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
@@ -58,7 +58,7 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
         string filter = null,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
@@ -69,7 +69,7 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
 
     public virtual async Task<List<IdentityClaimType>> GetListByNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x => names.Contains(x.Name))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

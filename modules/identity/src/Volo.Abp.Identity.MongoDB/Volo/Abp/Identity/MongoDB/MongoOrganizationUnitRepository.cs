@@ -27,7 +27,7 @@ public class MongoOrganizationUnitRepository
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(ou => ou.ParentId == parentId)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -38,7 +38,7 @@ public class MongoOrganizationUnitRepository
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
                 .Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId)
                 .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -48,7 +48,7 @@ public class MongoOrganizationUnitRepository
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
                 .Where(t => ids.Contains(t.Id))
                 .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -58,7 +58,7 @@ public class MongoOrganizationUnitRepository
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x => x.Roles.Any(r => r.RoleId == roleId))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -70,7 +70,7 @@ public class MongoOrganizationUnitRepository
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
                 .OrderBy(sorting.IsNullOrEmpty() ? nameof(OrganizationUnit.CreationTime) + " desc" : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -81,7 +81,7 @@ public class MongoOrganizationUnitRepository
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(
                 ou => ou.DisplayName == displayName,
@@ -99,7 +99,7 @@ public class MongoOrganizationUnitRepository
     {
         var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
 
-        return await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken))
+        return await (await GetQueryableAsync<IdentityRole>(cancellationToken))
             .Where(r => roleIds.Contains(r.Id))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
             .PageBy(skipCount, maxResultCount)
@@ -114,13 +114,13 @@ public class MongoOrganizationUnitRepository
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        var organizationUnits = await (await GetMongoQueryableAsync(cancellationToken))
+        var organizationUnits = await (await GetQueryableAsync(cancellationToken))
             .Where(ou => organizationUnitIds.Contains(ou.Id))
             .ToListAsync(GetCancellationToken(cancellationToken));
 
         var roleIds = organizationUnits.SelectMany(ou => ou.Roles.Select(r => r.RoleId)).ToArray();
 
-        return await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken))
+        return await (await GetQueryableAsync<IdentityRole>(cancellationToken))
             .Where(r => roleIds.Contains(r.Id))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
             .PageBy(skipCount, maxResultCount)
@@ -133,7 +133,7 @@ public class MongoOrganizationUnitRepository
     {
         var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
 
-        return await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken)).Where(r => roleIds.Contains(r.Id)).CountAsync(GetCancellationToken(cancellationToken));
+        return await (await GetQueryableAsync<IdentityRole>(cancellationToken)).Where(r => roleIds.Contains(r.Id)).CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<IdentityRole>> GetUnaddedRolesAsync(
@@ -147,7 +147,7 @@ public class MongoOrganizationUnitRepository
     {
         var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
 
-        return await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken))
+        return await (await GetQueryableAsync<IdentityRole>(cancellationToken))
             .Where(r => !roleIds.Contains(r.Id))
             .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
@@ -162,7 +162,7 @@ public class MongoOrganizationUnitRepository
     {
         var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
 
-        return await (await GetMongoQueryableAsync<IdentityRole>(cancellationToken))
+        return await (await GetQueryableAsync<IdentityRole>(cancellationToken))
             .Where(r => !roleIds.Contains(r.Id))
             .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
             .CountAsync(GetCancellationToken(cancellationToken));
@@ -188,7 +188,7 @@ public class MongoOrganizationUnitRepository
     public virtual async Task<List<Guid>> GetMemberIdsAsync(Guid id, CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
-        return await (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
+        return await (await GetQueryableAsync<IdentityUser>(cancellationToken))
             .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == id)).Select(x => x.Id)
             .ToListAsync(cancellationToken);
     }
@@ -213,7 +213,7 @@ public class MongoOrganizationUnitRepository
         CancellationToken cancellationToken = default)
     {
         return await
-            (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
+            (await GetQueryableAsync<IdentityUser>(cancellationToken))
             .Where(u => !u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
@@ -230,7 +230,7 @@ public class MongoOrganizationUnitRepository
     public virtual async Task<int> GetUnaddedUsersCountAsync(OrganizationUnit organizationUnit, string filter = null,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
+        return await (await GetQueryableAsync<IdentityUser>(cancellationToken))
             .Where(u => !u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
@@ -251,7 +251,7 @@ public class MongoOrganizationUnitRepository
     public virtual async Task RemoveAllMembersAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
-        var userQueryable = await GetMongoQueryableAsync<IdentityUser>(cancellationToken);
+        var userQueryable = await GetQueryableAsync<IdentityUser>(cancellationToken);
         var dbContext = await GetDbContextAsync(cancellationToken);
         var users = await userQueryable
             .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
@@ -269,7 +269,7 @@ public class MongoOrganizationUnitRepository
         string filter = null,
         CancellationToken cancellationToken = default)
     {
-        return (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
+        return (await GetQueryableAsync<IdentityUser>(cancellationToken))
             .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),

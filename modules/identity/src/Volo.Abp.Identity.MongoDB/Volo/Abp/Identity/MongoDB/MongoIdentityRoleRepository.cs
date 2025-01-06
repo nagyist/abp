@@ -23,7 +23,7 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
     }
@@ -38,7 +38,7 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
     {
         var roles = await GetListInternalAsync(sorting, maxResultCount, skipCount, filter, includeDetails, cancellationToken: cancellationToken);
         var roleIds = roles.Select(x => x.Id).ToList();
-        var userCount = await (await GetMongoQueryableAsync<IdentityUser>(cancellationToken))
+        var userCount = await (await GetQueryableAsync<IdentityUser>(cancellationToken))
             .Where(user => user.Roles.Any(role => roleIds.Contains(role.RoleId)))
             .SelectMany(user => user.Roles)
             .GroupBy(userRole => userRole.RoleId)
@@ -73,7 +73,7 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
         IEnumerable<Guid> ids,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(t => ids.Contains(t.Id))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -82,7 +82,7 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(r => r.IsDefault)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -91,7 +91,7 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
         string filter = null,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(),
                 x => x.Name.Contains(filter) ||
                      x.NormalizedName.Contains(filter))
@@ -100,7 +100,7 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
 
     public virtual async Task RemoveClaimFromAllRolesAsync(string claimType, bool autoSave = false, CancellationToken cancellationToken = default)
     {
-        var roles = await (await GetMongoQueryableAsync(cancellationToken))
+        var roles = await (await GetQueryableAsync(cancellationToken))
             .Where(r => r.Claims.Any(c => c.ClaimType == claimType))
             .ToListAsync(GetCancellationToken(cancellationToken));
 
@@ -120,7 +120,7 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(),
                 x => x.Name.Contains(filter) ||
                      x.NormalizedName.Contains(filter))

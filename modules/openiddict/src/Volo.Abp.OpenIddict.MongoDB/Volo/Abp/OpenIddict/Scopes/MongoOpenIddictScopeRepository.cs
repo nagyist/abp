@@ -21,7 +21,7 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
     public virtual async Task<List<OpenIddictScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                 x.Name.Contains(filter) ||
                 x.DisplayName.Contains(filter) ||
@@ -33,7 +33,7 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
 
     public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
                 x.Name.Contains(filter) ||
                 x.DisplayName.Contains(filter) ||
@@ -43,31 +43,31 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
 
     public virtual async Task<OpenIddictScope> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
+        return await (await GetQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<OpenIddictScope> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x => x.Name == name, GetCancellationToken(cancellationToken));
+        return await (await GetQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x => x.Name == name, GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<OpenIddictScope>> FindByNamesAsync(string[] names, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        return await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => names.Contains(x.Name))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<OpenIddictScope>> FindByResourceAsync(string resource, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        return await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.Resources.Contains(resource))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<OpenIddictScope>> ListAsync(int? count, int? offset, CancellationToken cancellationToken = default)
     {
-        return  await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        return  await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .OrderBy(x => x.Id)
             .SkipIf<OpenIddictScope, IQueryable<OpenIddictScope>>(offset.HasValue, offset)
             .TakeIf<OpenIddictScope, IQueryable<OpenIddictScope>>(count.HasValue, count)

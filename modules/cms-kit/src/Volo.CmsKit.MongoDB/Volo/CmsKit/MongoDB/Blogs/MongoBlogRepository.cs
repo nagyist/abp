@@ -23,13 +23,13 @@ public class MongoBlogRepository : MongoDbRepository<ICmsKitMongoDbContext, Blog
     public virtual async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var token = GetCancellationToken(cancellationToken);
-        return await (await GetMongoQueryableAsync(token)).AnyAsync(x => x.Id == id, token);
+        return await (await GetQueryableAsync(token)).AnyAsync(x => x.Id == id, token);
     }
 
     public virtual async Task<bool> SlugExistsAsync(string slug, CancellationToken cancellationToken = default)
     {
         var token = GetCancellationToken(cancellationToken);
-        return await (await GetMongoQueryableAsync(token)).AnyAsync(x => x.Slug == slug, token);
+        return await (await GetQueryableAsync(token)).AnyAsync(x => x.Slug == slug, token);
     }
 
     public virtual async Task<List<Blog>> GetListAsync(
@@ -62,7 +62,7 @@ public class MongoBlogRepository : MongoDbRepository<ICmsKitMongoDbContext, Blog
         var blogIds = blogs.OrderBy(sorting.IsNullOrEmpty() ? "creationTime desc" : sorting)
             .PageBy(skipCount, maxResultCount).Select(x => x.Id).ToList();
         
-        var blogPostCount = await (await GetMongoQueryableAsync<BlogPost>(token))
+        var blogPostCount = await (await GetQueryableAsync<BlogPost>(token))
             .Where(blogPost => blogIds.Contains(blogPost.Id))
             .GroupBy(blogPost => blogPost.BlogId)
             .Select(x => new
@@ -92,7 +92,7 @@ public class MongoBlogRepository : MongoDbRepository<ICmsKitMongoDbContext, Blog
 
     protected virtual async Task<IQueryable<Blog>> GetListQueryAsync(string filter = null, CancellationToken cancellationToken = default)
     {
-        return (await GetMongoQueryableAsync(cancellationToken))
+        return (await GetQueryableAsync(cancellationToken))
                 .WhereIf(!filter.IsNullOrWhiteSpace(), b => b.Name.Contains(filter));
     }
 }

@@ -44,7 +44,7 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
                 x.Slug.ToLower() == slug,
             cancellationToken: token);
 
-        blogPost.Author = await (await GetMongoQueryableAsync<CmsUser>(token)).FirstOrDefaultAsync(x => x.Id == blogPost.AuthorId, token);
+        blogPost.Author = await (await GetQueryableAsync<CmsUser>(token)).FirstOrDefaultAsync(x => x.Id == blogPost.AuthorId, token);
 
         return blogPost;
     }
@@ -64,7 +64,7 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
 
         var favoriteUserFilteredEntityIds = await GetFavoriteEntityIdsByUserId(favoriteUserId, cancellationToken);
         
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .WhereIf(tagFilteredEntityIds.Any(), x => tagFilteredEntityIds.Contains(x.Id))
             .WhereIf(favoriteUserFilteredEntityIds.Any(), x => favoriteUserFilteredEntityIds.Contains(x.Id))
             .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
@@ -174,7 +174,7 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         Check.NotNullOrEmpty(slug, nameof(slug));
 
         cancellationToken = GetCancellationToken(cancellationToken);
-        var queryable = await GetMongoQueryableAsync(cancellationToken);
+        var queryable = await GetQueryableAsync(cancellationToken);
         return await queryable.AnyAsync(x => x.BlogId == blogId && x.Slug.ToLower() == slug, cancellationToken);
     }
 
@@ -225,14 +225,14 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .AnyAsync(x => x.Status == BlogPostStatus.WaitingForReview, cancellationToken);
     }
 
     public async Task UpdateBlogAsync(Guid sourceBlogId, Guid? targetBlogId, CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
-        var blogPosts = await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.BlogId == sourceBlogId).ToListAsync(cancellationToken);
+        var blogPosts = await (await GetQueryableAsync(cancellationToken)).Where(x => x.BlogId == sourceBlogId).ToListAsync(cancellationToken);
         if (targetBlogId.HasValue)
         {
             foreach (var blogPost in blogPosts)

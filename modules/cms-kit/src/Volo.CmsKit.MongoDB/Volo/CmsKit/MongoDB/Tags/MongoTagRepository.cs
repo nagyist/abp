@@ -29,7 +29,7 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
         Check.NotNullOrEmpty(entityType, nameof(entityType));
         Check.NotNullOrEmpty(name, nameof(name));
 
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
                 .AnyAsync(x =>
                         x.EntityType == entityType &&
                         x.Name == name,
@@ -69,12 +69,12 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
         Check.NotNullOrEmpty(entityType, nameof(entityType));
         Check.NotNullOrEmpty(entityId, nameof(entityId));
 
-        var entityTagIds = await (await GetMongoQueryableAsync<EntityTag>(cancellationToken))
+        var entityTagIds = await (await GetQueryableAsync<EntityTag>(cancellationToken))
             .Where(q => q.EntityId == entityId)
             .Select(q => q.TagId)
             .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
-        var query = (await GetMongoQueryableAsync(cancellationToken))
+        var query = (await GetQueryableAsync(cancellationToken))
                         .Where(x =>
                             x.EntityType == entityType &&
                             entityTagIds.Contains(x.Id));
@@ -86,14 +86,14 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
     
     public virtual async Task<List<PopularTag>> GetPopularTagsAsync(string entityType, int maxCount, CancellationToken cancellationToken = default)
     {
-        var tags = await (await GetMongoQueryableAsync(cancellationToken))
+        var tags = await (await GetQueryableAsync(cancellationToken))
             .Where(x => x.EntityType == entityType)
             .Select(x => new { x.Id, x.Name })
             .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
         var tagIds = tags.Select(x => x.Id);
 
-        var entityTagCounts = await (await GetMongoQueryableAsync<EntityTag>(cancellationToken))
+        var entityTagCounts = await (await GetQueryableAsync<EntityTag>(cancellationToken))
             .Where(q => tagIds.Contains(q.TagId))
             .GroupBy(q => q.TagId)
             .Select(q => new { TagId = q.Key, Count = q.Count() })
@@ -127,7 +127,7 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
 
     private async Task<IQueryable<Tag>> GetQueryableByFilterAsync(string filter, CancellationToken cancellationToken = default)
     {
-        var mongoQueryable = await GetMongoQueryableAsync(cancellationToken: cancellationToken);
+        var mongoQueryable = await GetQueryableAsync(cancellationToken: cancellationToken);
 
         if (!filter.IsNullOrWhiteSpace())
         {

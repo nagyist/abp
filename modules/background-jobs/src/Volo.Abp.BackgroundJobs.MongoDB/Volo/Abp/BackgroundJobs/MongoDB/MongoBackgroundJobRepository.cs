@@ -33,7 +33,7 @@ public class MongoBackgroundJobRepository : MongoDbRepository<IBackgroundJobsMon
     protected virtual async Task<IQueryable<BackgroundJobRecord>> GetWaitingListQuery(int maxResultCount, CancellationToken cancellationToken = default)
     {
         var now = Clock.Now;
-        return (await GetMongoQueryableAsync(cancellationToken))
+        return (await GetQueryableAsync(cancellationToken))
             .Where(t => !t.IsAbandoned && t.NextTryTime <= now)
             .OrderByDescending(t => t.Priority)
             .ThenBy(t => t.TryCount)

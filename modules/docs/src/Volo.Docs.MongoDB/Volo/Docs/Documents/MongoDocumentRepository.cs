@@ -22,7 +22,7 @@ namespace Volo.Docs.Documents
 
         public virtual async Task<List<DocumentWithoutDetails>> GetListWithoutDetailsByProjectId(Guid projectId, CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken))
+            return await (await GetQueryableAsync(cancellationToken))
                 .Where(d => d.ProjectId == projectId)
                 .Select(x => new DocumentWithoutDetails
                 {
@@ -37,7 +37,7 @@ namespace Volo.Docs.Documents
 
         public virtual async Task<List<DocumentInfo>> GetUniqueListDocumentInfoAsync(CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken))
+            return await (await GetQueryableAsync(cancellationToken))
                 .Select(x=> new DocumentInfo {
                     ProjectId = x.ProjectId,
                     Version = x.Version,
@@ -51,13 +51,13 @@ namespace Volo.Docs.Documents
 
         public virtual async Task<List<Document>> GetListByProjectId(Guid projectId, CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken)).Where(d => d.ProjectId == projectId).ToListAsync(GetCancellationToken(cancellationToken));
+            return await (await GetQueryableAsync(cancellationToken)).Where(d => d.ProjectId == projectId).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<Document>> GetUniqueDocumentsByProjectIdPagedAsync(Guid projectId, int skipCount, int maxResultCount,
             CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken))
+            return await (await GetQueryableAsync(cancellationToken))
                 .Where(d => d.ProjectId == projectId)
                 .OrderBy(x => x.LastCachedTime)
                 .GroupBy(x => new { x.Name, x.LanguageCode, x.Version })
@@ -69,7 +69,7 @@ namespace Volo.Docs.Documents
 
         public virtual async Task<long> GetUniqueDocumentCountByProjectIdAsync(Guid projectId, CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken)).Where(d => d.ProjectId == projectId)
+            return await (await GetQueryableAsync(cancellationToken)).Where(d => d.ProjectId == projectId)
                 .GroupBy(x => new { x.Name, x.LanguageCode, x.Version })
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
@@ -89,7 +89,7 @@ namespace Volo.Docs.Documents
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x =>
+            return await (await GetQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x =>
                 x.ProjectId == projectId &&
                 x.Name == name &&
                 x.LanguageCode == languageCode &&
@@ -100,7 +100,7 @@ namespace Volo.Docs.Documents
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x => x.ProjectId == projectId &&
+            return await (await GetQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x => x.ProjectId == projectId &&
                 possibleNames.Contains(x.Name) &&
                 x.LanguageCode == languageCode &&
                 x.Version == version, GetCancellationToken(cancellationToken));
@@ -115,7 +115,7 @@ namespace Volo.Docs.Documents
 
         public virtual async Task<List<Document>> GetListAsync(Guid? projectId, string version, string name, CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken))
+            return await (await GetQueryableAsync(cancellationToken))
                 .WhereIf(version != null, x => x.Version == version)
                 .WhereIf(name != null, x => x.Name == name)
                 .WhereIf(projectId.HasValue, x => x.ProjectId == projectId)
@@ -144,7 +144,7 @@ namespace Volo.Docs.Documents
         {
             return await
                 (await ApplyFilterForGetAll(
-                    await GetMongoQueryableAsync(cancellationToken),
+                    await GetQueryableAsync(cancellationToken),
                     projectId: projectId,
                     name: name,
                     version: version,
@@ -185,7 +185,7 @@ namespace Volo.Docs.Documents
         {
             return await
                 (await ApplyFilterForGetAll(
-                    await GetMongoQueryableAsync(cancellationToken),
+                    await GetQueryableAsync(cancellationToken),
                     projectId: projectId,
                     name: name,
                     version: version,
@@ -207,7 +207,7 @@ namespace Volo.Docs.Documents
 
         public virtual async Task<Document> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.Id == id).SingleAsync(GetCancellationToken(cancellationToken));
+            return await (await GetQueryableAsync(cancellationToken)).Where(x => x.Id == id).SingleAsync(GetCancellationToken(cancellationToken));
         }
 
         protected virtual async Task<IQueryable<DocumentWithoutContent>> ApplyFilterForGetAll(

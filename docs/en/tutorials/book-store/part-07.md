@@ -180,7 +180,7 @@ public class MongoDbAuthorRepository
 
     public async Task<Author> FindByNameAsync(string name)
     {
-        var queryable = await GetMongoQueryableAsync();
+        var queryable = await GetQueryableAsync();
         return await queryable.FirstOrDefaultAsync(author => author.Name == name);
     }
 
@@ -190,7 +190,7 @@ public class MongoDbAuthorRepository
         string sorting,
         string filter = null)
     {
-        var queryable = await GetMongoQueryableAsync();
+        var queryable = await GetQueryableAsync();
         return await queryable
             .WhereIf<Author, IQueryable<Author>>(
                 !filter.IsNullOrWhiteSpace(),

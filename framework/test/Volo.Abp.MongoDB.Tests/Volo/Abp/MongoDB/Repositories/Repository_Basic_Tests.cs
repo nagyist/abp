@@ -69,9 +69,9 @@ public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModul
     [Fact]
     public async Task Filter_Case_Insensitive()
     {
-        (await CityRepository.GetMongoQueryableAsync()).FirstOrDefault(c => c.Name == "ISTANBUL").ShouldBeNull();
-        (await CityRepository.GetMongoQueryableAsync()).FirstOrDefault(c => c.Name == "istanbul").ShouldBeNull();
-        (await CityRepository.GetMongoQueryableAsync()).FirstOrDefault(c => c.Name == "Istanbul").ShouldNotBeNull();
+        (await CityRepository.GetQueryableAsync()).FirstOrDefault(c => c.Name == "ISTANBUL").ShouldBeNull();
+        (await CityRepository.GetQueryableAsync()).FirstOrDefault(c => c.Name == "istanbul").ShouldBeNull();
+        (await CityRepository.GetQueryableAsync()).FirstOrDefault(c => c.Name == "Istanbul").ShouldNotBeNull();
         
         (await PersonRepository.GetQueryableAsync()).FirstOrDefault(p => p.Name == "douglas").ShouldNotBeNull();
         (await PersonRepository.GetQueryableAsync()).FirstOrDefault(p => p.Name == "DOUGLAS").ShouldNotBeNull();

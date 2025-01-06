@@ -97,7 +97,7 @@ Here we use `BookStore.ProductService` project as an example:
             int skipCount = 0,
             CancellationToken cancellationToken = default)
         {
-            var query = ApplyFilter(await GetMongoQueryableAsync(cancellationToken), filterText, name, priceMin, priceMax);
+            var query = ApplyFilter(await GetQueryableAsync(cancellationToken), filterText, name, priceMin, priceMax);
             query = query.OrderBy(string.IsNullOrWhiteSpace(sorting) ? ProductConsts.GetDefaultSorting(false) : sorting);
             return await query.PageBy(skipCount, maxResultCount).ToListAsync(cancellationToken);
         }
@@ -109,7 +109,7 @@ Here we use `BookStore.ProductService` project as an example:
             float? priceMax = null,
             CancellationToken cancellationToken = default)
         {
-            var query = ApplyFilter(await GetMongoQueryableAsync(cancellationToken), filterText, name, priceMin, priceMax);
+            var query = ApplyFilter(await GetQueryableAsync(cancellationToken), filterText, name, priceMin, priceMax);
             return await query.LongCountAsync(GetCancellationToken(cancellationToken));
         }
 

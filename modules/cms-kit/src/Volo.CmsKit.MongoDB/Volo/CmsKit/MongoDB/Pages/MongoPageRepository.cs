@@ -26,7 +26,7 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
     {
         var cancellation = GetCancellationToken(cancellationToken);
 
-        return await (await GetMongoQueryableAsync(cancellation))
+        return await (await GetQueryableAsync(cancellation))
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
@@ -43,7 +43,7 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
     {
         var cancellation = GetCancellationToken(cancellationToken);
 
-        return await (await GetMongoQueryableAsync(cancellation))
+        return await (await GetQueryableAsync(cancellation))
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u => u.Title.ToLower().Contains(filter) || u.Slug.Contains(filter))
@@ -67,7 +67,7 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
     public virtual async Task<bool> ExistsAsync([NotNull] string slug, CancellationToken cancellationToken = default)
     {
         Check.NotNullOrEmpty(slug, nameof(slug));
-        return await (await GetMongoQueryableAsync(cancellationToken)).AnyAsync(x => x.Slug == slug,
+        return await (await GetQueryableAsync(cancellationToken)).AnyAsync(x => x.Slug == slug,
             GetCancellationToken(cancellationToken));
     }
 
@@ -78,7 +78,7 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
 
     public async Task<string?> FindTitleAsync(Guid pageId, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.Id == pageId).Select(x => x.Title)
+        return await (await GetQueryableAsync(cancellationToken)).Where(x => x.Id == pageId).Select(x => x.Title)
             .FirstOrDefaultAsync(cancellationToken);
     }
 }
