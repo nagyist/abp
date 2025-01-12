@@ -225,16 +225,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
 
             case IEntity entryEntity:
                 var keys = entryEntity.GetKeys();
-                if (keys.Length == 0)
-                {
-                    return null;
-                }
-
-                var serializedKeys = keys.Length == 1 && !isCollection
-                    ? keys[0]?.ToString()
-                    : JsonSerializer.Serialize(keys);
-
-                return serializedKeys?.TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength);
+                return keys.Length == 0 ? null : string.Join(", ",keys).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength);
 
             case IEnumerable enumerable:
                 var keysList = new List<string>();
