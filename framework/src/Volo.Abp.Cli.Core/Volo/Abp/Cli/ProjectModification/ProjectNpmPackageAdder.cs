@@ -75,7 +75,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
             using (DirectoryHelper.ChangeCurrentDirectory(directory))
             {
                 Logger.LogInformation("yarn add " + npmPackage.Name + versionPostfix);
-                CmdHelper.RunCmd("yarn add " + npmPackage.Name + versionPostfix);
+                CmdHelper.RunCmd("npx yarn add " + npmPackage.Name + versionPostfix);
             }
         }
         else
@@ -130,7 +130,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
         using (DirectoryHelper.ChangeCurrentDirectory(directory))
         {
             Logger.LogInformation("yarn add " + npmPackage.Name + versionPostfix);
-            CmdHelper.RunCmd("yarn add " + npmPackage.Name + versionPostfix);
+            CmdHelper.RunCmd("npx yarn add " + npmPackage.Name + versionPostfix);
 
             if (skipInstallingLibs)
             {
@@ -158,7 +158,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
         using (DirectoryHelper.ChangeCurrentDirectory(directory))
         {
             Logger.LogInformation("yarn remove " + npmPackage.Name);
-            CmdHelper.RunCmd("yarn remove " + npmPackage.Name);
+            CmdHelper.RunCmd("npx yarn remove " + npmPackage.Name);
 
             if (skipInstallingLibs)
             {

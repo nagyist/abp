@@ -13,8 +13,10 @@ A reference application built with ABP. It implements the Domain Driven Design w
 
 Reference microservice solution built with ABP and .NET.
 
-* [Live demo](https://www.eshoponabp.com/)
 * [Source code](https://github.com/abpframework/eShopOnAbp)
+
+> ⚠️ **Important Notice**  
+> This project, "eShopOnAbp," is outdated. It served as a reference project for microservice architecture using the ABP Framework, but we now recommend using the [ABP Microservice Solution Template](https://abp.io/docs/latest/solution-templates/microservice) for new projects.
 
 ## CMS Kit Demo
 

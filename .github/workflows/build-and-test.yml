@@ -18,6 +18,7 @@ on:
       - 'templates/**/*.razor'
       - 'Directory.Build.props'
       - 'Directory.Packages.props'
+      - '.github/workflows/build-and-test.yml'
 
   pull_request:
     paths:
@@ -35,6 +36,7 @@ on:
       - 'templates/**/*.razor'
       - 'Directory.Build.props'
       - 'Directory.Packages.props'
+      - '.github/workflows/build-and-test.yml'
     types:
       - opened
       - synchronize
@@ -46,6 +48,7 @@ permissions:
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     if: ${{ !github.event.pull_request.draft }}
     steps:
     - uses: actions/checkout@v2

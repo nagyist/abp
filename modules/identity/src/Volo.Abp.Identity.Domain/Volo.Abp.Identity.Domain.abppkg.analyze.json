@@ -4151,6 +4151,11 @@
               "isOptional": true
             },
             {
+              "type": "String",
+              "name": "clientIpAddress",
+              "isOptional": true
+            },
+            {
               "type": "Boolean",
               "name": "includeDetails",
               "isOptional": true
@@ -4215,6 +4220,11 @@
             {
               "type": "String",
               "name": "correlationId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "clientIpAddress",
               "isOptional": true
             },
             {

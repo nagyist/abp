@@ -3,7 +3,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor", "BlazorServer", "BlazorWebApp" ,"NG"],
+    "UI": ["MVC", "Blazor", "BlazorServer", "BlazorWebApp" ,"NG", "MAUIBlazor"],
     "DB": ["EF", "Mongo"]
 }
 ````
@@ -74,7 +74,7 @@ dotnet tool install -g Volo.Abp.Studio.Cli
 Create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
 ````bash
-abp new TodoApp{{if UI=="Blazor"}} -u blazor{{else if UI=="BlazorServer"}} -u blazor-server{{else if UI=="BlazorWebApp"}} -u blazor-webapp{{else if UI=="NG"}} -u angular{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
+abp new TodoApp{{if UI=="Blazor"}} -u blazor{{else if UI=="BlazorServer"}} -u blazor-server{{else if UI=="BlazorWebApp"}} -u blazor-webapp{{else if UI=="NG"}} -u angular{{else if UI=="MAUIBlazor"}} -u maui-blazor{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
 ````
 
 {{if UI=="NG"}}
@@ -113,7 +113,7 @@ abp install-libs
 
 > We suggest you install [Yarn v1.22+ (not v2)](https://classic.yarnpkg.com/en/docs/install) to prevent possible package inconsistencies, if you haven't installed it yet.
 
-{{if UI=="Blazor" || UI=="BlazorWebApp"}}
+{{if UI=="Blazor" || UI=="BlazorWebApp" || UI=="MAUIBlazor"}}
 
 #### Bundling and Minification
 
@@ -136,12 +136,16 @@ abp bundle
 
 It is good to run the application before starting the development. Ensure the {{if UI=="BlazorServer"}}`TodoApp.Blazor`{{else}}`TodoApp.Web`{{end}} project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the initial UI:
 
-{{else if UI=="Blazor"}}
+{{else if UI=="Blazor" || UI=="MAUIBlazor"}}
 
 It is good to run the application before starting the development. The solution has two main applications;
 
 * `TodoApp.HttpApi.Host` hosts the server-side HTTP API.
+{{if UI=="Blazor"}}
 * `TodoApp.Blazor` is the client-side Blazor WebAssembly application.
+{{else if UI=="MAUIBlazor"}}
+* `TodoApp.MauiBlazor` is the MAUI Blazor application.
+{{end}}
 
 Ensure the `TodoApp.HttpApi.Host` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the server-side HTTP API on the [Swagger UI](https://swagger.io/tools/swagger-ui/):
 
@@ -253,7 +257,7 @@ You can apply changes to the database using the following command, in the same c
 dotnet ef database update
 ````
 
-> If you are using Visual Studio, you may want to use the `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer" || UI=="Blazor" || UI=="BlazorWebApp"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore` is the *Default Project* in PMC.
+> If you are using Visual Studio, you may want to use the `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer" || UI=="Blazor" || UI=="BlazorWebApp"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG" || UI=="MAUIBlazor"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{else if DB=="Mongo"}}
 
@@ -582,11 +586,11 @@ If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering t
 
 ![todo-api](../images/todo-api.png)
 
-{{else if UI=="Blazor" || UI=="BlazorServer" || UI=="BlazorWebApp"}}
+{{else if UI=="Blazor" || UI=="BlazorServer" || UI=="BlazorWebApp" || UI=="MAUIBlazor"}}
 
 ### Index.razor.cs
 
-Open the `Index.razor.cs` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}} *TodoApp.Blazor.Client* {{else}}*TodoApp.Blazor*{{end}} project and replace the content with the following code block:
+Open the `Index.razor.cs` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}} *TodoApp.Blazor.Client* {{else if UI=="BlazorServer"}} *TodoApp.Blazor* {{else if UI=="MAUIBlazor"}} *TodoApp.MauiBlazor* {{end}} project and replace the content with the following code block:
 
 ```csharp
 using Microsoft.AspNetCore.Components;
@@ -627,7 +631,7 @@ namespace TodoApp.Blazor.Pages
 
 This class uses `ITodoAppService` to perform operations for the todo items. It manipulates the `TodoItems` list after create and delete operations. This way, we don't need to refresh the whole todo list from the server.
 
-{{if UI=="Blazor"}}
+{{if UI=="Blazor" || UI=="MAUIBlazor"}}
 
 See the *Dynamic C# Proxies & Auto API Controllers* section below to learn how we could inject and use the application service interface from the Blazor application which is running on the browser! But now, let's continue and complete the application.
 
@@ -635,7 +639,7 @@ See the *Dynamic C# Proxies & Auto API Controllers* section below to learn how w
 
 ### Index.razor
 
-Open the `Index.razor` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}} *TodoApp.Blazor.Client* {{else}} *TodoApp.Blazor* {{end}} project and replace the content with the following code block:
+Open the `Index.razor` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}} *TodoApp.Blazor.Client* {{else if UI=="BlazorServer"}} *TodoApp.Blazor* {{else if UI=="MAUIBlazor"}} *TodoApp.MauiBlazor* {{end}} project and replace the content with the following code block:
 
 ```xml
 @page "/"
@@ -677,7 +681,7 @@ Open the `Index.razor` file in the `Pages` folder of the {{if UI=="Blazor" || UI
 
 ### Index.razor.css
 
-As the final touch, open the `Index.razor.css` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}}*TodoApp.Blazor.Client*{{else}}*TodoApp.Blazor*{{end}} project and replace it with the following content:
+As the final touch, open the `Index.razor.css` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}}*TodoApp.Blazor.Client*{{else if UI=="BlazorServer"}} *TodoApp.Blazor* {{else if UI=="MAUIBlazor"}} *TodoApp.MauiBlazor* {{end}} project and replace it with the following content:
 
 ```css
 #TodoList{
@@ -710,7 +714,7 @@ This is a simple styling for the todo page. We believe that you can do much bett
 
 Now, you can run the application again to see the result.
 
-{{if UI=="Blazor"}}
+{{if UI=="Blazor" || UI=="MAUIBlazor"}}
 
 ### Dynamic C# Proxies & Auto API Controllers
 
