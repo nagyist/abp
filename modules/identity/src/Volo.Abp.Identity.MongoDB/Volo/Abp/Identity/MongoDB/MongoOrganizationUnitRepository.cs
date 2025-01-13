@@ -68,7 +68,7 @@ public class MongoOrganizationUnitRepository
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x => displayNames.Contains(x.DisplayName))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
