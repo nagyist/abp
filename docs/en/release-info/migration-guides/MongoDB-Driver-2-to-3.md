@@ -4,11 +4,11 @@
 
 The release of MongoDB Driver 3 includes numerous user-requested fixes and improvements that were deferred in previous versions due to backward compatibility concerns. It also features internal improvements to reduce technical debt and enhance maintainability. One major update is the removal of a significant portion of the public API (primarily from `MongoDB.Driver.Core`), which was not intended for public use. The removed APIs were marked as deprecated in version 2.30.0.
 
-For a complete list of breaking changes and upgrade guidelines, please refer to the [upgrade guide](https://www.mongodb.com/docs/drivers/csharp/current/upgrade/v3/).
+Please refer to the [upgrade guide](https://www.mongodb.com/docs/drivers/csharp/current/upgrade/v3/) for a complete list of breaking changes and upgrade guidelines.
 
 ## Repository Changes
 
-Some method signatures in the `MongoDbRepository` class have been updated, primarily to accommodate the removal of `IMongoQueryable`. The specific changes are as follows:
+Some method signatures in the `MongoDbRepository` class have been updated because the `IMongoQueryable` has been removed.  The specific changes are as follows:
 
 - The `GetMongoQueryable` method has been renamed to `GetQueryable`.
 - The `GetMongoQueryableAsync` method has been renamed to `GetQueryableAsync`.
