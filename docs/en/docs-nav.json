@@ -1290,6 +1290,10 @@
                       "path": "framework/ui/mvc-razor-pages/basic-theme.md"
                     },
                     {
+                      "text": "LeptonX Lite",
+                      "path": "ui-themes/lepton-x-lite/mvc.md"
+                    },
+                    {
                       "text": "LeptonX",
                       "path": "ui-themes/lepton-x/mvc.md"
                     }
@@ -1966,8 +1970,87 @@
         },
         {
           "text": "Layered Solution",
+          "isLazyExpandable": true,
           "path": "solution-templates/layered-web-application",
           "items": [
+            {
+              "text": "Overview",
+              "path": "solution-templates/layered-web-application/overview.md"
+            },
+            {
+              "text": "Solution Structure",
+              "path": "solution-templates/layered-web-application/solution-structure.md"
+            },
+            {
+              "text": "Main Components",
+              "isLazyExpandable": true,
+              "path": "solution-templates/layered-web-application/main-components.md",
+              "items": [
+                {
+                  "text": "Web Applications",
+                  "path": "solution-templates/layered-web-application/web-applications.md"
+                },
+                {
+                  "text": "Db Migrator",
+                  "path": "solution-templates/layered-web-application/db-migrator.md"
+                },
+                {
+                  "text": "Mobile Applications",
+                  "path": "solution-templates/layered-web-application/mobile-applications.md"
+                }
+              ]
+            },
+            {
+              "text": "Built-In Features",
+              "isLazyExpandable": true,
+              "path": "solution-templates/layered-web-application/built-in-features.md",
+              "items": [
+                {
+                  "text": "Authentication",
+                  "path": "solution-templates/layered-web-application/authentication.md"
+                },
+                {
+                  "text": "Database configurations",
+                  "path": "solution-templates/layered-web-application/database-configurations.md"
+                },
+                {
+                  "text": "Logging (with Serilog)",
+                  "path": "solution-templates/layered-web-application/logging.md"
+                },
+                {
+                  "text": "Swagger integration",
+                  "path": "solution-templates/layered-web-application/swagger-integration.md"
+                },
+                {
+                  "text": "Background Jobs",
+                  "path": "solution-templates/layered-web-application/background-jobs.md"
+                },
+                {
+                  "text": "Background Workers",
+                  "path": "solution-templates/layered-web-application/background-workers.md"
+                },
+                {
+                  "text": "Distributed Locking",
+                  "path": "solution-templates/layered-web-application/distributed-locking.md"
+                },
+                {
+                  "text": "Multi-Tenancy",
+                  "path": "solution-templates/layered-web-application/multi-tenancy.md"
+                },
+                {
+                  "text": "BLOB Storing",
+                  "path": "solution-templates/layered-web-application/blob-storing.md"
+                },
+                {
+                  "text": "CORS configuration",
+                  "path": "solution-templates/layered-web-application/cors-configuration.md"
+                }
+              ]
+            },
+            {
+              "text": "Helm Charts and Kubernetes",
+              "path": "solution-templates/layered-web-application/helm-charts-and-kubernetes.md"
+            },
             {
               "text": "Deployment",
               "path": "solution-templates/layered-web-application/deployment",
@@ -2364,6 +2447,10 @@
           "path": "ui-themes/basic-theme"
         },
         {
+          "text": "LeptonX Lite",
+          "path": "ui-themes/lepton-x-lite"
+        },
+        {
           "text": "LeptonX Theme",
           "path": "ui-themes/lepton-x"
         }
@@ -2525,6 +2612,10 @@
         {
           "text": "Free (Open Source) License vs Commercial (Pro) Licenses",
           "path": "others/free-licenses-vs-pro-licenses.md"
+        },
+        {
+          "text": "Knowledge Base",
+          "path": "kb/index.md"
         },
         {
           "text": "Penetration Test Report",

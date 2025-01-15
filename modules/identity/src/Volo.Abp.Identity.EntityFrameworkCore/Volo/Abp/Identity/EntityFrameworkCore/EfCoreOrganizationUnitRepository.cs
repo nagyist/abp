@@ -84,6 +84,17 @@ public class EfCoreOrganizationUnitRepository
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<List<OrganizationUnit>> GetListByDisplayNamesAsync(
+        string[] displayNames,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .Where(ou => displayNames.Contains(ou.DisplayName))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<OrganizationUnit> GetAsync(
         string displayName,
         bool includeDetails = true,

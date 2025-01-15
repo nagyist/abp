@@ -63,6 +63,16 @@ public class MongoOrganizationUnitRepository
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<List<OrganizationUnit>> GetListByDisplayNamesAsync(
+        string[] displayNames,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(x => displayNames.Contains(x.DisplayName))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<List<OrganizationUnit>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,

@@ -48,4 +48,6 @@ You can use the `dotnet dev-certs https -v -ep openiddict.pfx -p 00000000-0000-0
 
 > It is recommended to use **two** RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
 
+> If you encounter a deployment error on IIS that says **File not found** even though the file exists, it is recommended to set the application pool’s advanced settings **Load User Profile** to **True** to resolve the issue.
+
 For more information, please refer to: https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html#registering-a-certificate-recommended-for-production-ready-scenarios

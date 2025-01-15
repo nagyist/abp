@@ -1,6 +1,14 @@
 # Web Application Development Tutorial (with ABP Suite) - Part 3: Creating the Authors
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp","NG","MAUIBlazor"],
+    "DB": ["EF", "Mongo"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -24,11 +32,11 @@ After generating the all necessary code for the `Book` entity, and testing the *
 
 Click the entity selection box in the top right of the *CRUD page generation* page, and select the *-New entity-*:
 
-![](/images/suite-author-new-entity.png)
+![](./images/suite-author-new-entity.png)
 
 Then, you can type `Author` for the *Name* field and leave the other options as is (you can change the menu icon as **pen** for a proper menu icon, and/or other options, if you wish). ABP Suite automatically calculates proper values for the rest of the inputs for you:
 
-![](/images/suite-author-entity-1.png)
+![](./images/suite-author-entity-1.png)
 
 ABP Suite sets:
 
@@ -52,13 +60,27 @@ You can leave the other configurations as default.
 
 > **Note:** All properties are marked as **filterable** by default, and they appear in the advanced filter section because of that. You can set any properties you want as **not filterable** and then the related property will be removed from the advanced filter section and code will be generated accordingly.
 
-You can click the **Save and Generate** button to start the code generation process:
-
-![](./images/suite-book-entity-5.png)
+You can click the **Save and Generate** button to start the code generation process.
 
 ABP Suite will generate the necessary code for you. It will take some time to complete the process. After the process is completed, you will see a success message, you can click the *Ok* button, and then run the application by clicking the *Start* button (or alternatively, directly clicking the *run* icon) in the *Solution Runner* panel:
 
-![](./images/book-store-studio-run-app.png)
+{{ if UI == "MVC" }}
+
+![](./images/book-store-studio-run-app-mvc.png)
+
+{{ else if UI == "Angular" }}
+
+![](./images/book-store-studio-run-app-angular.png)
+
+{{ else if UI == "MAUIBlazor" }}
+
+![](./images/book-store-studio-run-app-mauiblazor.png)
+
+{{ else }}
+
+![](./images/book-store-studio-run-app-blazor.png)
+
+{{ end }}
 
 After the application is started, you can right-click and *Browse* on the application to open it in the ABP Studio's pre-integrated browser and try to add a new author:
 

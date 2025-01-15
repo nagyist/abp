@@ -358,7 +358,7 @@ public class NpmPackagesUpdater : ITransientDependency
     protected virtual void RunYarn(string fileDirectory)
     {
         Logger.LogInformation($"Running Yarn on {fileDirectory}");
-        CmdHelper.RunCmd($"yarn", fileDirectory);
+        CmdHelper.RunCmd($"npx yarn", fileDirectory);
     }
 
     protected virtual void RunNpmInstall(string fileDirectory)

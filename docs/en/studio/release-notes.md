@@ -2,6 +2,20 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
+## 0.9.20 (2025-01-08)
+
+* Upgraded templates to version `9.0.3`.
+* Fixed Invariant Culture problem in source code downloading.
+* Added missing linux support to OldCliInstaller
+* Increased database test connection timeout up to 10seconds.
+
+## 0.9.19 (2025-01-02)
+
+* Disabled auto-scroll when scrolled up in the logging section.
+* Added localhost development certificate check during solution load.
+* Added testing connection string in project creation.
+* Made enhancements for exception handling.
+
 ## 0.9.18 (2024-12-24)
 
 * Fixed Blazor WebApp Kubernetes problems.

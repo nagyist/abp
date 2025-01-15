@@ -50,7 +50,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
         if (!NpmHelper.IsYarnAvailable())
         {
-            Logger.LogWarning("YARN is not installed, which may cause package inconsistency, please use YARN instead of NPM. visit https://classic.yarnpkg.com/lang/en/docs/install/ and install YARN");
+            Logger.LogWarning("YARN is not installed, which may cause package inconsistency. ABP uses 'npx yarn <command>' behind the scenes to prevent possible inconsistencies.");
         }
 
         Logger.LogInformation($"Found {projectPaths.Count} projects.");
@@ -66,14 +66,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             // angular
             if (projectPath.EndsWith("angular.json"))
             {
-                if (NpmHelper.IsYarnAvailable())
-                {
-                    NpmHelper.RunYarn(projectDirectory);
-                }
-                else
-                {
-                    NpmHelper.RunNpmInstall(projectDirectory, "--legacy-peer-deps");
-                }
+                NpmHelper.RunYarn(projectDirectory);
             }
 
             // MVC or BLAZOR SERVER
@@ -86,14 +79,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
                     continue;
                 }
 
-                if (NpmHelper.IsYarnAvailable())
-                {
-                    NpmHelper.RunYarn(projectDirectory);
-                }
-                else
-                {
-                    NpmHelper.RunNpmInstall(projectDirectory, "--no-audit");
-                }
+                NpmHelper.RunYarn(projectDirectory);
 
                 await CleanAndCopyResources(projectDirectory);
             }
