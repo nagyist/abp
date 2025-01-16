@@ -196,7 +196,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         bool includeDetails = false,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
-        string id = null,
+        Guid? id = null,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
@@ -274,7 +274,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         string filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
-        string id = null,
+        Guid? id = null,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
@@ -438,7 +438,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         string filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
-        string id = null,
+        Guid? id = null,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
@@ -488,6 +488,6 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
             .WhereIf(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
             .WhereIf(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime)
-            .WhereIf(!string.IsNullOrWhiteSpace(id), x => x.Id.ToString() == id);
+            .WhereIf(id.HasValue, x => x.Id == id);
     }
 }
