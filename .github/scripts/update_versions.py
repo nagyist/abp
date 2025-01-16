@@ -5,7 +5,7 @@ from github import Github
 def update_latest_versions():
     version = os.environ["GITHUB_REF"].split("/")[-1]
 
-    if "rc" not in version:
+    if "rc" in version:
         return False
 
     with open("latest-versions.json", "r") as f:
@@ -39,14 +39,16 @@ def create_pr():
         branch=branch_name,
     )
 
-    pr = repo.create_pull(title="Update latest-versions.json",
-                          body="Automated PR to update the latest-versions.json file.",
-                          head=branch_name, base="dev")
+    try:
+        pr = repo.create_pull(title="Update latest-versions.json",
+                        body="Automated PR to update the latest-versions.json file.",
+                        head=branch_name, base="dev")
+    except Exception as e:
+        print(f"Error while creating PR: {e}")
 
     pr.create_review_request(reviewers=["ebicoglu", "gizemmutukurt", "skoc10"])
 
-if __name__ == "__dev__":
+if __name__ == "__main__":
     should_create_pr = update_latest_versions()
     if should_create_pr:
         create_pr()
- 

@@ -44,9 +44,20 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         CancellationToken cancellationToken = default
     );
 
+    Task RemoveClaimFromAllUsersAsync(
+        string claimType,
+        bool autoSave = false,
+        CancellationToken cancellationToken = default
+    );
+
     Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
         string normalizedRoleName,
         bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<Guid>> GetUserIdListByRoleIdAsync(
+        Guid roleId,
         CancellationToken cancellationToken = default
     );
 
@@ -131,4 +142,20 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         bool includeDetails = false,
         CancellationToken cancellationToken = default
     );
+
+    Task UpdateRoleAsync(
+        Guid sourceRoleId,
+        Guid? targetRoleId,
+        CancellationToken cancellationToken = default
+    );
+
+    Task UpdateOrganizationAsync(
+        Guid sourceOrganizationId,
+        Guid? targetOrganizationId,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<IdentityUserIdWithRoleNames>> GetRoleNamesAsync(
+        IEnumerable<Guid> userIds,
+        CancellationToken cancellationToken = default);
 }

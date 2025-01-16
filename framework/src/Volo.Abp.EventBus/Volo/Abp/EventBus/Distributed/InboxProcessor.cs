@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,13 +22,13 @@ public class InboxProcessor : IInboxProcessor, ITransientDependency
     protected IAbpDistributedLock DistributedLock { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IClock Clock { get; }
-    protected IEventInbox Inbox { get; private set; }
-    protected InboxConfig InboxConfig { get; private set; }
+    protected IEventInbox Inbox { get; private set; } = default!;
+    protected InboxConfig InboxConfig { get; private set; } = default!;
     protected AbpEventBusBoxesOptions EventBusBoxesOptions { get; }
 
     protected DateTime? LastCleanTime { get; set; }
 
-    protected string DistributedLockName => "AbpInbox_" + InboxConfig.Name;
+    protected string DistributedLockName { get; set; } = default!;
     public ILogger<InboxProcessor> Logger { get; set; }
     protected CancellationTokenSource StoppingTokenSource { get; }
     protected CancellationToken StoppingToken { get; }
@@ -60,15 +61,16 @@ public class InboxProcessor : IInboxProcessor, ITransientDependency
         await RunAsync();
     }
 
-    public Task StartAsync(InboxConfig inboxConfig, CancellationToken cancellationToken = default)
+    public virtual Task StartAsync(InboxConfig inboxConfig, CancellationToken cancellationToken = default)
     {
         InboxConfig = inboxConfig;
         Inbox = (IEventInbox)ServiceProvider.GetRequiredService(inboxConfig.ImplementationType);
+        DistributedLockName = $"AbpInbox_{InboxConfig.DatabaseName}";
         Timer.Start(cancellationToken);
         return Task.CompletedTask;
     }
 
-    public Task StopAsync(CancellationToken cancellationToken = default)
+    public virtual Task StopAsync(CancellationToken cancellationToken = default)
     {
         StoppingTokenSource.Cancel();
         Timer.Stop(cancellationToken);
@@ -91,7 +93,7 @@ public class InboxProcessor : IInboxProcessor, ITransientDependency
 
                 while (true)
                 {
-                    var waitingEvents = await Inbox.GetWaitingEventsAsync(EventBusBoxesOptions.InboxWaitingEventMaxCount, StoppingToken);
+                    var waitingEvents = await GetWaitingEventsAsync();
                     if (waitingEvents.Count <= 0)
                     {
                         break;
@@ -126,6 +128,11 @@ public class InboxProcessor : IInboxProcessor, ITransientDependency
                 catch (TaskCanceledException) { }
             }
         }
+    }
+
+    protected virtual async Task<List<IncomingEventInfo>> GetWaitingEventsAsync()
+    {
+        return await Inbox.GetWaitingEventsAsync(EventBusBoxesOptions.InboxWaitingEventMaxCount, EventBusBoxesOptions.InboxProcessorFilter, StoppingToken);
     }
 
     protected virtual async Task DeleteOldEventsAsync()

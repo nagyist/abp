@@ -5,11 +5,13 @@ using Volo.Abp.Domain.Entities;
 namespace Volo.CmsKit.Admin.Pages;
 
 [Serializable]
-public class PageDto : AuditedEntityDto<Guid>, IHasConcurrencyStamp
+public class PageDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
     public string Title { get; set; }
 
     public string Slug { get; set; }
+
+    public string LayoutName { get; set; }
 
     public string Content { get; set; }
 

@@ -23,6 +23,7 @@ import { DISABLE_TREE_STYLE_LOADING_TOKEN } from '../disable-tree-style-loading.
 export type DropEvent = NzFormatEmitEvent & { pos: number };
 
 @Component({
+  standalone: false,
   selector: 'abp-tree',
   templateUrl: 'tree.component.html',
   styleUrls: ['tree.component.scss'],

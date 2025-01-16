@@ -19,3 +19,7 @@ export * from './session-state.service';
 export * from './subscription.service';
 export * from './track-by.service';
 export * from './local-storage.service';
+export * from './window.service';
+export * from './internet-connection-service';
+export * from './local-storage-listener.service';
+export * from './title-strategy.service';

@@ -9,10 +9,13 @@ export namespace ABP {
     environment: Partial<Environment>;
     registerLocaleFn: (locale: string) => Promise<any>;
     skipGetAppConfiguration?: boolean;
+    skipInitAuthService?: boolean;
     sendNullsAsQueryParam?: boolean;
     tenantKey?: string;
     localizations?: Localization[];
     othersGroup?: string;
+    dynamicLayouts?: Map<string, string>;
+    disableProjectNameInTitle?: boolean;
   }
 
   export interface Child {
@@ -72,6 +75,7 @@ export namespace ABP {
     layout?: eLayoutType;
     iconClass?: string;
     group?: string;
+    breadcrumbText?: string;
   }
 
   export interface Tab extends Nav {

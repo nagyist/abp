@@ -10,28 +10,28 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.PermissionManagement;
 
-public class DynamicPermissionDefinitionStoreInMemoryCache : 
+public class DynamicPermissionDefinitionStoreInMemoryCache :
     IDynamicPermissionDefinitionStoreInMemoryCache,
     ISingletonDependency
 {
     public string CacheStamp { get; set; }
-    
+
     protected IDictionary<string, PermissionGroupDefinition> PermissionGroupDefinitions { get; }
     protected IDictionary<string, PermissionDefinition> PermissionDefinitions { get; }
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
     protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
 
     public SemaphoreSlim SyncSemaphore { get; } = new(1, 1);
-    
+
     public DateTime? LastCheckTime { get; set; }
 
     public DynamicPermissionDefinitionStoreInMemoryCache(
-        ISimpleStateCheckerSerializer stateCheckerSerializer, 
+        ISimpleStateCheckerSerializer stateCheckerSerializer,
         ILocalizableStringSerializer localizableStringSerializer)
     {
         StateCheckerSerializer = stateCheckerSerializer;
         LocalizableStringSerializer = localizableStringSerializer;
-        
+
         PermissionGroupDefinitions = new Dictionary<string, PermissionGroupDefinition>();
         PermissionDefinitions = new Dictionary<string, PermissionDefinition>();
     }
@@ -42,16 +42,16 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
     {
         PermissionGroupDefinitions.Clear();
         PermissionDefinitions.Clear();
-        
+
         var context = new PermissionDefinitionContext(null);
-        
+
         foreach (var permissionGroupRecord in permissionGroupRecords)
         {
             var permissionGroup = context.AddGroup(
                 permissionGroupRecord.Name,
-                LocalizableStringSerializer.Deserialize(permissionGroupRecord.DisplayName)
+                permissionGroupRecord.DisplayName != null ? LocalizableStringSerializer.Deserialize(permissionGroupRecord.DisplayName) : null
             );
-            
+
             PermissionGroupDefinitions[permissionGroup.Name] = permissionGroup;
 
             foreach (var property in permissionGroupRecord.ExtraProperties)
@@ -61,7 +61,7 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
 
             var permissionRecordsInThisGroup = permissionRecords
                 .Where(p => p.GroupName == permissionGroup.Name);
-            
+
             foreach (var permissionRecord in permissionRecordsInThisGroup.Where(x => x.ParentName == null))
             {
                 AddPermissionRecursively(permissionGroup, permissionRecord, permissionRecords);
@@ -92,11 +92,11 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
     {
         var permission = permissionContainer.AddPermission(
             permissionRecord.Name,
-            LocalizableStringSerializer.Deserialize(permissionRecord.DisplayName),
+            permissionRecord.DisplayName != null ? LocalizableStringSerializer.Deserialize(permissionRecord.DisplayName) : null,
             permissionRecord.MultiTenancySide,
             permissionRecord.IsEnabled
         );
-        
+
         PermissionDefinitions[permission.Name] = permission;
 
         if (!permissionRecord.Providers.IsNullOrWhiteSpace())

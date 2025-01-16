@@ -30,7 +30,7 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
             .WhereIf<Page, IMongoQueryable<Page>>(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.Title.ToLower().Contains(filter) || u.Slug.Contains(filter)
+                    u.Title.ToLower().Contains(filter.ToLower()) || u.Slug.Contains(filter)
             ).CountAsync(cancellation);
     }
 
@@ -75,5 +75,11 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
     public virtual Task<List<Page>> GetListOfHomePagesAsync(CancellationToken cancellationToken = default)
     {
         return GetListAsync(x => x.IsHomePage, cancellationToken: GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<string?> FindTitleAsync(Guid pageId, CancellationToken cancellationToken = default)
+    {
+        return await (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.Id == pageId).Select(x => x.Title)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

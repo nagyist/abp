@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Autofac.Core;
 using Autofac.Extras.DynamicProxy;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.DependencyInjection;
@@ -14,10 +17,14 @@ public static class AbpRegistrationBuilderExtensions
 {
     public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureAbpConventions<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
+            ServiceDescriptor serviceDescriptor,
             IModuleContainer moduleContainer,
-            ServiceRegistrationActionList registrationActionList)
+            ServiceRegistrationActionList registrationActionList,
+            ServiceActivatedActionList activatedActionList)
         where TActivatorData : ReflectionActivatorData
     {
+        registrationBuilder = registrationBuilder.InvokeActivatedActions(activatedActionList, serviceDescriptor);
+
         var serviceType = registrationBuilder.RegistrationData.Services.OfType<IServiceWithType>().FirstOrDefault()?.ServiceType;
         if (serviceType == null)
         {
@@ -32,6 +39,28 @@ public static class AbpRegistrationBuilderExtensions
 
         registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);
         registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType, implementationType);
+
+        return registrationBuilder;
+    }
+
+    private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> InvokeActivatedActions<TLimit, TActivatorData, TRegistrationStyle>(
+        this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
+        ServiceActivatedActionList activatedActionList,
+        ServiceDescriptor serviceDescriptor)
+        where TActivatorData : ReflectionActivatorData
+    {
+        var actions = activatedActionList.GetActions(serviceDescriptor);
+        if (actions.Any())
+        {
+            registrationBuilder.OnActivated(context =>
+            {
+                var serviceActivatedContext = new OnServiceActivatedContext(context.Instance!);
+                foreach (var action in actions)
+                {
+                    action.Invoke(serviceActivatedContext);
+                }
+            });
+        }
 
         return registrationBuilder;
     }
@@ -52,11 +81,15 @@ public static class AbpRegistrationBuilderExtensions
 
         if (serviceRegistredArgs.Interceptors.Any())
         {
-            registrationBuilder = registrationBuilder.AddInterceptors(
-                registrationActionList,
-                serviceType,
-                serviceRegistredArgs.Interceptors
-            );
+            var disableAbpFeaturesAttribute = serviceRegistredArgs.ImplementationType.GetCustomAttribute<DisableAbpFeaturesAttribute>(true);
+            if (disableAbpFeaturesAttribute == null || !disableAbpFeaturesAttribute.DisableInterceptors)
+            {
+                registrationBuilder = registrationBuilder.AddInterceptors(
+                    registrationActionList,
+                    serviceType,
+                    serviceRegistredArgs.Interceptors
+                );
+            }
         }
 
         return registrationBuilder;
@@ -69,7 +102,7 @@ public static class AbpRegistrationBuilderExtensions
         where TActivatorData : ReflectionActivatorData
     {
         // Enable Property Injection only for types in an assembly containing an AbpModule and without a DisablePropertyInjection attribute on class or properties.
-        if (moduleContainer.Modules.Any(m => m.Assembly == implementationType.Assembly) &&
+        if (moduleContainer.Modules.Any(m => m.AllAssemblies.Contains(implementationType.Assembly)) &&
             implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
         {
             registrationBuilder = registrationBuilder.PropertiesAutowired(new AbpPropertySelector(false));

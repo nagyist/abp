@@ -12,6 +12,7 @@ using Volo.Abp.Data;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Features;
@@ -25,33 +26,42 @@ namespace Volo.CmsKit.Public.Comments;
 [RequiresGlobalFeature(typeof(CommentsFeature))]
 public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPublicAppService
 {
-    protected string RegexMarkdownUrlPattern = @"\[[^\]]*\]\((?<url>.*?)\)(?![^\x60]*\x60)";
+    protected string RegexUrlPattern =
+        @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)";
     
     protected ICommentRepository CommentRepository { get; }
     protected ICmsUserLookupService CmsUserLookupService { get; }
     public IDistributedEventBus DistributedEventBus { get; }
     protected CommentManager CommentManager { get; }
-    
     protected CmsKitCommentOptions CmsCommentOptions { get; }
+
+    private readonly ISettingManager SettingManager;
 
     public CommentPublicAppService(
         ICommentRepository commentRepository,
         ICmsUserLookupService cmsUserLookupService,
         IDistributedEventBus distributedEventBus,
         CommentManager commentManager,
-        IOptionsSnapshot<CmsKitCommentOptions> cmsCommentOptions)
+        IOptionsSnapshot<CmsKitCommentOptions> cmsCommentOptions,
+        ISettingManager settingManager
+        )
     {
         CommentRepository = commentRepository;
         CmsUserLookupService = cmsUserLookupService;
         DistributedEventBus = distributedEventBus;
         CommentManager = commentManager;
         CmsCommentOptions = cmsCommentOptions.Value;
+        SettingManager = settingManager;
     }
 
     public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
     {
-        var commentsWithAuthor = await CommentRepository
-            .GetListWithAuthorsAsync(entityType, entityId);
+        var isRequireApprovementEnabled = bool.Parse(await SettingManager.GetOrNullGlobalAsync(CmsKitSettings.Comments.RequireApprovement));
+        
+        var commentsWithAuthor = isRequireApprovementEnabled
+            ? await CommentRepository.GetListWithAuthorsAsync(entityType, entityId, CommentApproveState.Approved)
+            : await CommentRepository.GetListWithAuthorsAsync(entityType, entityId, CommentApproveState.Approved | CommentApproveState.Waiting);
+
 
         return new ListResultDto<CommentWithDetailsDto>(
             ConvertCommentsToNestedStructure(commentsWithAuthor)
@@ -62,20 +72,22 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
     {
         CheckExternalUrls(entityType, input.Text);
-        
-        var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
 
         if (input.RepliedCommentId.HasValue)
         {
             await CommentRepository.GetAsync(input.RepliedCommentId.Value);
         }
 
+        await CheckIdempotencyTokenUniquenessAsync(input.IdempotencyToken);
+
+        var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
         var comment = await CommentRepository.InsertAsync(
             await CommentManager.CreateAsync(
                 user,
                 entityType,
                 entityId,
                 input.Text,
+                input.Url,
                 input.RepliedCommentId
             )
         );
@@ -124,7 +136,41 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
             throw new AbpAuthorizationException();
         }
     }
+    
+    protected virtual void CheckExternalUrls(string entityType, string text)
+    {
+        if (!CmsCommentOptions.AllowedExternalUrls.TryGetValue(entityType, out var allowedExternalUrls))
+        {
+            return;
+        }
 
+        text = text.Replace("www.", "https://www.").Replace("://https", "");
+
+        var matches = Regex.Matches(text, RegexUrlPattern,
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        foreach (Match match in matches)
+        {
+            if (!match.Success || match.Groups.Count <= 0)
+            {
+                continue;
+            }
+
+            var normalizedFullUrl = NormalizeUrl(match.Groups[0].Value);
+            
+            if (!allowedExternalUrls.Any(allowedExternalUrl =>
+                    normalizedFullUrl.Contains(NormalizeUrl(allowedExternalUrl), StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new UserFriendlyException(L["UnAllowedExternalUrlMessage"]);
+            }
+        }
+    }
+    
+    private static string NormalizeUrl(string url)
+    {
+        return url.Replace("www.", "").RemovePostFix("/");
+    }
+    
     private List<CommentWithDetailsDto> ConvertCommentsToNestedStructure(List<CommentWithAuthorQueryResultItem> comments)
     {
         //TODO: I think this method can be optimized if you use dictionaries instead of straight search
@@ -157,45 +203,13 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
         return ObjectMapper.Map<CmsUser, CmsUserDto>(comments.Single(c => c.Comment.Id == commentId).Author);
     }
 
-    private void CheckExternalUrls(string entityType, string text)
+    private async Task CheckIdempotencyTokenUniquenessAsync(string idempotencyToken) 
     {
-        if (!CmsCommentOptions.AllowedExternalUrls.TryGetValue(entityType, out var allowedExternalUrls))
+        if(!await CommentRepository.ExistsAsync(idempotencyToken))
         {
             return;
         }
 
-        var matches = Regex.Matches(text, RegexMarkdownUrlPattern,
-            RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        foreach (Match match in matches)
-        {
-            if (!match.Success || match.Groups.Count < 2)
-            {
-                continue;
-            }
-
-            var url = NormalizeUrl(match.Groups[1].Value);
-            if (!IsExternalUrl(url))
-            {
-                continue;
-            }
-
-            if (!allowedExternalUrls.Any(allowedExternalUrl =>
-                    url.Contains(NormalizeUrl(allowedExternalUrl), StringComparison.OrdinalIgnoreCase)))
-            {
-                throw new UserFriendlyException(L["UnAllowedExternalUrlMessage"]);
-            }
-        }
-    }
-
-    private static bool IsExternalUrl(string url)
-    {
-        return url.StartsWith("https", StringComparison.InvariantCultureIgnoreCase) ||
-               url.StartsWith("http", StringComparison.InvariantCultureIgnoreCase);
-    }
-
-    private static string NormalizeUrl(string url)
-    {
-        return url.Replace("www.", "").RemovePostFix("/");
+        throw new UserFriendlyException(L["DuplicateCommentAttemptMessage"]);
     }
 }
