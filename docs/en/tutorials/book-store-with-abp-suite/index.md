@@ -1,6 +1,14 @@
 # Web Application Development Tutorial (with ABP Suite)
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp","NG","MAUIBlazor"],
+    "DB": ["EF", "Mongo"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Next": {
@@ -18,8 +26,8 @@
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* **Entity Framework Core** as the database provider.
-* **MVC** as the UI Framework.
+* **{{DB_Value}}** as the database provider.
+* **{{UI_Value}}** as the UI Framework.
 
 This tutorial is organized as the following parts:
 
