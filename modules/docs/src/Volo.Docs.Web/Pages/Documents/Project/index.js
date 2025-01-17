@@ -49,15 +49,10 @@ var doc = doc || {};
                     return;
                 }
                 for(var i = 0; i < lazyLiElements.length; i++){
-                    var $li = $(lazyLiElements[i]);
-                    if($li.has("ul").length === 0){
-                        var $a = $li.find("a");
-                        var node = doc.lazyExpandableNavigation.findNode($a.text(), $a.attr("href"), doc.project.navigation);
-                        node.items.forEach(item => {
-                            doc.lazyExpandableNavigation.renderNodeAsHtml($li, item, true);
-                        })
-                    }
 
+                    doc.lazyExpandableNavigation.load(lazyLiElements[i]);
+
+                    var $li = $(lazyLiElements[i]);
                     var childLazyLiElements = $li.find("li.lazy-expand");
                     if(childLazyLiElements.length > 0){
                         doc.lazyExpandableNavigation.isAllLoaded = false;
@@ -68,6 +63,23 @@ var doc = doc || {};
                 }
                 
                 doc.lazyExpandableNavigation.isAllLoaded = true;
+            },
+            load : function(lazyLiEment){
+                var $li = $(lazyLiEment);
+
+                if($li.has("ul").length > 0){
+                    return;
+                }
+                
+                var $a = $li.find("a");
+                var text = $a.contents().filter(function() { return this.nodeType === 3 }).text();
+                var node = doc.lazyExpandableNavigation.findNode(text, $a.attr("href") , doc.project.navigation);
+                if(!node || !node.items){
+                    return;
+                }
+                node.items.forEach(item => {
+                    doc.lazyExpandableNavigation.renderNodeAsHtml($li, item, true);
+                })
             }
         }
         
@@ -370,17 +382,7 @@ var doc = doc || {};
                 }
             });
             $("li .lazy-expand").on('click', function(){
-                var $this = $(this);
-                if($this.has("ul").length > 0){
-                    return;
-                }
-                
-                var $a = $this.find("a");
-                var node = doc.lazyExpandableNavigation.findNode($a.text(), $a.attr("href") , doc.project.navigation);
-                node.items.forEach(item => {
-                    doc.lazyExpandableNavigation.renderNodeAsHtml($this, item, true);
-                })
-
+                doc.lazyExpandableNavigation.load(this);
                 initLazyExpandNavigation();
             });
         }

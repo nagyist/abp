@@ -1,6 +1,14 @@
 # Web Application Development Tutorial (with ABP Suite) - Part 2: Creating the Books
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp","NG","MAUIBlazor"],
+    "DB": ["EF", "Mongo"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -87,9 +95,7 @@ You can leave the other configurations as default.
 
 > ABP Suite allows you to define properties with a great range of options, for example, you can specify the property type as *string*, *int*, *float*, *Guid*, *DateTime*, and even *File* (for file upload) and also you can set any options while defining your properties, such as specifying it as *required*, or *nullable*, setting *max-min length*, *default value* and more...
 
-After that, you can click the **Save and Generate** button to start the code generation process:
-
-![](./images/suite-book-entity-5.png)
+After that, you can click the **Save and Generate** button to start the code generation process.
 
 ABP Suite will generate the necessary code for you. It generates:
 
@@ -104,11 +110,27 @@ ABP Suite will generate the necessary code for you. It generates:
 
 It will take some time to complete the process. After the process is completed, you will see a success message, you can click the *Ok* button, and then run the application by clicking the *Start* button (or alternatively, directly clicking the *run* icon) in the *Solution Runner* panel:
 
-![](./images/book-store-studio-run-app.png)
+{{ if UI == "MVC" }}
+
+![](./images/book-store-studio-run-app-mvc.png)
+
+{{ else if UI == "Angular" }}
+
+![](./images/book-store-studio-run-app-angular.png)
+
+{{ else if UI == "MAUIBlazor" }}
+
+![](./images/book-store-studio-run-app-mauiblazor.png)
+
+{{ else }}
+
+![](./images/book-store-studio-run-app-blazor.png)
+
+{{ end }}
 
 After the application is started, you can right-click and *Browse* on the application to open it in the ABP Studio's pre-integrated browser. You can see the Books page in the following figure with a single record:
 
-![](./images/suite-book-pages-1.png)
+![](./images/suite-book-pages-browser.png)
 
 On this page, you can create a new book, update an existing book, delete a book, export all records (or the filtered records) to excel, filter the records by using the advanced filter section, bulk delete multiple records and so on.
 

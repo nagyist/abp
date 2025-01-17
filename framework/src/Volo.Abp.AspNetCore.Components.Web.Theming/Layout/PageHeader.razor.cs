@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
 using Volo.Abp.BlazoriseUI;
 using System.Linq;
+using System;
 
 namespace Volo.Abp.AspNetCore.Components.Web.Theming.Layout;
 
-public partial class PageHeader : ComponentBase
+public partial class PageHeader : ComponentBase, IDisposable
 {
     protected List<RenderFragment> ToolbarItemRenders { get; set; }
 
@@ -106,5 +107,12 @@ public partial class PageHeader : ComponentBase
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+    }
+    
+    public void Dispose()
+    {
+        PageLayout.ToolbarItems.Clear();
+        PageLayout.BreadcrumbItems.Clear();
+        ToolbarItemRenders.Clear();
     }
 }

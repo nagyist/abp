@@ -291,7 +291,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
                 var result = await response.Content.ReadAsStringAsync();
                 var versions = JsonSerializer.Deserialize<GithubReleaseVersions>(result);
 
-                return templateName.Contains("LeptonX") ?
+                return (templateName.Contains("LeptonX") || templateName.Contains("lepton-x")) ?
                     versions.LeptonXVersions.Any(v => v.Name == version) :
                     versions.FrameworkAndCommercialVersions.Any(v => v.Name == version);
             }
