@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB;
@@ -20,6 +19,12 @@ public interface IMongoDbRepository<TEntity> : IRepository<TEntity>
     IMongoCollection<TEntity> Collection { get; }
 
     Task<IMongoCollection<TEntity>> GetCollectionAsync(CancellationToken cancellationToken = default);
+
+    [Obsolete("Use GetQueryable method.")]
+    IQueryable<TEntity> GetMongoQueryable();
+
+    [Obsolete("Use GetQueryableAsync method.")]
+    Task<IQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions? options = null);
 
     Task<IQueryable<TEntity>> GetQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions? options = null);
 

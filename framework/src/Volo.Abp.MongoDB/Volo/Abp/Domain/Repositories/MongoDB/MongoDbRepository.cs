@@ -499,7 +499,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         await DeleteManyAsync(entities, autoSave, cancellationToken);
     }
 
-    public override async Task DeleteDirectAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    public async override Task DeleteDirectAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
@@ -523,6 +523,21 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
         }
     }
 
+    [Obsolete("Use GetQueryableAsync method.")]
+    protected override IQueryable<TEntity> GetQueryable()
+    {
+        return ApplyDataFilters(
+            SessionHandle != null
+                ? Collection.AsQueryable(SessionHandle)
+                : Collection.AsQueryable()
+        );
+    }
+
+    public async override Task<IQueryable<TEntity>> GetQueryableAsync()
+    {
+        return await GetQueryableAsync();
+    }
+
     public async override Task<TEntity?> FindAsync(
         Expression<Func<TEntity, bool>> predicate,
         bool includeDetails = true,
@@ -536,21 +551,18 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     }
 
     [Obsolete("Use GetQueryableAsync method.")]
-    protected override IQueryable<TEntity> GetQueryable()
+    public virtual IQueryable<TEntity> GetMongoQueryable()
     {
-        return ApplyDataFilters(
-            SessionHandle != null
-                ? Collection.AsQueryable(SessionHandle)
-                : Collection.AsQueryable()
-        );
+        return GetQueryable();
     }
 
-    public async override Task<IQueryable<TEntity>> GetQueryableAsync()
+    [Obsolete("Use GetQueryableAsync method.")]
+    public virtual Task<IQueryable<TEntity>> GetMongoQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions? options = null)
     {
-        return await GetQueryableAsync<TEntity>();
+        return GetQueryableAsync<TEntity>(cancellationToken, options);
     }
 
-    public async Task<IQueryable<TEntity>> GetQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions? options = null)
+    public virtual async Task<IQueryable<TEntity>> GetQueryableAsync(CancellationToken cancellationToken = default, AggregateOptions? options = null)
     {
         return await GetQueryableAsync<TEntity>(cancellationToken, options);
     }
