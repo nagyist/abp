@@ -10,8 +10,9 @@ Please refer to the [upgrade guide](https://www.mongodb.com/docs/drivers/csharp/
 
 Some method signatures in the `MongoDbRepository` class have been updated because the `IMongoQueryable` has been removed.  The specific changes are as follows:
 
-- The `GetMongoQueryable` method has been renamed to `GetQueryable`.
-- The `GetMongoQueryableAsync` method has been renamed to `GetQueryableAsync`.
+- The new `GetQueryableAsync` method has been added to return `IQueryable<TEntity>`.
+- The `GetMongoQueryable` and `GetMongoQueryableAsync` methods return `IQueryable<TEntity>` instead of `IMongoQueryable<TEntity>`, 
+- The `GetMongoQueryable` and `GetMongoQueryableAsync` methods are marked as obsolete, You should use the new `GetQueryableAsync` method instead.
 
 Please update your application by searching for and replacing these method calls.
 
