@@ -39,7 +39,7 @@ if ($full -eq "-f")
 		"../source-code"
 	)
 	if ($env:OS -eq "Windows_NT") {
-		solutionPaths += "../templates/wpf"
+		$solutionPaths += "../templates/wpf"
 	}
 }else{ 
 	Write-host ""
