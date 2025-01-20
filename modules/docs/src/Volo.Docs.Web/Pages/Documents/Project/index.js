@@ -376,7 +376,7 @@ var doc = doc || {};
         
         var initLazyExpandNavigation = function(){
             $("li .lazy-expand").off('click');
-            $("li .lazy-expand a").on('click', function(e){
+            $("li .lazy-expand").children("a").on('click', function(e){
                 if($(this).attr("href") !== "javascript:;"){
                     e.stopPropagation();
                 }
