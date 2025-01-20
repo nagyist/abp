@@ -194,7 +194,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             }
         }
 
-        if (Options.SaveEntityHistoryWhenNavigationChanges && AbpEfCoreNavigationHelper != null)
+        if (AbpEfCoreNavigationHelper != null)
         {
             foreach (var (navigationEntry, index) in entityEntry.Navigations.Select((value, i) => ( value, i )))
             {
