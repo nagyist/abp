@@ -57,6 +57,10 @@
     <div class="@containerClass">
         <abp-row>
             <abp-column class="col mx-auto" style="max-width: 440px">
+                <div class="text-center mb-3">
+                    <img src="@(BrandingProvider.LogoUrl ?? Url.Content("~/themes/basic/logo.svg"))" class="mb-1" alt="@BrandingProvider.AppName"/>
+                    <h2>@BrandingProvider.AppName</h2>
+                </div>
                 @if (MultiTenancyOptions.Value.IsEnabled &&
                   (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true ||
                    TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(QueryStringTenantResolveContributor.ContributorName) == true))
