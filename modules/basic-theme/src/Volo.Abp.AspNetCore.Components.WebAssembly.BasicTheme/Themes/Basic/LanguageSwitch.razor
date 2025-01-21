@@ -1,8 +1,10 @@
 ﻿@using Volo.Abp.Localization
 @using System.Globalization
 @using System.Collections.Immutable
+@using Volo.Abp.AspNetCore.Components.Web
 @inject ILanguageProvider LanguageProvider
 @inject IJSRuntime JsRuntime
+@inject ICookieService CookieService
 @if (_otherLanguages != null && _otherLanguages.Any())
 {
     <BarDropdown RightAligned="true">
@@ -57,20 +59,23 @@
     {
         await JsRuntime.InvokeVoidAsync(
             "localStorage.setItem",
-            "Abp.SelectedLanguage", 
+            "Abp.SelectedLanguage",
             language.UiCultureName
         );
 
         await JsRuntime.InvokeVoidAsync(
             "localStorage.setItem",
-            "Abp.IsRtl", 
+            "Abp.IsRtl",
             CultureInfo.GetCultureInfo(language.UiCultureName).TextInfo.IsRightToLeft
         );
 
-        await JsRuntime.InvokeVoidAsync(
-            "abp.utils.setCookieValue",
+        await CookieService.SetAsync(
             ".AspNetCore.Culture",
-            $"c={language.CultureName}|uic={language.UiCultureName}"
+            $"c={language.CultureName}|uic={language.UiCultureName}",
+            new CookieOptions
+            {
+                Path = "/"
+            }
         );
 
         await JsRuntime.InvokeVoidAsync("location.reload");
