@@ -16,43 +16,109 @@ By default, ABP Studio uses stable versions to create solutions. Therefore, if y
 
 ## Migration Guide
 
-There are no breaking changes in this version that would affect your application.
+There are no breaking changes in this version that would affect your application. Only you might need to update some constant names due to the OpenIddict 6.0 upgrade, which is explained in the [OpenIddict 6.0 migration guide](https://docs.abp.io/en/abp/9.1/Migration-Guides/OpenIddict-6_0).
 
 ## What's New with ABP v9.1?
 
 In this section, I will introduce some major features released in this version.
 Here is a brief list of titles explained in the next sections:
 
-* Angular 19 Upgrade
-* OpenIddict v6.0 Update
+* Upgraded to Angular 19
+* Upgraded to OpenIddict 6.0
 * New Blazor WASM Bundling System
-* Improved Distributed Event Handler Performance
-* Lazy Expandable Documentation Feature
-* Idle Session Warning Feature
+* Idle Session Warning
+* Lazy Expandable Feature for Documentation
 
-### Angular 19 Upgrade
+### Upgraded to Angular 19
 
-We've upgraded the Angular templates and packages to Angular 19. This upgrade brings the latest features and improvements from the Angular ecosystem to ABP-based applications, including better performance and development experience.
+We've upgraded the Angular templates and packages to **Angular 19**. This upgrade brings the latest features and improvements from the Angular ecosystem to ABP-based applications, including better performance and development experience.
 
-### OpenIddict v6.0 Update
+### Upgraded to OpenIddict 6.0
 
-The OpenIddict integration has been updated to version 6.0, bringing enhanced security features and improved authentication capabilities. This update ensures your applications stay current with the latest security standards and best practices.
+OpenIddict 6.0 has been released and we've upgraded the OpenIddict packages to version 6.0 in ABP 9.1. This brings enhanced security features and improved authentication capabilities. The migration is straightforward and mainly involves updating some constant names:
+
+- `OpenIddictConstants.Permissions.Endpoints.Logout` is now `OpenIddictConstants.Permissions.Endpoints.EndSession`
+- `OpenIddictConstants.Permissions.Endpoints.Device` is now `OpenIddictConstants.Permissions.Endpoints.DeviceAuthorization`
+
+If you're using IdentityModel packages directly, you'll need to upgrade them to the latest stable version (8.3.0). This update ensures your applications stay current with the latest security standards and best practices.
+
+> Please refer to the [OpenIddict 6.0 migration guide](https://docs.abp.io/en/abp/9.1/Migration-Guides/OpenIddict-6_0) for more information.    
 
 ### New Blazor WASM Bundling System
 
-We've implemented a new bundling system for Blazor WebAssembly applications that significantly improves the application loading performance and development experience. This new system provides better control over asset management and optimizes the delivery of your Blazor WASM applications.
+We've implemented a new bundling system for Blazor WebAssembly applications that eliminates the need to manually run the `abp bundle` command. This system automatically handles JavaScript and CSS file bundling at runtime, significantly improving both development experience and application loading performance.
 
-### Improved Distributed Event Handler Performance
+**Key improvements include:**
 
-We've enhanced the distributed event handling system to avoid global blocking scenarios. This improvement allows for better scalability and performance in distributed systems by implementing a more efficient event handling mechanism that reduces bottlenecks in high-load scenarios.
+- Automatic bundling of JavaScript and CSS files without manual intervention
+- Dynamic file generation through the host application
+- Better integration with the ABP module system
+- Improved asset management through virtual file system
 
-### Lazy Expandable Documentation Feature
+The new system is particularly beneficial for modular applications, as it allows modules to contribute their assets automatically to the global bundles. This results in a more maintainable and efficient asset management system for Blazor WebAssembly applications.
 
-A new lazy expandable feature has been added to the documentation system, making it easier to navigate through large documentation sections. This feature improves the user experience by allowing readers to expand and collapse sections as needed, making documentation more manageable and easier to read.
+> Please refer to [this documentation](https://abp.io/docs/9.1/framework/ui/blazor/global-scripts-styles) for more information. 
 
-### Idle Session Warning Feature
+### Idle Session Warning
 
-We've introduced a new idle session warning feature that helps manage user sessions more effectively. This feature alerts users when their session is about to expire due to inactivity, allowing them to take action to maintain their session, enhancing the user experience and security of your applications.
+We've introduced a new idle session warning feature that helps manage user sessions more effectively across MVC, Blazor, and Angular UIs. This security enhancement automatically monitors user activity and manages session timeouts in a user-friendly way.
+
+![Idle Session Settings](idle-session-settings.png)
+
+The feature can be easily configured through the administration interface, where administrators can:
+
+- Enable/disable the idle session timeout
+- Set custom timeout duration in minutes
+- Configure when users should be signed out
+
+When a user becomes inactive for the configured duration, they'll receive a warning dialog:
+
+![Session Expiration Warning](session-expiration-warning.png)
+
+**Key features and behaviors:**
+
+- Tracks real user activity (mouse movements, keyboard presses) across all tabs
+- Works on a per-browser session basis - affects all tabs of the same session
+- Maintains session if user is active in any tab of the application
+- Provides a countdown timer before automatic sign-out
+- Offers options to "Stay signed in" or "Sign out now"
+
+This feature significantly improves application security while maintaining a smooth user experience by preventing unexpected session expirations and data loss.
+
+### Lazy Expandable Feature for Documentation
+
+We've introduced a new lazy expandable feature to the documentation system that significantly improves navigation through large documentation sections. This enhancement addresses common challenges when dealing with extensive documentation hierarchies by introducing smart menu management.
+
+**Key benefits and features:**
+
+- **Cleaner Navigation:** The menu stays concise by hiding sub-items until they're needed, reducing visual clutter
+- **Better Performance:** Reduces the initial load of the navigation tree by loading sub-items on demand
+- **Improved Search Experience:** Makes filtering documentation items more efficient by showing only relevant top-level items
+- **Context-Aware Expansion:** Automatically expands relevant sections when viewing specific documentation pages
+
+The feature works by marking certain documentation sections as "lazy expandable" in the navigation configuration. When users navigate to a document within a lazy expandable section, the system automatically expands the relevant menu items while keeping other sections collapsed.
+
+This improvement is particularly valuable for complex documentation areas like tutorials, solution templates, and extensive module documentation, where having all navigation items visible at once could be overwhelming.
+
+An example of lazy expandable feature from the [ABP's BookStore Tutorial](https://abp.io/docs/latest/tutorials/book-store/part-01):
+
+```json
+        {
+          "text": "Book Store Application",
+          "isLazyExpandable": true,
+          "path": "tutorials/book-store",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "tutorials/book-store",
+              "isIndex": true
+            },
+            //other items...
+          ]
+        }
+```
+
+![Lazy Expandable Feature](lazy-expandable.png)
 
 ### Others
 
@@ -61,6 +127,7 @@ Some other highlights from this release:
 * Updated Iyzico NuGet packages to the latest version, which is used in the [ABP's Payment Module](https://abp.io/docs/latest/modules/payment#payment-module-pro).
 * Removed optional _secondaryIds_ from path. See: [#21307](https://github.com/abpframework/abp/pull/21307)
 * [CMS Kit Pro](https://abp.io/docs/latest/modules/cms-kit-pro): Added automatic deletion of comments when a blog post is deleted - comments are now automatically removed when their associated blog post is deleted.
+* Avoiding global blocking in distributed event handlers (See [#21716](https://github.com/abpframework/abp/pull/21716)).
 
 ## Community News
 
