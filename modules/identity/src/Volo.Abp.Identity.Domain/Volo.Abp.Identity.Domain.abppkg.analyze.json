@@ -6056,6 +6056,65 @@
       "summary": null
     },
     {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.Abp.Identity",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "IdentityUser",
+            "namespace": "Volo.Abp.Identity",
+            "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+            "fullName": "Volo.Abp.Identity.IdentityUser"
+          },
+          "name": "EntityUpdatedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityUpdatedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "IdentityUser",
+            "namespace": "Volo.Abp.Identity",
+            "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+            "fullName": "Volo.Abp.Identity.IdentityUser"
+          },
+          "name": "EntityDeletedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityDeletedEventData`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityUpdatedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityUpdatedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ILocalEventHandler<EntityDeletedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityDeletedEventData`1>"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "UserEntityUpdatedOrDeletedEventHandler",
+      "summary": null
+    },
+    {
       "defaultValue": "6",
       "displayName": "Required length",
       "description": "The minimum length a password must be.",

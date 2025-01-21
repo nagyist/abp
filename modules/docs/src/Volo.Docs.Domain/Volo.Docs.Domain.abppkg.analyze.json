@@ -1799,6 +1799,83 @@
       "contentType": "repositoryInterface",
       "name": "IDocumentRepository",
       "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.Docs.Documents.FullSearch.Elastic",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "Document",
+            "namespace": "Volo.Docs.Documents",
+            "declaringAssemblyName": "Volo.Docs.Domain",
+            "fullName": "Volo.Docs.Documents.Document"
+          },
+          "name": "EntityCreatedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityCreatedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "Document",
+            "namespace": "Volo.Docs.Documents",
+            "declaringAssemblyName": "Volo.Docs.Domain",
+            "fullName": "Volo.Docs.Documents.Document"
+          },
+          "name": "EntityUpdatedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityUpdatedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "Document",
+            "namespace": "Volo.Docs.Documents",
+            "declaringAssemblyName": "Volo.Docs.Domain",
+            "fullName": "Volo.Docs.Documents.Document"
+          },
+          "name": "EntityDeletedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityDeletedEventData`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityCreatedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityCreatedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ILocalEventHandler<EntityUpdatedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityUpdatedEventData`1>"
+        },
+        {
+          "name": "ILocalEventHandler<EntityDeletedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityDeletedEventData`1>"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "DocumentChangedEventHandler",
+      "summary": null
     }
   ]
 }
