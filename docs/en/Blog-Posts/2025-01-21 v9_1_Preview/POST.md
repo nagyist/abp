@@ -1,7 +1,5 @@
 # ABP Platform 9.1 RC Has Been Released
 
-![](cover-image.png)
-
 We are happy to release [ABP](https://abp.io) version **9.1 RC** (Release Candidate). This blog post introduces the new features and important changes in this new version.
 
 Try this version and provide feedback for a more stable version of ABP v9.1! Thanks to you in advance.
@@ -12,11 +10,11 @@ You can check the [Get Started page](https://abp.io/get-started) to see how to g
 
 By default, ABP Studio uses stable versions to create solutions. Therefore, if you want to create a solution with a preview version, first you need to create a solution and then switch your solution to the preview version from the ABP Studio UI:
 
-![](studio-switch-to-preview.png)
+![studio-switch-to-preview.png](studio-switch-to-preview.png)
 
 ## Migration Guide
 
-There are no breaking changes in this version that would affect your application. Only you might need to update some constant names due to the OpenIddict 6.0 upgrade, which is explained in the [OpenIddict 6.0 migration guide](https://docs.abp.io/en/abp/9.1/Migration-Guides/OpenIddict-6_0).
+There are no breaking changes in this version that would affect your application. Only you might need to update some constant names due to the OpenIddict 6.0 upgrade, which is explained in the [OpenIddict 6.0 migration guide](https://abp.io/docs/9.1/release-info/migration-guides/openiddict5-to-6).
 
 ## What's New with ABP v9.1?
 
@@ -42,7 +40,7 @@ OpenIddict 6.0 has been released and we've upgraded the OpenIddict packages to v
 
 If you're using IdentityModel packages directly, you'll need to upgrade them to the latest stable version (8.3.0). This update ensures your applications stay current with the latest security standards and best practices.
 
-> Please refer to the [OpenIddict 6.0 migration guide](https://docs.abp.io/en/abp/9.1/Migration-Guides/OpenIddict-6_0) for more information.    
+> Please refer to the [OpenIddict 6.0 migration guide](https://abp.io/docs/9.1/release-info/migration-guides/openiddict5-to-6) for more information.    
 
 ### New Blazor WASM Bundling System
 
@@ -61,9 +59,9 @@ The new system is particularly beneficial for modular applications, as it allows
 
 ### Idle Session Warning
 
-We've introduced a new idle session warning feature that helps manage user sessions more effectively across MVC, Blazor, and Angular UIs. This security enhancement automatically monitors user activity and manages session timeouts in a user-friendly way.
+We've introduced a new idle session warning feature for the [Account (Pro) Module](https://abp.io/docs/latest/modules/account-pro) that helps manage user sessions more effectively. This security enhancement automatically monitors user activity and manages session timeouts in a user-friendly way.
 
-![Idle Session Settings](idle-session-settings.png)
+![idle-session-settings.png](idle-session-settings.png)
 
 The feature can be easily configured through the administration interface, where administrators can:
 
@@ -73,7 +71,7 @@ The feature can be easily configured through the administration interface, where
 
 When a user becomes inactive for the configured duration, they'll receive a warning dialog:
 
-![Session Expiration Warning](session-expiration-warning.png)
+![session-expiration-warning.png](session-expiration-warning.png)
 
 **Key features and behaviors:**
 
@@ -118,7 +116,7 @@ An example of lazy expandable feature from the [ABP's BookStore Tutorial](https:
         }
 ```
 
-![Lazy Expandable Feature](lazy-expandable.png)
+![lazy-expandable.png](lazy-expandable.png)
 
 ### Others
 
