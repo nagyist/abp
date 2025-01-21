@@ -16,13 +16,13 @@
     grid-template-columns: 35px 1fr;
     gap: 5px;
     margin: 5px 0;
-    padding: 7px;
+    padding: 10px;
     width: 350px;
     user-select: none;
     z-index: 9999;
     color: #fff;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 16px;
     box-shadow: 0 0 20px 0 rgba(76, 87, 125, 0.02);
     animation: toastIn 0.3s ease-in-out;
 }
@@ -54,7 +54,7 @@
 }
 
 .abp-toast-icon .icon {
-    font-size: 32px;
+    font-size: 30px;
 }
 
 .abp-toast-content {
