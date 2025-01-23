@@ -1868,6 +1868,10 @@
     "GenerateQuote" : "Generate Quote" ,
     "GeneratePriceQuote": "Generate a Price Quote",
     "Qa:QuestionPageTitle": "Support",
-    "SelectedTrainingName" : "Trainings"
+    "SelectedTrainingName" : "Trainings",
+    "RcStableDifference": "What is the difference between the RC version and the stable version of ABP?",
+    "RcStableDifferenceExplanation1": "The RC (Release Candidate) version is a pre-release version that allows early access to upcoming features and updates in the ABP project. It is primarily intended for testing purposes and for developers who want to prepare for the upcoming stable release. While it undergoes internal testing, it may still contain unresolved issues and it is not recommended for use in the production environment.",
+    "RcStableDifferenceExplanation2": "The Stable version is tested and officially supported for production use. It ensures reliability and compatibility.",
+    "RcStableDifferenceExplanation3": "Use the RC version for testing and early adoption but use the Stable version for production deployment."
   }
 }
