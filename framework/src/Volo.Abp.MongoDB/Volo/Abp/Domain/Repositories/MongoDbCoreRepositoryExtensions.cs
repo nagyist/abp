@@ -50,13 +50,6 @@ public static class MongoDbCoreRepositoryExtensions
         return repository.ToMongoDbRepository().GetMongoQueryableAsync(cancellationToken, aggregateOptions);
     }
 
-    [Obsolete("Use GetQueryableAsync method.")]
-    public static IQueryable<TEntity> GetQueryable<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
-        where TEntity : class, IEntity
-    {
-        return repository.ToMongoDbRepository().GetMongoQueryable();
-    }
-
     public static Task<IQueryable<TEntity>> GetQueryableAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
         where TEntity : class, IEntity
     {
