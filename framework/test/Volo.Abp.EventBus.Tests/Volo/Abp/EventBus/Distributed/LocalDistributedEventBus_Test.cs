@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Shouldly;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Uow;
@@ -11,12 +10,6 @@ namespace Volo.Abp.EventBus.Distributed;
 
 public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
 {
-    protected override void AfterAddApplication(IServiceCollection services)
-    {
-        services.Replace(ServiceDescriptor.Singleton<ILocalEventBus, UnitTestLocalEventBus>());
-        base.AfterAddApplication(services);
-    }
-
     [Fact]
     public async Task Should_Call_Handler_AndDispose()
     {
@@ -76,60 +69,56 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     public async Task DistributedEventSentAndReceived_Test()
     {
         var localEventBus = GetRequiredService<ILocalEventBus>();
-        if (localEventBus is UnitTestLocalEventBus eventBus)
-        {
-            eventBus.OnEventHandleInvoking = async (eventType, eventData) =>
-            {
-                await localEventBus.PublishAsync(new DistributedEventReceived()
-                {
-                    Source = DistributedEventSource.Direct,
-                    EventName = EventNameAttribute.GetNameOrDefault(eventType),
-                    EventData = eventData
-                }, onUnitOfWorkComplete: false);
-            };
 
-            eventBus.OnPublishing = async (eventType, eventData) =>
-            {
-                await localEventBus.PublishAsync(new DistributedEventSent()
-                {
-                    Source = DistributedEventSource.Direct,
-                    EventName = EventNameAttribute.GetNameOrDefault(eventType),
-                    EventData = eventData
-                }, onUnitOfWorkComplete: false);
-            };
-        }
-
-        GetRequiredService<ILocalEventBus>().Subscribe<DistributedEventSent, DistributedEventHandles>();
-        GetRequiredService<ILocalEventBus>().Subscribe<DistributedEventReceived, DistributedEventHandles>();
+        localEventBus.Subscribe<DistributedEventSent, DistributedEventHandles>();
+        localEventBus.Subscribe<DistributedEventReceived, DistributedEventHandles>();
 
         DistributedEventBus.Subscribe<MyEventDate, MyEventHandle>();
 
         using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
         {
+            MyEventDate.Order = string.Empty;
             await DistributedEventBus.PublishAsync(new MyEventDate(), onUnitOfWorkComplete: false);
 
-            Assert.Equal(1, DistributedEventHandles.SentCount);
-            Assert.Equal(1, DistributedEventHandles.ReceivedCount);
+            MyEventDate.Order.ShouldBe(nameof(DistributedEventSent) + nameof(DistributedEventReceived) + nameof(MyEventHandle));
 
+            MyEventDate.Order = string.Empty;
             await DistributedEventBus.PublishAsync(new MyEventDate(), onUnitOfWorkComplete: true);
+            MyEventDate.Order.ShouldBe(string.Empty);
 
             await uow.CompleteAsync();
 
-            Assert.Equal(2, DistributedEventHandles.SentCount);
-            Assert.Equal(2, DistributedEventHandles.ReceivedCount);
+           MyEventDate.Order.ShouldBe(nameof(DistributedEventSent) + nameof(DistributedEventReceived) + nameof(MyEventHandle));
         }
     }
 
     class MyEventDate
     {
-
+        public static string Order { get; set; } = string.Empty;
     }
 
     class MyEventHandle : IDistributedEventHandler<MyEventDate>
     {
         public Task HandleEventAsync(MyEventDate eventData)
         {
+            MyEventDate.Order += nameof(MyEventHandle);
             return Task.CompletedTask;
         }
     }
+
+    class DistributedEventHandles : ILocalEventHandler<DistributedEventSent>, ILocalEventHandler<DistributedEventReceived>
+    {
+        public Task HandleEventAsync(DistributedEventSent eventData)
+        {
+            MyEventDate.Order += nameof(DistributedEventSent);
+            return Task.CompletedTask;
+        }
+
+        public Task HandleEventAsync(DistributedEventReceived eventData)
+        {
+            MyEventDate.Order += nameof(DistributedEventReceived);
+            return Task.CompletedTask;
+        }
+    }
+
 }
