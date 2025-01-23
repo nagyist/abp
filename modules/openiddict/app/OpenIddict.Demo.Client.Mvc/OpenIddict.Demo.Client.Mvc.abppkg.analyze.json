@@ -1,24 +1,19 @@
 {
-  "name": "Volo.CmsKit.Domain.Shared",
+  "name": "OpenIddict.Demo.Client.Mvc",
   "hash": "",
   "contents": [
     {
-      "namespace": "Volo.CmsKit",
+      "namespace": "OpenIddict.Demo.Client.Mvc",
       "dependsOnModules": [
         {
-          "declaringAssemblyName": "Volo.Abp.Validation",
-          "namespace": "Volo.Abp.Validation",
-          "name": "AbpValidationModule"
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc",
+          "namespace": "Volo.Abp.AspNetCore.Mvc",
+          "name": "AbpAspNetCoreMvcModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
-          "namespace": "Volo.Abp.GlobalFeatures",
-          "name": "AbpGlobalFeaturesModule"
-        },
-        {
-          "declaringAssemblyName": "Volo.Abp.Features",
-          "namespace": "Volo.Abp.Features",
-          "name": "AbpFeaturesModule"
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Authentication.OpenIdConnect",
+          "namespace": "Volo.Abp.AspNetCore.Authentication.OpenIdConnect",
+          "name": "AbpAspNetCoreAuthenticationOpenIdConnectModule"
         }
       ],
       "implementingInterfaces": [
@@ -66,7 +61,7 @@
         }
       ],
       "contentType": "abpModule",
-      "name": "CmsKitDomainSharedModule",
+      "name": "OpenIddictMvcModule",
       "summary": null
     }
   ]
