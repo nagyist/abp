@@ -50,4 +50,13 @@ You can use the `dotnet dev-certs https -v -ep openiddict.pfx -p 00000000-0000-0
 
 > If you encounter a deployment error on IIS that says **File not found** even though the file exists, it is recommended to set the application pool’s advanced settings **Load User Profile** to **True** to resolve the issue.
 
+> The `X509KeyStorageFlags.MachineKeySet` and `X509KeyStorageFlags.EphemeralKeySet` flags can be set in the `AddProductionEncryptionAndSigningCertificate` method for IIS deployments. For example:
+
+```csharp
+serverBuilder.AddProductionEncryptionAndSigningCertificate(
+   "openiddict.pfx",
+   "your-password",
+   X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.EphemeralKeySet);
+```
+
 For more information, please refer to: https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html#registering-a-certificate-recommended-for-production-ready-scenarios

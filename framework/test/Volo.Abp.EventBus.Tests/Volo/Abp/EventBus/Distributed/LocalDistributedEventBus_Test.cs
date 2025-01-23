@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Uow;
@@ -9,6 +11,12 @@ namespace Volo.Abp.EventBus.Distributed;
 
 public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
 {
+    protected override void AfterAddApplication(IServiceCollection services)
+    {
+        services.Replace(ServiceDescriptor.Singleton<ILocalEventBus, UnitTestLocalEventBus>());
+        base.AfterAddApplication(services);
+    }
+
     [Fact]
     public async Task Should_Call_Handler_AndDispose()
     {
@@ -67,6 +75,30 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     [Fact]
     public async Task DistributedEventSentAndReceived_Test()
     {
+        var localEventBus = GetRequiredService<ILocalEventBus>();
+        if (localEventBus is UnitTestLocalEventBus eventBus)
+        {
+            eventBus.OnEventHandleInvoking = async (eventType, eventData) =>
+            {
+                await localEventBus.PublishAsync(new DistributedEventReceived()
+                {
+                    Source = DistributedEventSource.Direct,
+                    EventName = EventNameAttribute.GetNameOrDefault(eventType),
+                    EventData = eventData
+                }, onUnitOfWorkComplete: false);
+            };
+
+            eventBus.OnPublishing = async (eventType, eventData) =>
+            {
+                await localEventBus.PublishAsync(new DistributedEventSent()
+                {
+                    Source = DistributedEventSource.Direct,
+                    EventName = EventNameAttribute.GetNameOrDefault(eventType),
+                    EventData = eventData
+                }, onUnitOfWorkComplete: false);
+            };
+        }
+
         GetRequiredService<ILocalEventBus>().Subscribe<DistributedEventSent, DistributedEventHandles>();
         GetRequiredService<ILocalEventBus>().Subscribe<DistributedEventReceived, DistributedEventHandles>();
 

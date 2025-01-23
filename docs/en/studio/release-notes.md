@@ -2,6 +2,20 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
+## 0.9.22 (2025-01-22)
+
+* Allowed to display multiple installation notes.
+* Showed **Inner Exceptions** in the Solution Runner side-panel
+* Hidden logs when no selected application is present.
+* Added full docker compose to template.
+* Zipped microservice module template for better structuring the solution.
+* Upgraded templates to version `9.0.4`.
+
+## 0.9.21 (2025-01-09)
+
+* Showed a db test connection message while testing the database connection.
+* Fixed books sample's application service.
+
 ## 0.9.20 (2025-01-08)
 
 * Upgraded templates to version `9.0.3`.

@@ -22,7 +22,7 @@
         @((string.IsNullOrWhiteSpace(author.Name)
     ? author.UserName
     : author.Name + " " + author.Surname).Trim())
-        <small class="text-muted float-end" style="opacity: .5; font-size: 14px">@creationTime.ToString()</small>
+        <small class="text-muted float-end" style="opacity: .5; font-size: 14px" comment-time="@creationTime.ToUniversalTime().ToString("o")"></small>
     </span>;
 }
 @{

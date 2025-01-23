@@ -394,14 +394,16 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         var roleIds = userAndRoleIds.SelectMany(x => x.Value);
 
         var organizationUnitAndRoleIds = await (await GetQueryableAsync<OrganizationUnit>(cancellationToken)).Where(ou => organizationUnitIds.Contains(ou.Id))
-            .Select(userOrganizationUnit => new {
+            .Select(userOrganizationUnit => new
+            {
                 userOrganizationUnit.Id,
                 userOrganizationUnit.Roles
             }).ToListAsync(cancellationToken: cancellationToken);
         var allOrganizationUnitRoleIds = organizationUnitAndRoleIds.SelectMany(x => x.Roles.Select(r => r.RoleId)).ToList();
         var allRoleIds = roleIds.Union(allOrganizationUnitRoleIds);
 
-        var roles = await (await GetQueryableAsync<IdentityRole>(cancellationToken)).Where(r => allRoleIds.Contains(r.Id)).Select(r => new { r.Id, r.Name }).ToListAsync(cancellationToken);
+
+        var roles = await (await GetQueryableAsync<IdentityRole>(cancellationToken)).Where(r => allRoleIds.Contains(r.Id)).Select(r => new{ r.Id, r.Name }).ToListAsync(cancellationToken);
         var userRoles = userAndRoleIds.ToDictionary(x => x.Key, x => roles.Where(r => x.Value.Contains(r.Id)).Select(r => r.Name).ToArray());
 
         var result = userRoles.Select(x => new IdentityUserIdWithRoleNames { Id = x.Key, RoleNames = x.Value }).ToList();
@@ -457,7 +459,8 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             query = query.Where(identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value) || identityUser.OrganizationUnits.Any(x => organizationUnitIds.Contains(x.OrganizationUnitId)));
         }
 
-        return query
+
+        return  query
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
@@ -474,7 +477,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name == name)
             .WhereIf(!string.IsNullOrWhiteSpace(surname), x => x.Surname == surname)
             .WhereIf(isLockedOut.HasValue && isLockedOut.Value, x => x.LockoutEnabled && x.LockoutEnd != null && x.LockoutEnd > DateTimeOffset.UtcNow)
-            .WhereIf(isLockedOut.HasValue && !isLockedOut.Value, x => !(x.LockoutEnabled && x.LockoutEnd != null && x.LockoutEnd > DateTimeOffset.UtcNow))
+            .WhereIf(isLockedOut.HasValue && !isLockedOut.Value, x =>  !(x.LockoutEnabled && x.LockoutEnd != null && x.LockoutEnd > DateTimeOffset.UtcNow))
             .WhereIf(notActive.HasValue, x => x.IsActive == !notActive.Value)
             .WhereIf(emailConfirmed.HasValue, x => x.EmailConfirmed == emailConfirmed.Value)
             .WhereIf(isExternal.HasValue, x => x.IsExternal == isExternal.Value)

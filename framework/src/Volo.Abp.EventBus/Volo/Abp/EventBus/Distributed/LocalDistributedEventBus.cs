@@ -28,30 +28,6 @@ public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependen
         ServiceScopeFactory = serviceScopeFactory;
         AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
         Subscribe(distributedEventBusOptions.Value.Handlers);
-
-        // For unit testing
-        if (localEventBus is LocalEventBus eventBus)
-        {
-            eventBus.OnEventHandleInvoking = async (eventType, eventData) =>
-            {
-                await localEventBus.PublishAsync(new DistributedEventReceived()
-                {
-                    Source = DistributedEventSource.Direct,
-                    EventName = EventNameAttribute.GetNameOrDefault(eventType),
-                    EventData = eventData
-                }, onUnitOfWorkComplete: false);
-            };
-
-            eventBus.OnPublishing = async (eventType, eventData) =>
-            {
-                await localEventBus.PublishAsync(new DistributedEventSent()
-                {
-                    Source = DistributedEventSource.Direct,
-                    EventName = EventNameAttribute.GetNameOrDefault(eventType),
-                    EventData = eventData
-                }, onUnitOfWorkComplete: false);
-            };
-        }
     }
 
     public virtual void Subscribe(ITypeList<IEventHandler> handlers)
