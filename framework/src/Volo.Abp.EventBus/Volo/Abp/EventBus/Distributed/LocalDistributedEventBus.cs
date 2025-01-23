@@ -125,47 +125,48 @@ public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependen
     public async Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true)
         where TEvent : class
     {
-        await _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
         await PublishDistributedEventSentReceivedAsync(typeof(TEvent), eventData, onUnitOfWorkComplete);
+        await _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
     }
 
     public async Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
     {
-        await _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
         await PublishDistributedEventSentReceivedAsync(eventType, eventData, onUnitOfWorkComplete);
+        await _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
     }
 
     public async Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true) where TEvent : class
     {
-        await _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
         await PublishDistributedEventSentReceivedAsync(typeof(TEvent), eventData, onUnitOfWorkComplete);
+        await _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
     }
 
     public async Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
     {
-        await _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
         await PublishDistributedEventSentReceivedAsync(eventType, eventData, onUnitOfWorkComplete);
+        await _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
     }
 
     private async Task PublishDistributedEventSentReceivedAsync(Type eventType, object eventData, bool onUnitOfWorkComplete)
     {
-        if (eventType == typeof(DistributedEventSent) || eventType == typeof(DistributedEventReceived))
+        if (eventType != typeof(DistributedEventSent))
         {
-            return;
+            await _localEventBus.PublishAsync(new DistributedEventSent
+            {
+                Source = DistributedEventSource.Direct,
+                EventName = EventNameAttribute.GetNameOrDefault(eventType),
+                EventData = eventData
+            }, onUnitOfWorkComplete);
         }
 
-        await _localEventBus.PublishAsync(new DistributedEventSent
+        if (eventType != typeof(DistributedEventReceived))
         {
-            Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
-        }, onUnitOfWorkComplete);
-
-        await _localEventBus.PublishAsync(new DistributedEventReceived
-        {
-            Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
-        }, onUnitOfWorkComplete);
+            await _localEventBus.PublishAsync(new DistributedEventReceived
+            {
+                Source = DistributedEventSource.Direct,
+                EventName = EventNameAttribute.GetNameOrDefault(eventType),
+                EventData = eventData
+            }, onUnitOfWorkComplete);
+        }
     }
 }
