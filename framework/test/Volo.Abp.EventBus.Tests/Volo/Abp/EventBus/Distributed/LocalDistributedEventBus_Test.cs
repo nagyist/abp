@@ -80,7 +80,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
             MyEventDate.Order = string.Empty;
             await DistributedEventBus.PublishAsync(new MyEventDate(), onUnitOfWorkComplete: false);
 
-            MyEventDate.Order.ShouldBe(nameof(MyEventHandle) + nameof(DistributedEventSent) + nameof(DistributedEventReceived));
+            MyEventDate.Order.ShouldBe(nameof(DistributedEventSent) + nameof(DistributedEventReceived) + nameof(MyEventHandle));
 
             MyEventDate.Order = string.Empty;
             await DistributedEventBus.PublishAsync(new MyEventDate(), onUnitOfWorkComplete: true);
@@ -88,7 +88,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
 
             await uow.CompleteAsync();
 
-            MyEventDate.Order.ShouldBe(nameof(MyEventHandle) + nameof(DistributedEventSent) + nameof(DistributedEventReceived));
+           MyEventDate.Order.ShouldBe(nameof(DistributedEventSent) + nameof(DistributedEventReceived) + nameof(MyEventHandle));
         }
     }
 
