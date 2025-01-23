@@ -1,5 +1,88 @@
+var doc = doc || {};
+
 (function ($) {
     $(function () {        
+        
+        doc.lazyExpandableNavigation = {
+            isAllLoaded: false,
+            findNode : function(text, href, node){
+                if(node.text === text && node.path === href && node.isLazyExpandable){
+                    return node;
+                }
+                if(node.items){
+                    for (let i = 0; i < node.items.length; i++) {
+                        var result = doc.lazyExpandableNavigation.findNode(text, href, node.items[i]);
+                        if(result){
+                            return result;
+                        }
+                    }
+                }
+                return null;
+            },
+            renderNodeAsHtml : function($lazyLiElement, node, isRootLazyNode){
+                if(node.isEmpty){
+                    return;
+                }
+
+                var textCss = node.path === "javascript:;" ? "": "tree-toggle";
+                var uiCss = isRootLazyNode ? "" : "style='display: none;'";
+                var $ul =  $(`<ul class="nav nav-list tree" ${uiCss}></ul>`);
+                var $li = $(`<li class="${node.hasChildItems ? 'nav-header' : 'last-link'}"></li>`);
+                
+                $li.append(`<span class="plus-icon"> <i class="fa fa-${node.hasChildItems ? 'chevron-right' : node.path === "javascript:;" ? 'has-link' : 'no-link'}"></i></span><a href="${node.path}" class="${textCss}">${node.text}</a>`)
+
+                if(node.isLazyExpandable){
+                    $li.addClass("lazy-expand");
+                }else if(node.hasChildItems){
+                    node.items.forEach(function(item){
+                        doc.lazyExpandableNavigation.renderNodeAsHtml($li, item, false);
+                    });
+                }
+
+                $ul.append($li);
+                $lazyLiElement.append($ul)
+
+                window.Toc.helpers.initNavEvent();
+            },
+            loadAll : function(lazyLiElements){
+                if(doc.lazyExpandableNavigation.isAllLoaded){
+                    return;
+                }
+                for(var i = 0; i < lazyLiElements.length; i++){
+
+                    doc.lazyExpandableNavigation.load(lazyLiElements[i]);
+
+                    var $li = $(lazyLiElements[i]);
+                    var childLazyLiElements = $li.find("li.lazy-expand");
+                    if(childLazyLiElements.length > 0){
+                        doc.lazyExpandableNavigation.isAllLoaded = false;
+                        doc.lazyExpandableNavigation.loadAll(childLazyLiElements);
+                    }
+
+                    initLazyExpandNavigation();
+                }
+                
+                doc.lazyExpandableNavigation.isAllLoaded = true;
+            },
+            load : function(lazyLiEment){
+                var $li = $(lazyLiEment);
+
+                if($li.has("ul").length > 0){
+                    return;
+                }
+                
+                var $a = $li.find("a");
+                var text = $a.contents().filter(function() { return this.nodeType === 3 }).text();
+                var node = doc.lazyExpandableNavigation.findNode(text, $a.attr("href") , doc.project.navigation);
+                if(!node || !node.items){
+                    return;
+                }
+                node.items.forEach(item => {
+                    doc.lazyExpandableNavigation.renderNodeAsHtml($li, item, true);
+                })
+            }
+        }
+        
         var initNavigationFilter = function (navigationContainerId) {
             var $navigation = $('#' + navigationContainerId);
 
@@ -23,6 +106,8 @@
                     return;
                 }
 
+                doc.lazyExpandableNavigation.loadAll($navigation.find("li.lazy-expand"));
+                
                 var filteredItems = $navigation
                     .find('li > a')
                     .filter(function () {
@@ -97,6 +182,23 @@
                 anchors.add(container + ' ' + tag);
             });
         };
+
+        var initDocProject = function(){
+            abp.ajax({
+                type :"GET",
+                url: '/docs/document-navigation',
+                data: {
+                    projectId: doc.project.id,
+                    version: doc.project.version,
+                    routeVersion: doc.project.routeVersion,
+                    languageCode: doc.project.languageCode,
+                    projectName: doc.project.name,
+                    projectFormat: doc.project.format
+                }
+            }).done(data => {
+                doc.project.navigation = data;
+            })
+        }
 
         var initSocialShareLinks = function () {
             var pageHeader = $('.docs-body').find('h1, h2').first().text();
@@ -272,6 +374,21 @@
             }
         };
         
+        var initLazyExpandNavigation = function(){
+            $("li .lazy-expand").off('click');
+            $("li .lazy-expand a").on('click', function(e){
+                if($(this).attr("href") !== "javascript:;"){
+                    e.stopPropagation();
+                }
+            });
+            $("li .lazy-expand").on('click', function(){
+                doc.lazyExpandableNavigation.load(this);
+                initLazyExpandNavigation();
+            });
+        }
+
+        initDocProject();
+        
         initNavigationFilter('sidebar-scroll');
 
         initAnchorTags('.docs-page .docs-body');
@@ -280,7 +397,7 @@
 
         initSections();
 
-        initDocumentNodeBreadcrumb();
+        initLazyExpandNavigation();
         
         Element.prototype.querySelector = function (selector) {
             var result = $(this).find(decodeURI(selector));

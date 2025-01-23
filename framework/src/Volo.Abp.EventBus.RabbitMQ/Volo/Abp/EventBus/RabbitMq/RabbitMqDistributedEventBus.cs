@@ -23,8 +23,8 @@ namespace Volo.Abp.EventBus.RabbitMq;
 /* TODO: How to handle unsubscribe to unbind on RabbitMq (may not be possible for)
  */
 [Dependency(ReplaceServices = true)]
-[ExposeServices(typeof(IDistributedEventBus), typeof(RabbitMqDistributedEventBus))]
-public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDependency
+[ExposeServices(typeof(IDistributedEventBus), typeof(RabbitMqDistributedEventBus), typeof(IRabbitMqDistributedEventBus))]
+public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDistributedEventBus, ISingletonDependency
 {
     protected AbpRabbitMqEventBusOptions AbpRabbitMqEventBusOptions { get; }
     protected IConnectionPool ConnectionPool { get; }
@@ -72,7 +72,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         EventTypes = new ConcurrentDictionary<string, Type>();
     }
 
-    public void Initialize()
+    public virtual void Initialize()
     {
         Consumer = MessageConsumerFactory.Create(
             new ExchangeDeclareConfiguration(
@@ -290,7 +290,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, ISingletonDe
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
         var body = Serializer.Serialize(eventData);
 
-        return PublishAsync( eventName, body, headersArguments, eventId, correlationId);
+        return PublishAsync(eventName, body, headersArguments, eventId, correlationId);
     }
 
     protected virtual Task PublishAsync(

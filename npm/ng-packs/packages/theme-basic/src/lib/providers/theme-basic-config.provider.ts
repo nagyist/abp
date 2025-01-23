@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, makeEnvironmentProviders } from '@angular/core';
+import { makeEnvironmentProviders, inject, provideAppInitializer } from '@angular/core';
 import { noop } from '@abp/ng.core';
 import {
   VALIDATION_ERROR_TEMPLATE,
@@ -29,11 +29,8 @@ export function provideThemeBasicConfig() {
       useValue: 'is-invalid',
     },
     LazyStyleHandler,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: noop,
-      multi: true,
-      deps: [LazyStyleHandler],
-    },
+    provideAppInitializer(() => {
+      inject(LazyStyleHandler);
+    }),
   ]);
 }

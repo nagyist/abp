@@ -227,6 +227,11 @@
     "CssClass": "CSS klasa",
     "TagsHelpText": "Oznake trebaju biti odvojene zarezom (npr. oznaka1, oznaka2, oznaka3)",
     "ThisPartOfContentCouldntBeLoaded": "Ovaj dio sadržaja nije bilo moguće učitati.",
-    "DuplicateCommentAttemptMessage": "Otkriven pokušaj postavljanja duplikata komentara. Vaš komentar je već poslan."
+    "DuplicateCommentAttemptMessage": "Otkriven pokušaj postavljanja duplikata komentara. Vaš komentar je već poslan.",
+    "ChooseAnActionForBlog": "Odaberite radnju za blog",
+    "AssignBlogPostsToOtherBlog": "Dodijelite postove na blogu drugom blogu",
+    "SelectAnBlogToAssign": "Odaberite blog za dodjelu",
+    "DeleteAllBlogPostsOfThisBlog": "Izbrišite sve postove na blogu",
+    "RequiredPermissionName": "Potrebno ime dozvole"
   }
 }

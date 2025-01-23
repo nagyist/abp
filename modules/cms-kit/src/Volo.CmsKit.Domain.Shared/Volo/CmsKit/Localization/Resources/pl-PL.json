@@ -227,6 +227,11 @@
     "CssClass": "Klasa CSS",
     "TagsHelpText": "Tagi powinny być oddzielone przecinkami (np. tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "Ta część zawartości nie mogła zostać załadowana.",
-    "DuplicateCommentAttemptMessage": "Wykryto zduplikowaną próbę opublikowania komentarza. Twój komentarz został już przesłany."
+    "DuplicateCommentAttemptMessage": "Wykryto zduplikowaną próbę opublikowania komentarza. Twój komentarz został już przesłany.",
+    "ChooseAnActionForBlog": "Wybierz akcję dla bloga",
+    "AssignBlogPostsToOtherBlog": "Przypisz posty na blogu do innego bloga",
+    "SelectAnBlogToAssign": "Wybierz blog, do którego chcesz przypisać posty na blogu",
+    "DeleteAllBlogPostsOfThisBlog": "Usuń wszystkie posty na blogu tego bloga",
+    "RequiredPermissionName": "Wymagana nazwa uprawnienia"
   }
 }

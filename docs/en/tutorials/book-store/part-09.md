@@ -1214,14 +1214,11 @@ You will need to declare a `using Acme.BookStore.Authors;` statement to the begi
 Open the `BookStoreMenuContributor.cs` in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor`{{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor`{{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and add the following code to the end of the `ConfigureMainMenuAsync` method:
 
 ````csharp
-if (await context.IsGrantedAsync(BookStorePermissions.Authors.Default))
-{
-    context.Menu.AddItem(new ApplicationMenuItem(
+context.Menu.AddItem(new ApplicationMenuItem(
         "BooksStore.Authors",
         l["Menu:Authors"],
         url: "/authors"
-    ));
-}
+    ).RequirePermissions(BookStorePermissions.Books.Default));
 ````
 
 ### Localizations

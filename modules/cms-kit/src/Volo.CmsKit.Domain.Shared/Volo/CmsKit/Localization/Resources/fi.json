@@ -227,6 +227,11 @@
     "CssClass": "CSS-luokka",
     "TagsHelpText": "Tunnisteet on erotettava pilkuilla (esim. tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "Tämä sisällön osa ei voitu ladata.",
-    "DuplicateCommentAttemptMessage": "Kopiokommenttiyritys havaittiin. Kommenttisi on jo lähetetty."
+    "DuplicateCommentAttemptMessage": "Kopiokommenttiyritys havaittiin. Kommenttisi on jo lähetetty.",
+    "ChooseAnActionForBlog": "Valitse toiminto blogille",
+    "AssignBlogPostsToOtherBlog": "Määritä blogiviestit toiseen blogiin",
+    "SelectAnBlogToAssign": "Valitse blogi, johon haluat määrittää",
+    "DeleteAllBlogPostsOfThisBlog": "Poista tämän blogin kaikki blogiviestit",
+    "RequiredPermissionName": "Tarvittava lupa"
   }
 }

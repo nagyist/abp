@@ -227,6 +227,11 @@
     "CssClass": "Clase CSS",
     "TagsHelpText": "Las etiquetas deben estar separadas por comas (por ejemplo: etiqueta1, etiqueta2, etiqueta3)",
     "ThisPartOfContentCouldntBeLoaded": "Esta parte del contenido no se pudo cargar.",
-    "DuplicateCommentAttemptMessage": "Intento de publicación de comentario duplicado detectado. Tu comentario ya ha sido enviado."
+    "DuplicateCommentAttemptMessage": "Intento de publicación de comentario duplicado detectado. Tu comentario ya ha sido enviado.",
+    "ChooseAnActionForBlog": "Elija una acción para el blog",
+    "AssignBlogPostsToOtherBlog": "Asignar publicaciones de blog a otro blog",
+    "SelectAnBlogToAssign": "Seleccione un blog para asignar publicaciones de blog",
+    "DeleteAllBlogPostsOfThisBlog": "Eliminar todas las publicaciones de blog de este blog",
+    "RequiredPermissionName": "Nombre de permiso requerido"
   }
 }

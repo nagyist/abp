@@ -1,6 +1,7 @@
 import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'abp-card-footer',
   template: `
     <div [ngStyle]="cardFooterStyle" [ngClass]="cardFooterClass">

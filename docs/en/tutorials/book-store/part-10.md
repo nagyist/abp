@@ -1132,6 +1132,8 @@ The final `@code` block should be the following:
 
     public Books() // Constructor
     {
+        LocalizationResource = typeof(BookStoreResource);
+        
         CreatePolicyName = BookStorePermissions.Books.Create;
         UpdatePolicyName = BookStorePermissions.Books.Edit;
         DeletePolicyName = BookStorePermissions.Books.Delete;

@@ -182,7 +182,7 @@ export function createRefToImportReducerCreator(params: ModelGeneratorParams) {
 }
 
 function isOptionalProperty(prop: PropertyDef) {
-  return prop.typeSimple.endsWith('?') || (prop.typeSimple === 'string' && !prop.isRequired);
+  return prop.typeSimple.endsWith('?') || !prop.isRequired;
 }
 
 export function parseBaseTypeWithGenericTypes(type: string): string[] {

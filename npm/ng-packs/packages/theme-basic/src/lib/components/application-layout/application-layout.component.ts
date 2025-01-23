@@ -4,6 +4,7 @@ import { AfterViewInit, Component, inject } from '@angular/core';
 import { LayoutService } from '../../services/layout.service';
 
 @Component({
+  standalone: false,
   selector: 'abp-layout-application',
   templateUrl: './application-layout.component.html',
   animations: [slideFromBottom, collapseWithMargin],

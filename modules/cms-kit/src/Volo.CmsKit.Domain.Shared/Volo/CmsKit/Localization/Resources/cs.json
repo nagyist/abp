@@ -227,6 +227,11 @@
     "CssClass": "Třída CSS",
     "TagsHelpText": "Značky by měly být odděleny čárkami (např.: tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "Tato část obsahu nemohla být načtena.",
-    "DuplicateCommentAttemptMessage": "Byl zjištěn duplicitní pokus o vložení komentáře. Váš komentář již byl odeslán."
+    "DuplicateCommentAttemptMessage": "Byl zjištěn duplicitní pokus o vložení komentáře. Váš komentář již byl odeslán.",
+    "ChooseAnActionForBlog": "Vyberte akci pro blog",
+    "AssignBlogPostsToOtherBlog": "Přiřaďte blogové příspěvky k jinému blogu",
+    "SelectAnBlogToAssign": "Vyberte blog, ke kterému chcete přiřadit blogové příspěvky",
+    "DeleteAllBlogPostsOfThisBlog": "Smazat všechny blogové příspěvky tohoto blogu",
+    "RequiredPermissionName": "Je vyžadováno oprávnění"
   }
 }

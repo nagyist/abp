@@ -41,7 +41,6 @@ Create an `Authors` folder (namespace) in the `Acme.BookStore.Domain` project an
 
 ````csharp
 using System;
-using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
@@ -115,7 +114,6 @@ Created this class inside the `Acme.BookStore.Domain.Shared` project since we wi
 ````csharp
 using System;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
 

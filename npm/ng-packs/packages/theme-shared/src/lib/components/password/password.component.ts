@@ -4,12 +4,11 @@ import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 /**
- * @deprecated use ShowPasswordDirective directive 
+ * @deprecated use ShowPasswordDirective directive
  * https://abp.io/docs/latest/framework/ui/angular/show-password-directive
  */
 @Component({
   selector: 'abp-password',
-  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: `./password.component.html`,
   providers: [

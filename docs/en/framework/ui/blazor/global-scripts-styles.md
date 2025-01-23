@@ -1,91 +1,72 @@
 # Blazor UI: Managing Global Scripts & Styles
 
-Some modules may require additional styles or scripts that need to be referenced in **index.html** file. It's not easy to find and update these types of references in Blazor apps. ABP offers a simple, powerful, and modular way to manage global style and scripts in Blazor apps.
+You can add your JavaScript and CSS files from your modules or applications to the Blazor global assets system. All the JavaScript and CSS files will be added to the `global.js` and `global.css` files. You can access these files via the following URL in a Blazor WASM project:
 
-To update script & style references without worrying about dependencies, ordering, etc in a project, you can use the [bundle command](../../../cli#bundle).
+-  https://localhost/global.js
+-  https://localhost/global.css
 
-You can also add custom styles and scripts and let ABP manage them for you. In your Blazor project, you can create a class implementing `IBundleContributor` interface.
+## Add JavaScript and CSS to the global assets system in the module
 
-`IBundleContributor` interface contains two methods.
+Your module project solution will have two related Blazor projects:
 
-* `AddScripts(...)`
-* `AddStyles(...)`
+* `MyModule.Blazor`：This project includes the JavaScript/CSS files required for your Blazor components. The `MyApp.Blazor.Client (Blazor WASM)` project will reference this project.
+* `MyModule.Blazor.WebAssembly.Bundling`：This project is used to add your JavaScript/CSS files to the Blazor global resources. The `MyModule.Blazor (ASP.NET Core)` project will reference this project.
 
-Both methods get `BundleContext` as a parameter. You can add scripts and styles to the `BundleContext` and run [bundle command](../../../cli#bundle). Bundle command detects custom styles and scripts with module dependencies and updates `index.html` file.
+You need to define JavaScript and CSS contributor classes in the `MyModule.Blazor.WebAssembly.Bundling` project to add the files to the global assets system.
 
-## Example Usage
-```csharp
-namespace MyProject.Blazor
+> Please use `BlazorWebAssemblyStandardBundles.Scripts.Global` and `BlazorWebAssemblyStandardBundles.Styles.Global` for the bundle name.
+
+```cs
+public class MyModuleBundleScriptContributor : BundleContributor
 {
-    public class MyProjectBundleContributor : IBundleContributor
+    public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        public void AddScripts(BundleContext context)
-        {
-            context.Add("site.js");
-        }
-
-        public void AddStyles(BundleContext context)
-        {
-            context.Add("main.css");
-            context.Add("custom-styles.css");
-        }
+        context.Files.AddIfNotContains("_content/MyModule.Blazor/libs/myscript.js");
     }
 }
 ```
 
-> There is a BundleContributor class implementing `IBundleContributor` interface coming by default with the startup templates. So, most of the time, you don't need to add it manually.
-
-## Bundling And Minification
-The `abp bundle` command provides bundling and minification capabilities for your client-side resources (JavaScript and CSS files). When you run this command, it processes and bundles the resources based on configuration settings and generates optimized bundles that can be used in your application.
-
-```bash
-abp bundle
-
-# for a different ABP version than current CLI version
-abp bundle --version 9.0.3
-```
-### Bundle Configuration
-
-Here are the options that you can control inside the `appsettings.json` file.
-
-`Mode`: Bundling and minification mode. Possible values are
-* `BundleAndMinify`: Bundle all the files into a single file and minify the content.
-* `Bundle`: Bundle all files into a single file, but not minify.
-* `None`: Add files individually, do not bundle.
-
-`Name`: Bundle file name. Default value is `global`.
-
-`Parameters`: You can define additional key/value pair parameters inside this section. `abp bundle` command automatically sends these parameters to the bundle contributors, and you can check these parameters inside the bundle contributor, take some actions according to these values. 
-
-Let's say that you want to exclude some resources from the bundle and control this action using the bundle parameters. You can add a parameter to the bundle section like below.
-
-```json
-"AbpCli": {
-    "Bundle": {
-      "Mode": "BundleAndMinify", /* Options: None, Bundle, BundleAndMinify */
-      "Name": "global",
-      "Parameters": {
-        "ExcludeThemeFromBundle":"true"
-      }
-    }
-  }
-```
-
-You can check this parameter and take action like below.
-
-```csharp
-public class MyProjectNameBundleContributor : IBundleContributor
+```cs
+public class MyModuleBundleStyleContributor : BundleContributor
 {
-    public void AddScripts(BundleContext context)
+    public override void ConfigureBundle(BundleConfigurationContext context)
     {
-    }
-
-    public void AddStyles(BundleContext context)
-    {
-        var excludeThemeFromBundle = bool.Parse(context.Parameters.GetValueOrDefault("ExcludeThemeFromBundle"));
-        context.Add("mytheme.css", excludeFromBundle: excludeThemeFromBundle);
-        context.Add("main.css");
+        context.Files.AddIfNotContains("_content/MyModule.Blazor/libs/mystyle.css");
     }
 }
 ```
 
+```cs
+[DependsOn(
+    typeof(AbpAspNetCoreComponentsWebAssemblyThemingBundlingModule)
+)]
+public class MyBlazorWebAssemblyBundlingModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpBundlingOptions>(options =>
+        {
+            // Add script bundle
+            options.ScriptBundles.Get(BlazorWebAssemblyStandardBundles.Scripts.Global)
+                .AddContributors(typeof(MyModuleBundleScriptContributor));
+
+            // Add style bundle
+            options.StyleBundles.Get(BlazorWebAssemblyStandardBundles.Styles.Global)
+                .AddContributors(typeof(MyModuleBundleStyleContributor));
+        });
+    }
+}
+```
+
+## Add JavaScript and CSS to the global assets system in the application
+
+This is similar to the module. You need to define JavaScript and CSS contributor classes in the `MyApp.Blazor.Client` project to add the files to the global assets system.
+
+## AbpBundlingGlobalAssetsOptions
+
+You can configure the JavaScript and CSS file names in the `GlobalAssets` property of the `AbpBundlingOptions` class. The default values are `global.js` and `global.css`.
+
+## Reference
+
+- [ASP.NET Core MVC Bundling & Minification](../mvc-razor-pages/bundling-minification#bundle-contributorsg)
+- [ABP Global Assets - New way to bundle JavaScript/CSS files in Blazor WebAssembly app](https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2024-11-25-Global-Assets/POST.md)
