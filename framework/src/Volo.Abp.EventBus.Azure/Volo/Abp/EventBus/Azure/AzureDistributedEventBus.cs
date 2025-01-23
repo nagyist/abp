@@ -102,6 +102,8 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
+        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.GetCorrelationId(), outgoingEvent.Id);
+
         using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
         {
             await TriggerDistributedEventSentAsync(new DistributedEventSent()
@@ -111,8 +113,6 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
                 EventData = outgoingEvent.EventData
             });
         }
-
-        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.GetCorrelationId(), outgoingEvent.Id);
     }
 
     public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -141,7 +141,12 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
                 throw new AbpException(
                     "The message is too large to fit in the batch. Set AbpEventBusBoxesOptions.OutboxWaitingEventMaxCount to reduce the number");
             }
+        }
 
+        await publisher.SendMessagesAsync(messageBatch);
+
+        foreach (var outgoingEvent in outgoingEventArray)
+        {
             using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
             {
                 await TriggerDistributedEventSentAsync(new DistributedEventSent()
@@ -152,8 +157,6 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
                 });
             }
         }
-
-        await publisher.SendMessagesAsync(messageBatch);
     }
 
     public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
