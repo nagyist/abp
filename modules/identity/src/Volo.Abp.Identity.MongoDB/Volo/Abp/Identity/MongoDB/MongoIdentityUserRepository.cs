@@ -459,6 +459,10 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             query = query.Where(identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value) || identityUser.OrganizationUnits.Any(x => organizationUnitIds.Contains(x.OrganizationUnitId)));
         }
 
+        if (id.HasValue)
+        {
+            return query.Where(x => x.Id == id);
+        }
 
         return  query
             .WhereIf(
@@ -484,7 +488,6 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
             .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
             .WhereIf(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
-            .WhereIf(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime)
-            .WhereIf(id.HasValue, x => x.Id == id);
+            .WhereIf(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime);
     }
 }
