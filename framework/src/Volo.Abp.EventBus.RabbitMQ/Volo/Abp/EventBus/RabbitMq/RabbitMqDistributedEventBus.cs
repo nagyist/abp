@@ -207,6 +207,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         OutgoingEventInfo outgoingEvent,
         OutboxConfig outboxConfig)
     {
+        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, eventId: outgoingEvent.Id, correlationId: outgoingEvent.GetCorrelationId());
+
         using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
         {
             await TriggerDistributedEventSentAsync(new DistributedEventSent()
@@ -216,8 +218,6 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
                 EventData = outgoingEvent.EventData
             });
         }
-
-        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, eventId: outgoingEvent.Id, correlationId: outgoingEvent.GetCorrelationId());
     }
 
     public async override Task PublishManyFromOutboxAsync(
@@ -231,6 +231,13 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
             foreach (var outgoingEvent in outgoingEventArray)
             {
+                await PublishAsync(
+                    channel,
+                    outgoingEvent.EventName,
+                    outgoingEvent.EventData,
+                    eventId: outgoingEvent.Id,
+                    correlationId: outgoingEvent.GetCorrelationId());
+
                 using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
                 {
                     await TriggerDistributedEventSentAsync(new DistributedEventSent()
@@ -240,13 +247,6 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
                         EventData = outgoingEvent.EventData
                     });
                 }
-
-                await PublishAsync(
-                    channel,
-                    outgoingEvent.EventName,
-                    outgoingEvent.EventData,
-                    eventId: outgoingEvent.Id,
-                    correlationId: outgoingEvent.GetCorrelationId());
             }
 
             channel.WaitForConfirmsOrDie();
