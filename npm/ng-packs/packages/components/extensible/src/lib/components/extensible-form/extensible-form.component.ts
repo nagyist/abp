@@ -21,7 +21,6 @@ import { CommonModule } from '@angular/common';
 import { PropDataDirective } from '../../directives/prop-data.directive';
 
 @Component({
-  standalone: true,
   exportAs: 'abpExtensibleForm',
   selector: 'abp-extensible-form',
   templateUrl: './extensible-form.component.html',

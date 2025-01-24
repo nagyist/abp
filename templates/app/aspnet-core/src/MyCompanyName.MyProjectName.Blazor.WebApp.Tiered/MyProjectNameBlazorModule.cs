@@ -28,6 +28,7 @@ using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
+using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme.Bundling;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
@@ -67,6 +68,7 @@ namespace MyCompanyName.MyProjectName.Blazor.WebApp.Tiered;
     typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreComponentsServerLeptonXLiteThemeModule),
+    typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeBundlingModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpAutofacModule),
     typeof(AbpSwashbuckleModule),
@@ -140,6 +142,9 @@ public class MyProjectNameBlazorModule : AbpModule
     {
         Configure<AbpBundlingOptions>(options =>
         {
+            // Blazor Web App
+            options.Parameters.InteractiveAuto = true;
+
             // MVC UI
             options.StyleBundles.Configure(
                 LeptonXLiteThemeBundles.Styles.Global,

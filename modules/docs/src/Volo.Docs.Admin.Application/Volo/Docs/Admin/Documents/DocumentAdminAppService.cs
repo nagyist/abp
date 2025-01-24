@@ -8,6 +8,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
+using Volo.Docs.Admin.Projects;
 using Volo.Docs.Caching;
 using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
@@ -218,6 +219,12 @@ namespace Volo.Docs.Admin.Documents
         {
             var documents = await _documentRepository.GetUniqueListDocumentInfoAsync();
             return ObjectMapper.Map<List<DocumentInfo>, List<DocumentInfoDto>>(documents);
+        }
+
+        public virtual async Task<List<ProjectWithoutDetailsDto>> GetProjectsAsync()
+        {
+            var projects = await _projectRepository.GetListWithoutDetailsAsync();
+            return ObjectMapper.Map<List<ProjectWithoutDetails>, List<ProjectWithoutDetailsDto>>(projects);
         }
 
 

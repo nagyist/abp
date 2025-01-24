@@ -200,7 +200,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         );
 
         return await query
-            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.CreationTime) + " desc" : sorting)
             .As<IMongoQueryable<IdentityUser>>()
             .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));

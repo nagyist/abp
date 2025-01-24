@@ -580,8 +580,6 @@ Open the `Books.razor` and replace the content as the following:
 @using Volo.Abp.Application.Dtos
 @using Acme.BookStore.Books
 @using Acme.BookStore.Localization
-@using Microsoft.Extensions.Localization
-@inject IStringLocalizer<BookStoreResource> L
 @inherits AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
 
 <Card>
@@ -628,13 +626,21 @@ Open the `Books.razor` and replace the content as the following:
         </DataGrid>
     </CardBody>
 </Card>
+
+@code
+{
+    public Books() // Constructor
+    {
+        LocalizationResource = typeof(BookStoreResource);
+    }
+}
 ````
 
 > If you see some syntax errors, you can ignore them if your application is properly built and running. Visual Studio still has some bugs with Blazor.
 
 * Inherited from  `AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
 * `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base class.
-* Injected `IStringLocalizer<BookStoreResource>` (as `L` object) and used for localization.
+* `LocalizationResource` is set to the `BookStoreResource` to localize the texts.
 
 While the code above is pretty easy to understand, you can check the Blazorise [Card](https://blazorise.com/docs/components/card/) and [DataGrid](https://blazorise.com/docs/extensions/datagrid/) documents to understand them better.
 

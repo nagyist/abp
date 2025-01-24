@@ -227,6 +227,11 @@
     "CssClass": "CSS trieda",
     "TagsHelpText": "Značky by mali byť oddelené čiarkou (napr.: tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "Táto časť obsahu sa nedá načítať.",
-    "DuplicateCommentAttemptMessage": "Zistil sa duplicitný pokus o uverejnenie komentára. Váš komentár už bol odoslaný."
+    "DuplicateCommentAttemptMessage": "Zistil sa duplicitný pokus o uverejnenie komentára. Váš komentár už bol odoslaný.",
+    "ChooseAnActionForBlog": "Vyberte akciu pre blog",
+    "AssignBlogPostsToOtherBlog": "Priradiť blogové príspevky k inému blogu",
+    "SelectAnBlogToAssign": "Vyberte blog, na ktorý chcete priradiť blogové príspevky",
+    "DeleteAllBlogPostsOfThisBlog": "Zmazať všetky blogové príspevky tohto blogu",
+    "RequiredPermissionName": "Požadovaný názov oprávnenia"
   }
 }

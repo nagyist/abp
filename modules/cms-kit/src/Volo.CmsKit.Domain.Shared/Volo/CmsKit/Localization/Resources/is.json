@@ -227,6 +227,11 @@
     "CssClass": "CSS flokkur",
     "TagsHelpText": "Merki ættu að vera aðskilin með kommum (td: tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "Þessi hluti af efni gat ekki verið hlaðið inn.",
-    "DuplicateCommentAttemptMessage": "Tvítekin tilraun til að skrifa athugasemd fannst. Athugasemd þín hefur þegar verið send."
+    "DuplicateCommentAttemptMessage": "Tvítekin tilraun til að skrifa athugasemd fannst. Athugasemd þín hefur þegar verið send.",
+    "ChooseAnActionForBlog": "Veldu aðgerð fyrir blogg",
+    "AssignBlogPostsToOtherBlog": "Úthluta bloggfærslum til annars bloggs",
+    "SelectAnBlogToAssign": "Veldu blogg til að úthluta",
+    "DeleteAllBlogPostsOfThisBlog": "Eyða öllum bloggfærslum þessa bloggs",
+    "RequiredPermissionName": "Nafn á nauðsynlegri leyfi"
   }
 }

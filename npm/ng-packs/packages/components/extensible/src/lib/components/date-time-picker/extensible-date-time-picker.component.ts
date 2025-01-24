@@ -25,7 +25,6 @@ import { selfFactory } from '../../utils/factory.util';
 
 @Component({
   exportAs: 'abpExtensibleDateTimePicker',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
