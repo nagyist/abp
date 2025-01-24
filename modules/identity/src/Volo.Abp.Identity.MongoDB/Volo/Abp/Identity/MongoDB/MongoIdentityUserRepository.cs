@@ -449,6 +449,11 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         var upperFilter = filter?.ToUpperInvariant();
         var query = await GetQueryableAsync(cancellationToken);
 
+        if (id.HasValue)
+        {
+            return query.Where(x => x.Id == id);
+        }
+        
         if (roleId.HasValue)
         {
             var organizationUnitIds = (await GetQueryableAsync<OrganizationUnit>(cancellationToken))
@@ -457,11 +462,6 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
                 .ToArray();
 
             query = query.Where(identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value) || identityUser.OrganizationUnits.Any(x => organizationUnitIds.Contains(x.OrganizationUnitId)));
-        }
-
-        if (id.HasValue)
-        {
-            return query.Where(x => x.Id == id);
         }
 
         return  query
