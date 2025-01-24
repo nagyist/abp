@@ -244,6 +244,6 @@ Enabling long-running transactions can lead to resource locking, excessive trans
 
 ## References
 
-- [Unit of Work Pattern](https://abp.io/docs/latest/framework/architecture/domain-driven-design/unit-of-work)
+- [ABP Unit of Work](https://abp.io/docs/latest/framework/architecture/domain-driven-design/unit-of-work)
 - [EF Core Transactions](https://docs.microsoft.com/en-us/ef/core/saving/transactions)
 - [Transaction Isolation Levels](https://docs.microsoft.com/en-us/dotnet/api/system.data.isolationlevel)
