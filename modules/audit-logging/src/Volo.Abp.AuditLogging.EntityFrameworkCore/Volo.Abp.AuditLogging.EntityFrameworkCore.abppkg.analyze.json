@@ -67,7 +67,14 @@
     {
       "namespace": "Volo.Abp.AuditLogging.EntityFrameworkCore",
       "connectionStringName": "AbpAuditLogging",
-      "databaseTables": [],
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.AuditLogging.AuditLog",
+          "contentType": "databaseTable",
+          "name": "AuditLogs",
+          "summary": null
+        }
+      ],
       "replacedDbContexts": [],
       "modelBuilderExtensionMethods": [
         {

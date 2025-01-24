@@ -605,6 +605,47 @@
       "contentType": "repositoryInterface",
       "name": "IPermissionGroupDefinitionRecordRepository",
       "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.Abp.PermissionManagement",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "PermissionGrant",
+            "namespace": "Volo.Abp.PermissionManagement",
+            "declaringAssemblyName": "Volo.Abp.PermissionManagement.Domain",
+            "fullName": "Volo.Abp.PermissionManagement.PermissionGrant"
+          },
+          "name": "EntityChangedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityChangedEventData`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityChangedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityChangedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "PermissionGrantCacheItemInvalidator",
+      "summary": null
     }
   ]
 }

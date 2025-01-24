@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -193,22 +194,64 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             }
         }
 
-        if (Options.SaveEntityHistoryWhenNavigationChanges && AbpEfCoreNavigationHelper != null)
+        if (AbpEfCoreNavigationHelper != null)
         {
             foreach (var (navigationEntry, index) in entityEntry.Navigations.Select((value, i) => ( value, i )))
             {
                 if (AbpEfCoreNavigationHelper.IsNavigationEntryModified(entityEntry, index))
                 {
+                    var abpNavigationEntry = AbpEfCoreNavigationHelper.GetNavigationEntry(entityEntry, index);
+                    var isCollection = navigationEntry.Metadata.IsCollection;
                     propertyChanges.Add(new EntityPropertyChangeInfo
                     {
                         PropertyName = navigationEntry.Metadata.Name,
-                        PropertyTypeFullName = navigationEntry.Metadata.ClrType.GetFirstGenericArgumentIfNullable().FullName!
+                        PropertyTypeFullName = navigationEntry.Metadata.ClrType.GetFirstGenericArgumentIfNullable().FullName!,
+                        OriginalValue = GetNavigationPropertyValue(abpNavigationEntry?.OriginalValue, isCollection),
+                        NewValue = GetNavigationPropertyValue(abpNavigationEntry?.CurrentValue, isCollection)
                     });
                 }
             }
         }
 
         return propertyChanges;
+    }
+
+    protected virtual string? GetNavigationPropertyValue(object? entity, bool isCollection)
+    {
+        switch (entity)
+        {
+            case null:
+                return null;
+
+            case IEntity entryEntity:
+                var keys = entryEntity.GetKeys();
+                return keys.Length == 0 ? null : string.Join(", ",keys).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength);
+
+            case IEnumerable enumerable:
+                var keysList = new List<string>();
+                foreach (var item in enumerable)
+                {
+                    var id = GetNavigationPropertyValue(item, false);
+                    if (id != null)
+                    {
+                        keysList.Add(id);
+                    }
+                }
+
+                if (keysList.Count == 0)
+                {
+                    return null;
+                }
+
+                var serializedKeysEnumerable = keysList.Count == 1 && !isCollection
+                    ? keysList.First()
+                    : JsonSerializer.Serialize(keysList);
+
+                return serializedKeysEnumerable.TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength);
+
+            default:
+                return null;
+        }
     }
 
     protected virtual bool IsCreated(EntityEntry entityEntry)

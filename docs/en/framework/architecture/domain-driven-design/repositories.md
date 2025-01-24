@@ -393,19 +393,6 @@ This method is suggested;
 
 * If you are developing an application and you **don't plan to change** EF Core in the future, or you can **tolerate** it if you need to change it later. We believe that's reasonable if you are developing a final application.
 
-#### MongoDB Case
-
-If you are using [MongoDB](../../data/mongodb), you need to add the [Volo.Abp.MongoDB](https://www.nuget.org/packages/Volo.Abp.MongoDB) NuGet package to your project. Even in this case, you can't directly use async LINQ extensions (like `ToListAsync`) because MongoDB doesn't provide async extension methods for `IQueryable<T>`, but provides for `IMongoQueryable<T>`. You need to cast the query to `IMongoQueryable<T>` first to be able to use the async extension methods.
-
-**Example: Cast `IQueryable<T>` to `IMongoQueryable<T>` and use `ToListAsync()`**
-
-````csharp
-var queryable = await _personRepository.GetQueryableAsync();
-var people = ((IMongoQueryable<Person>) queryable
-    .Where(p => p.Name.Contains(nameFilter)))
-    .ToListAsync();
-````
-
 ### Option-2: Use the IRepository Async Extension Methods
 
 ABP provides async extension methods for the repositories, just similar to async LINQ extension methods.

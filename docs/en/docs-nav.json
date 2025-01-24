@@ -2292,6 +2292,10 @@
             {
               "text": "Tenant impersonation & User impersonation",
               "path": "modules/account/impersonation.md"
+            },
+            {
+              "text": "Idle Session Timeout",
+              "path": "modules/account/idle-session-timeout.md"
             }
           ]
         },

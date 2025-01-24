@@ -5627,6 +5627,88 @@
       "contentType": "repositoryInterface",
       "name": "IBlogRepository",
       "summary": null
+    },
+    {
+      "eventHandlerType": "Distributed",
+      "namespace": "Volo.CmsKit.Users",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "UserEto",
+            "namespace": "Volo.Abp.Users",
+            "declaringAssemblyName": "Volo.Abp.Users.Abstractions",
+            "fullName": "Volo.Abp.Users.UserEto"
+          },
+          "name": "EntityUpdatedEto`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events.Distributed",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain.Shared",
+          "fullName": "Volo.Abp.Domain.Entities.Events.Distributed.EntityUpdatedEto`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IDistributedEventHandler<EntityUpdatedEto`1>",
+          "namespace": "Volo.Abp.EventBus.Distributed",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.Distributed.IDistributedEventHandler<EntityUpdatedEto`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "CmsUserSynchronizer",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.CmsKit.Menus",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "Page",
+            "namespace": "Volo.CmsKit.Pages",
+            "declaringAssemblyName": "Volo.CmsKit.Domain",
+            "fullName": "Volo.CmsKit.Pages.Page"
+          },
+          "name": "EntityUpdatedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityUpdatedEventData`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityUpdatedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityUpdatedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "PageChangedHandler",
+      "summary": null
     }
   ]
 }

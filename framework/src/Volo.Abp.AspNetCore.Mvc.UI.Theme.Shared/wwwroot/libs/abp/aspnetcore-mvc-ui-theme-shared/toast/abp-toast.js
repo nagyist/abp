@@ -73,12 +73,12 @@ AbpToastService.prototype.getIconClass = function(severity, options) {
     }
 
     const icons = {
-        success: 'bi-check',
-        info: 'bi-info-circle',
-        warning: 'bi-exclamation-triangle',
-        error: 'bi-shield-exclamation'
+        success: 'fa fa-check',
+        info: 'fa fa-info-circle',
+        warning: 'fa fa-exclamation-triangle',
+        error: 'fa fa-exclamation-circle'
     };
-    return icons[severity] || 'bi-exclamation-triangle';
+    return icons[severity] || 'fa fa-exclamation-triangle';
 };
 
 // Create toast DOM element
@@ -88,14 +88,14 @@ AbpToastService.prototype.createToastElement = function(message, title, severity
 
     const closeButton = options.closable !== false ? 
         `<button class="abp-toast-close-button">
-            <i class="bi bi-x fs-4" aria-hidden="true"></i>
+            <i class="fa fa-times" aria-hidden="true"></i>
         </button>` : '';
 
     const titleHtml = title ? `<div class="abp-toast-title">${title}</div>` : '';
 
     toast.innerHTML = `
         <div class="abp-toast-icon">
-            <i class="bi ${this.getIconClass(severity, options)} icon" aria-hidden="true"></i>
+            <i class="${this.getIconClass(severity, options)} icon" aria-hidden="true"></i>
         </div>
         <div class="abp-toast-content">
             ${closeButton}
@@ -189,28 +189,19 @@ AbpToastService.setDefaultOptions = function(options) {
 
 var abp = abp || {};
 (function () {    
-    var toast;
-
-    function getToast() {
-        if (!toast) {
-            toast = new AbpToastService();
-        }
-        return toast;
-    }
-
     abp.notify.success = function (message, title, options) {
-        getToast().success(message, title, options);
+        new AbpToastService().success(message, title, options);
     };
 
     abp.notify.info = function (message, title, options) {
-        getToast().info(message, title, options);
+        new AbpToastService().info(message, title, options);
     };
 
     abp.notify.warn = function (message, title, options) {
-        getToast().warning(message, title, options);
+        new AbpToastService().warning(message, title, options);
     };
 
     abp.notify.error = function (message, title, options) {
-        getToast().error(message, title, options);
+        new AbpToastService().error(message, title, options);
     };
 })();
