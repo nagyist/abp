@@ -197,16 +197,6 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         OutgoingEventInfo outgoingEvent,
         OutboxConfig outboxConfig)
     {
-        using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
-        {
-            await TriggerDistributedEventSentAsync(new DistributedEventSent()
-            {
-                Source = DistributedEventSource.Outbox,
-                EventName = outgoingEvent.EventName,
-                EventData = outgoingEvent.EventData
-            });
-        }
-
         var headers = new Headers
         {
             { "messageId", System.Text.Encoding.UTF8.GetBytes(outgoingEvent.Id.ToString("N")) }
@@ -222,6 +212,16 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             outgoingEvent.EventData,
             headers
         );
+
+        using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
+        {
+            await TriggerDistributedEventSentAsync(new DistributedEventSent()
+            {
+                Source = DistributedEventSource.Outbox,
+                EventName = outgoingEvent.EventName,
+                EventData = outgoingEvent.EventData
+            });
+        }
     }
 
     public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -242,6 +242,15 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
                 headers.Add(EventBusConsts.CorrelationIdHeaderName, System.Text.Encoding.UTF8.GetBytes(outgoingEvent.GetCorrelationId()!));
             }
 
+            producer.Produce(
+                AbpKafkaEventBusOptions.TopicName,
+                new Message<string, byte[]>
+                {
+                    Key = outgoingEvent.EventName,
+                    Value = outgoingEvent.EventData,
+                    Headers = headers
+                });
+
             using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
             {
                 await TriggerDistributedEventSentAsync(new DistributedEventSent()
@@ -251,15 +260,6 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
                     EventData = outgoingEvent.EventData
                 });
             }
-
-            producer.Produce(
-                AbpKafkaEventBusOptions.TopicName,
-                new Message<string, byte[]>
-                {
-                    Key = outgoingEvent.EventName,
-                    Value = outgoingEvent.EventData,
-                    Headers = headers
-                });
         }
     }
 
