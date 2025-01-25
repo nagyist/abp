@@ -4,10 +4,10 @@
 
 ## Transaction Management Overview
 
-One of the main responsibilities of Unit of Work is managing database transactions. It provides the following transaction management features:
+One of the primary responsibilities of Unit of Work is managing database transactions. It provides the following transaction management features:
 
-- Automatically manages database connections and transaction scopes, developers don't need to manually control transaction start and commit
-- Ensures business operation integrity, all database operations within a unit of work either succeed completely or roll back completely
+- Automatically manages database connections and transaction scopes, eliminating the need for manual transaction control
+- Ensures business operation integrity by making all database operations within a unit of work either succeed or roll back completely
 - Supports configuration of transaction isolation levels and timeout periods
 - Supports nested transactions and transaction propagation
 
@@ -122,7 +122,7 @@ Applicable scenarios:
 
 #### In Transactional Unit of Work
 
-Within a unit of work, there are several ways to commit changes to the database:
+A unit of work provides several methods to commit changes to the database:
 
 1. **IUnitOfWork.SaveChangesAsync**
 
@@ -136,9 +136,10 @@ await _unitOfWorkManager.Current.SaveChangesAsync();
 await _repository.InsertAsync(entity, autoSave: true);
 ```
 
-`autoSave` and `SaveChangesAsync` are actually equivalent, both commit changes in the current context to the database. However, these changes can still be rolled back before `CompleteAsync` is called. If the unit of work throws an exception or `CompleteAsync` is not called, the transaction will automatically roll back, and saved changes will be undone. Only after successfully calling `CompleteAsync` will the transaction be truly committed, and changes will be permanently saved to the database.
+Both `autoSave` and `SaveChangesAsync` commit changes in the current context to the database. However, these changes remain reversible until `CompleteAsync` is called. If the unit of work throws an exception or `CompleteAsync` is not called, the transaction will be rolled back. Only after successfully executing `CompleteAsync` will the transaction be permanently committed to the database.
 
 3. **CompleteAsync**
+
 ```csharp
 using (var uow = _unitOfWorkManager.Begin())
 {
@@ -147,48 +148,51 @@ using (var uow = _unitOfWorkManager.Begin())
 }
 ```
 
-This method is used to commit the entire unit of work. It not only commits all database transactions but also:
-- Executes and handles all pending domain events within the unit of work
-- Executes all registered post-operations and cleanup work within the unit of work
-- Releases all DbTransaction resources when the unit of work object is disposed
+The `CompleteAsync` method is crucial for transaction completion. The unit of work maintains a `DbTransaction` object internally, and the `CompleteAsync` method invokes `DbTransaction.CommitAsync` to commit the transaction. The transaction will not be committed if `CompleteAsync` is either not executed or fails to execute successfully.
 
-Therefore, `CompleteAsync` is a key step to ensure the unit of work completes correctly and must be called before the unit of work ends.
+This method not only commits all database transactions but also:
+
+- Executes and processes all pending domain events within the unit of work
+- Executes all registered post-operations and cleanup tasks within the unit of work
+- Releases all DbTransaction resources upon disposal of the unit of work object
+
+> Note: `CompleteAsync` method should be called only once. Multiple calls are not supported.
 
 #### In Non-Transactional Unit of Work
 
-In non-transactional unit of work, these methods behave differently:
+In non-transactional units of work, these methods behave differently:
 
-`autoSave` and `SaveChangesAsync` will immediately save changes to the database, and they cannot be rolled back. Even in non-transactional unit of work, you still need to call the `CompleteAsync` method because it performs other important tasks.
+Both `autoSave` and `SaveChangesAsync` will persist changes to the database immediately, and these changes cannot be rolled back. Even in non-transactional units of work, calling the `CompleteAsync` method remains necessary as it handles other essential tasks.
 
 Example:
 ```csharp
 using (var uow = _unitOfWorkManager.Begin(isTransactional: false))
 {
-    // Immediately save to database, cannot be rolled back
+    // Changes are persisted immediately and cannot be rolled back
     await _repository.InsertAsync(entity1, autoSave: true);
     
-    // This operation will save separately, independent of the previous operation
+    // This operation persists independently of the previous operation
     await _repository.InsertAsync(entity2, autoSave: true);
     
     await uow.CompleteAsync();
 }
 ```
 
-### Methods to Rollback Transactions
+### Methods to Roll Back Transactions
 
 #### In Transactional Unit of Work
 
-Within a unit of work, there are several ways to rollback transactions:
+A unit of work provides multiple approaches to roll back transactions:
 
 1. **Automatic Rollback**
 
-For transactions automatically managed by the ABP framework, if there are uncaught exceptions in the request, they will be rolled back automatically.
+For transactions automatically managed by the ABP framework, any uncaught exceptions during the request will trigger an automatic rollback.
 
 2. **Manual Rollback**
 
-For transactions you manage manually, you can explicitly call the `RollbackAsync()` method to immediately roll back the current transaction.
+For manually managed transactions, you can explicitly invoke the `RollbackAsync()` method to immediately roll back the current transaction.
 
-> Once `RollbackAsync()` is called, the entire unit of work transaction will be rolled back immediately, and calling `CompleteAsync()` will not take effect.
+> Important: Once `RollbackAsync()` is called, the entire unit of work transaction will be rolled back immediately, and any subsequent calls to `CompleteAsync()` will have no effect.
 
 ```csharp
 using (var uow = _unitOfWorkManager.Begin(
@@ -209,11 +213,11 @@ using (var uow = _unitOfWorkManager.Begin(
 }
 ```
 
-`CompleteAsync` method will try to commit the transaction. If any exception occurs during this process, the transaction will not be committed.
+The `CompleteAsync` method attempts to commit the transaction. If any exceptions occur during this process, the transaction will not be committed.
 
 Here are two common exception scenarios:
 
-1. Catching Exceptions Within Unit of Work
+1. **Exception Handling Within Unit of Work**
 
 ```csharp
 using (var uow = _unitOfWorkManager.Begin(
@@ -231,14 +235,16 @@ using (var uow = _unitOfWorkManager.Begin(
     }
     catch (Exception)
     {
-        // Exceptions may occur in InsertAsync, SaveChangesAsync, UpdateAsync, or CompleteAsync. Even if some operations succeed, the transaction has not been truly committed to the database
-        // In this scenario, you can call RollbackAsync to roll back the transaction, but even if you don't call RollbackAsync, since the CompleteAsync method was not successfully executed, the transaction will not be committed.
+        // Exceptions can occur in InsertAsync, SaveChangesAsync, UpdateAsync, or CompleteAsync
+        // Even if some operations succeed, the transaction remains uncommitted to the database
+        // While you can explicitly call RollbackAsync to roll back the transaction,
+        // the transaction will not be committed anyway if CompleteAsync fails to execute
         throw;
     }
 }
 ```
 
-2. Catching Exceptions Outside Unit of Work
+2. **Exception Handling Outside Unit of Work**
 
 ```csharp
 try
@@ -257,22 +263,16 @@ try
 }
 catch (Exception)
 {
-    // Exceptions may occur in UpdateAsync, SaveChangesAsync, UpdateAsync, or CompleteAsync. Even if some operations succeed, the transaction has not been truly committed to the database
-    // In this scenario, since the CompleteAsync method was not successfully executed, the transaction will not be committed
+    // Exceptions can occur in UpdateAsync, SaveChangesAsync, UpdateAsync, or CompleteAsync
+    // Even if some operations succeed, the transaction remains uncommitted to the database
+    // Since CompleteAsync was not successfully executed, the transaction will not be committed
     throw;
 }
 ```
 
 #### In Non-Transactional Unit of Work
 
-In non-transactional unit of work, operations cannot be rolled back. Any changes saved using `autoSave: true` or `SaveChangesAsync()` are immediately persisted, and the `RollbackAsync` method will not take effect.
-
-
-### The `CompleteAsync` Method
-
-The `CompleteAsync` method is key to transaction success. The unit of work maintains `DbTransaction` object internally, and the `CompleteAsync` method calls `DbTransaction.CommitAsync` to commit the transaction. If `CompleteAsync` is not executed or not successfully executed, the transaction will not be committed.
-
-> `CompleteAsync` method can only be called once, You should not call it multiple times.
+In non-transactional units of work, operations are irreversible. Changes saved using `autoSave: true` or `SaveChangesAsync()` are persisted immediately, and the `RollbackAsync` method has no effect.
 
 ## Transaction Management Best Practices
 
