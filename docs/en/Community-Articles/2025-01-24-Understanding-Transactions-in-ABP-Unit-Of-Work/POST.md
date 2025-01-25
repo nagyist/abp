@@ -174,35 +174,111 @@ using (var uow = _unitOfWorkManager.Begin(isTransactional: false))
 }
 ```
 
+### Methods to Rollback Transactions
+
+#### In Transactional Unit of Work
+
+Within a unit of work, there are several ways to rollback transactions:
+
+1. **Automatic Rollback**
+
+For transactions automatically managed by the ABP framework, if there are uncaught exceptions in the request, they will be rolled back automatically.
+
+2. **Manual Rollback**
+
+For transactions you manage manually, you can explicitly call the `RollbackAsync()` method to immediately roll back the current transaction.
+
+> Once `RollbackAsync()` is called, the entire unit of work transaction will be rolled back immediately, and calling `CompleteAsync()` will not take effect.
+
+```csharp
+using (var uow = _unitOfWorkManager.Begin(
+    isTransactional: true,
+    isolationLevel: IsolationLevel.RepeatableRead,
+    timeout: 30
+))
+{
+    await _repository.InsertAsync(entity);
+    
+    if (someCondition)
+    {
+        await uow.RollbackAsync();
+        return;
+    }
+    
+    await uow.CompleteAsync();
+}
+```
+
+`CompleteAsync` method will try to commit the transaction. If any exception occurs during this process, the transaction will not be committed.
+
+Here are two common exception scenarios:
+
+1. Catching Exceptions Within Unit of Work
+
+```csharp
+using (var uow = _unitOfWorkManager.Begin(
+    isTransactional: true,
+    isolationLevel: IsolationLevel.RepeatableRead,
+    timeout: 30
+))
+{
+    try
+    {
+        await _bookRepository.InsertAsync(book);
+        await uow.SaveChangesAsync();
+        await _productRepository.UpdateAsync(product);
+        await uow.CompleteAsync();
+    }
+    catch (Exception)
+    {
+        // Exceptions may occur in InsertAsync, SaveChangesAsync, UpdateAsync, or CompleteAsync. Even if some operations succeed, the transaction has not been truly committed to the database
+        // In this scenario, you can call RollbackAsync to roll back the transaction, but even if you don't call RollbackAsync, since the CompleteAsync method was not successfully executed, the transaction will not be committed.
+        throw;
+    }
+}
+```
+
+2. Catching Exceptions Outside Unit of Work
+
+```csharp
+try
+{
+    using (var uow = _unitOfWorkManager.Begin(
+        isTransactional: true,
+        isolationLevel: IsolationLevel.RepeatableRead,
+        timeout: 30
+    ))
+    {
+        await _bookRepository.InsertAsync(book);
+        await uow.SaveChangesAsync();
+        await _productRepository.UpdateAsync(product);
+        await uow.CompleteAsync();
+    }
+}
+catch (Exception)
+{
+    // Exceptions may occur in UpdateAsync, SaveChangesAsync, UpdateAsync, or CompleteAsync. Even if some operations succeed, the transaction has not been truly committed to the database
+    // In this scenario, since the CompleteAsync method was not successfully executed, the transaction will not be committed
+    throw;
+}
+```
+
+#### In Non-Transactional Unit of Work
+
+In non-transactional unit of work, operations cannot be rolled back. Any changes saved using `autoSave: true` or `SaveChangesAsync()` are immediately persisted, and the `RollbackAsync` method will not take effect.
+
+
+### The `CompleteAsync` Method
+
+The `CompleteAsync` method is key to transaction success. The unit of work maintains `DbTransaction` object internally, and the `CompleteAsync` method calls `DbTransaction.CommitAsync` to commit the transaction. If `CompleteAsync` is not executed or not successfully executed, the transaction will not be committed.
+
+> `CompleteAsync` method can only be called once, You should not call it multiple times.
+
 ## Transaction Management Best Practices
 
 ### 1. Remember to Commit Transactions
 
-When manually controlling transactions, remember to call the `CompleteAsync` method to commit the transaction after operations are complete. For conventional transactions, the framework will automatically commit the transaction:
-
-```csharp
-public async Task TransferMoneyAsync(TransferDto transfer)
-{
-    using (var uow = _unitOfWorkManager.Begin(
-        requiresNew: true,
-        isTransactional: true,
-        isolationLevel: IsolationLevel.RepeatableRead
-    ))
-    {
-        try
-        {
-            await _accountRepository.DeductMoneyAsync(transfer.FromAccount, transfer.Amount);
-            await _accountRepository.AddMoneyAsync(transfer.ToAccount, transfer.Amount);
-            await uow.CompleteAsync();
-        }
-        catch (Exception)
-        {
-            // Transaction will automatically roll back
-            throw;
-        }
-    }
-}
-```
+When manually controlling transactions, remember to call the `CompleteAsync` method to commit the transaction after operations are complete.
 
 ### 2. Pay Attention to Context
 
