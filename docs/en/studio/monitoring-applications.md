@@ -48,7 +48,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 In this tab, you can view comprehensive overall information. You have the option to search by application name and filter by application state. To reset all filters, use the *Clear Filters* button. When you apply a filter header informations gonna refresh by filtered applications.
 
-- `Apps Running`: The number of applications running. It includes CLI and C# applications. In the example two C# microservice applications and one CLI application is running.
+- `Apps Running`: The number of applications running. It includes only C# applications. In the example, nine C# microservice applications are running.
 - `Requests`: The number of HTTP requests received by all C# applications.
 - `Events`: The number of [Distributed Event](../framework/infrastructure/event-bus/distributed) sent or received by all C# applications.
 - `Exceptions`: The number of exceptions thrown by all C# applications.
