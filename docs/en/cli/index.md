@@ -883,7 +883,7 @@ abp translate -c zh-Hans --online --deepl-auth-key <auth-key>
 
 ### login
 
-Some features of the CLI requires to be logged in to ABP Platform. The  login command supports the following usage options:
+Some features of the CLI requires to be logged in to ABP Platform. The login command supports the following usage options:
 
 ```bash
 abp login                                             # Opens a default browser to log in to ABP Platform via abp.io
