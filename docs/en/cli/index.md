@@ -883,17 +883,12 @@ abp translate -c zh-Hans --online --deepl-auth-key <auth-key>
 
 ### login
 
-Some features of the CLI requires to be logged in to ABP Platform. To login with your username write:
+Some features of the CLI requires to be logged in to ABP Platform. The login command supports the following usage options:
 
 ```bash
-abp login <username>                                  # Allows you to enter your password hidden
-abp login <username> -p <password>                    # Specify the password as a parameter (password is visible)
-abp login <username> --organization <organization>    # If you have multiple organizations, you need set your active organization
-abp login <username> -p <password> -o <organization>  # You can enter both your password and organization in the same command
-abp login <username> --device                         # Use device login flow
+abp login                                             # Opens a default browser to log in to ABP Platform via abp.io
+abp login --device                                    # Use device login flow
 ```
-
-> When using the -p parameter, be careful as your password will be visible. It's useful for CI/CD automation pipelines.
 
 A new login with an already active session overwrites the previous session.
 
