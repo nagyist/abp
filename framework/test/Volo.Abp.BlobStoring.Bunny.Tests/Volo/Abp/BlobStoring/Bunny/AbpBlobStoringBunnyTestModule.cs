@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NSubstitute.Extensions;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
@@ -55,19 +56,5 @@ public class AbpBlobStoringBunnyTestModule : AbpModule
                 });
             });
         });
-    }
-
-    public override void OnApplicationShutdown(ApplicationShutdownContext context)
-    {
-        AsyncHelper.RunSync(() => DeleteStorageZoneAsync(context));
-    }
-
-    private async Task DeleteStorageZoneAsync(ApplicationShutdownContext context)
-    {
-        var bunnyClient = new BunnyClient(_configuration.AccessKey, _configuration.ContainerName, _configuration.Region);
-        if (await bunnyClient.DoesStorageZoneExistAsync(_randomContainerName))
-        {
-            await bunnyClient.DeleteStorageZoneAsync(_randomContainerName);
-        }
     }
 }
