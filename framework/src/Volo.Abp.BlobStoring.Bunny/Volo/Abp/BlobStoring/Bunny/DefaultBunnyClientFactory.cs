@@ -8,25 +8,30 @@ using BunnyCDN.Net.Storage;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Security.Encryption;
 
 namespace Volo.Abp.BlobStoring.Bunny;
 
-public class BunnyClientFactory : IBunnyClientFactory, ITransientDependency
+public class DefaultBunnyClientFactory : IBunnyClientFactory, ITransientDependency
 {
     private readonly IDistributedCache<StorageZone> _cache;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IStringEncryptionService _stringEncryptionService;
+
     private const string CacheKeyPrefix = "BunnyStorageZone:";
     private static TimeSpan CacheDuration = TimeSpan.FromHours(12);
 
-    public BunnyClientFactory(
+    public DefaultBunnyClientFactory(
         IHttpClientFactory httpClient,
-        IDistributedCache<StorageZone> cache)
+        IDistributedCache<StorageZone> cache,
+        IStringEncryptionService stringEncryptionService)
     {
         _cache = cache;
         _httpClientFactory = httpClient;
+        _stringEncryptionService = stringEncryptionService;
     }
 
-    public async Task<BunnyCDNStorage> CreateAsync(string accessKey, string containerName, string region = "de")
+    public virtual async Task<BunnyCDNStorage> CreateAsync(string accessKey, string containerName, string region = "de")
     {
         var cacheKey = $"{CacheKeyPrefix}{containerName}";
         var storageZoneInfo = await _cache.GetOrAddAsync(
@@ -37,6 +42,9 @@ public class BunnyClientFactory : IBunnyClientFactory, ITransientDependency
                 {
                     throw new AbpException($"Storage zone '{containerName}' not found");
                 }
+
+                // Encrypt the sensitive password before caching
+                result.Password = _stringEncryptionService.Encrypt(result.Password!)!;
                 return result;
             },
             () => new DistributedCacheEntryOptions
@@ -50,10 +58,13 @@ public class BunnyClientFactory : IBunnyClientFactory, ITransientDependency
             throw new AbpException($"Could not retrieve storage zone information for container '{containerName}'");
         }
 
-        return new BunnyCDNStorage(containerName, storageZoneInfo.Password, region);
+        // Decrypt the password before using it
+        var decryptedPassword = _stringEncryptionService.Decrypt(storageZoneInfo.Password);
+
+        return new BunnyCDNStorage(containerName, decryptedPassword, region);
     }
 
-    public async Task EnsureStorageZoneExistsAsync(
+    public virtual async Task EnsureStorageZoneExistsAsync(
         string accessKey,
         string containerName,
         string region = "de",
@@ -78,7 +89,7 @@ public class BunnyClientFactory : IBunnyClientFactory, ITransientDependency
         }
     }
 
-    private async Task<StorageZone> CreateStorageZoneAsync(
+    protected virtual async Task<StorageZone> CreateStorageZoneAsync(
         string accessKey,
         string containerName,
         string region)
@@ -122,7 +133,7 @@ public class BunnyClientFactory : IBunnyClientFactory, ITransientDependency
         return createdZone;
     }
 
-    private async Task<StorageZone?> GetStorageZoneAsync(string accessKey, string containerName)
+    protected virtual async Task<StorageZone?> GetStorageZoneAsync(string accessKey, string containerName)
     {
         using var _client = _httpClientFactory.CreateClient("BunnyApiClient");
         _client.DefaultRequestHeaders.Add("AccessKey", accessKey);

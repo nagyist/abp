@@ -61,3 +61,4 @@ Bunny Blob Provider organizes BLOB name and implements some conventions. The ful
 
 * `BunnyBlobProvider` is the main service that implements the Bunny BLOB storage provider, if you want to override/replace it via [dependency injection](../../fundamentals/dependency-injection.md) (don't replace `IBlobProvider` interface, but replace `BunnyBlobProvider` class).
 * `IBunnyBlobNameCalculator` is used to calculate the full BLOB name (that is explained above). It is implemented by the `DefaultBunnyBlobNameCalculator` by default.
+* `IBunnyClientFactory` is implemented by `DefaultBunnyClientFactory` by default. You can override/replace it,if you want customize.
