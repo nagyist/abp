@@ -387,7 +387,10 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
     options.ConventionalControllers.Create(typeof(ModularCrmModule).Assembly);
 
     //ADD THE FOLLOWING LINE:
-    options.ConventionalControllers.Create(typeof(ProductsApplicationModule).Assembly);
+    options.ConventionalControllers.Create(typeof(ProductsApplicationModule).Assembly, settings => 
+    {
+        settings.RootPath = "products";
+    });
 });
 ````
 
@@ -409,7 +412,7 @@ Once you see the user interface of the web application, type `/swagger` at the e
 
 ![abp-studio-swagger-ui-in-browser](images/abp-studio-swagger-ui-in-browser.png)
 
-Expand the `/api/app/product` API and click the *Try it out* button as shown in the following figure:
+Expand the `/api/products/product` API and click the *Try it out* button as shown in the following figure:
 
 ![abp-studio-swagger-ui-create-product-try](images/abp-studio-swagger-ui-create-product-try.png)
 
