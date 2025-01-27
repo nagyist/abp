@@ -15,10 +15,12 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj" />
-    </ItemGroup>
+		<ProjectReference Include="..\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
+	</ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="BunnyCDN.Net.Storage" />
+      <PackageReference Include="Microsoft.Extensions.Http" />
     </ItemGroup>
 
 </Project>
