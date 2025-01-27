@@ -15,7 +15,7 @@ This guide will guide you through how to build docker images for your applicatio
 
 ## Building Docker Images
 
-Each application contains a dockerfile called `Dockerfile.local` for building the docker image. As the naming implies, these Dockerfiles are not multi-stage Dockerfiles and require the project to be built in `Release` mode to create the image. Currently, if you are building your images using CI & CD pipeline, you either need to include the SDK to your pipeline before building the images or add your own [multi-stage dockerfiles](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-7.0).
+Each application contains a dockerfile called `Dockerfile.local` for building the docker image. As the naming implies, these Dockerfiles are not multi-stage Dockerfiles and require the project to be built in `Release` mode to create the image. Currently, if you are building your images using CI & CD pipeline, you either need to include the SDK to your pipeline before building the images or add your own [multi-stage dockerfiles](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-9.0).
 
 Since they are not multi-staged Dockerfiles, if you want to build the images individually, you can navigate to the related to-be-hosted application folder and run the following command:
 
@@ -31,7 +31,7 @@ docker build -f Dockerfile.local -t mycompanyname/myappname:version .
 
 To manually build your application image.
 
-To ease the process, application templates provide a build script to build all the images with a single script under `etc/build` folder named `build-images-locally.ps1`. 
+To ease the process, application templates provide a build script to build all the images with a single script under `etc/docker-compose` folder named `build-images-locally.ps1`. 
 Based on your application name, UI and type, a build image script will be generated. 
 
 {{ if UI == "MVC"}}
@@ -204,8 +204,8 @@ DbMigrator is a console application that is used to migrate the database of your
 `Dockerfile.local` is provided under this project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
-COPY bin/Release/net7.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+COPY bin/Release/net9.0/publish/ app/
 WORKDIR /app
 ENTRYPOINT ["dotnet", "BookStore.DbMigrator.dll"]
 ```
@@ -226,7 +226,7 @@ docker build -f Dockerfile.local -t acme/bookstore-db-migrator:latest . #Builds 
 In the **WebModule** under authentication configuration, there is an extra configuration for containerized environment support:
 
 ```csharp
-if (Convert.ToBoolean(configuration["AuthServer:IsContainerizedOnLocalhost"]))
+if (Convert.ToBoolean(configuration["AuthServer:IsOnK8s"]))
 {
     context.Services.Configure<OpenIdConnectOptions>("oidc", options =>
     {
@@ -268,13 +268,13 @@ if (Convert.ToBoolean(configuration["AuthServer:IsContainerizedOnLocalhost"]))
 
 This is used when the **AuthServer is running on docker containers(or pods)** to configure the redirection URLs for the internal network and the web. The application must be redirected to real DNS (localhost in this case) when the `/authorize` and `/logout` requests over the browser but handle the token validation inside the isolated network without going out to the internet. `"AuthServer:MetaAddress"` appsetting should indicate the container/pod service name while the `AuthServer:Authority` should be pointing to real DNS for the browser to redirect.
 
-The `appsettings.json` file does not contain `AuthServer:IsContainerizedOnLocalhost` and `AuthServer:MetaAddress` settings since they are used for orchestrated deployment scenarios, you can see these settings are overridden by the `docker-compose.yml` file.
+The `appsettings.json` file does not contain `AuthServer:IsOnK8s` and `AuthServer:MetaAddress` settings since they are used for orchestrated deployment scenarios, you can see these settings are overridden by the `docker-compose.yml` file.
 
 `Dockerfile.local` is provided under this project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
-COPY bin/Release/net7.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+COPY bin/Release/net9.0/publish/ app/
 WORKDIR /app
 ENTRYPOINT ["dotnet", "Acme.BookStore.Web.dll"]
 ```
@@ -289,11 +289,11 @@ docker build -f Dockerfile.local -t acme/bookstore-web:latest . #Builds the imag
 ​	{{ end }}	{{ if Tiered == "No" }}MVC/Razor Pages application is a server-side rendering application that contains both the OpenID-provider and the Http.Api endpoints within self; it will be a single application to deploy. `Dockerfile.local` is provided under this project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-COPY bin/Release/net7.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+COPY bin/Release/net9.0/publish/ app/
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 RUN dotnet dev-certs https -v -ep authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED
 
@@ -318,36 +318,17 @@ if (!hostingEnvironment.IsDevelopment())
         options.AddDevelopmentEncryptionAndSigningCertificate = false;
     });
 
-    PreConfigure<OpenIddictServerBuilder>(builder =>
+    PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
     {
-        builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment, configuration));
-        builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment, configuration));
-        builder.SetIssuer(new Uri(configuration["AuthServer:Authority"]));
+        serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", configuration["AuthServer:CertificatePassPhrase"]!);
+        serverBuilder.SetIssuer(new Uri(configuration["AuthServer:Authority"]!));
     });
 }
 ```
 
 This configuration disables the *DevelopmentEncryptionAndSigningCertificate* and uses a self-signed certificate called `authserver.pfx`. for **signing and encrypting the tokens**. This certificate is created when the docker image is built using the `dotnet dev-certs` tooling. It is a sample-generated certificate, and it is **recommended** to update it for the production environment. You can check the [OpenIddict Encryption and signing credentials documentation](https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html) for different options and customization.
 
-The `GetSigningCertificate` method is a private method located under the same **WebModule**:
-
-```csharp
-private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv, IConfiguration configuration)
-{
-    var fileName = "authserver.pfx";
-    var passPhrase = "2D7AA457-5D33-48D6-936F-C48E5EF468ED";
-    var file = Path.Combine(hostingEnv.ContentRootPath, fileName);
-
-    if (!File.Exists(file))
-    {
-        throw new FileNotFoundException($"Signing Certificate couldn't found: {file}");
-    }
-
-    return new X509Certificate2(file, passPhrase);
-}
-```
-
-> You can always create any self-signed certificate using any other tooling outside the Dockerfile. You need to remember to set them as **embedded resource** since the `GetSigningCertificate` method will be checking this file physically. 
+> You can always create any self-signed certificate using any other tooling outside the Dockerfile. You need to remember to set them as **embedded resource**.
 
 If you don't want to use the `build-images-locally.ps1` to build the images or to build this image individually and manually, navigate to the **Web** folder and run:
 
@@ -369,7 +350,7 @@ docker build -f Dockerfile.local -t acme/bookstore-web:latest . #Builds the imag
 In the **BlazorModule** under authentication configuration, there is an extra configuration for containerized environment support:
 
 ```csharp
-if (Convert.ToBoolean(configuration["AuthServer:IsContainerizedOnLocalhost"]))
+if (Convert.ToBoolean(configuration["AuthServer:IsOnK8s"]))
 {
     context.Services.Configure<OpenIdConnectOptions>("oidc", options =>
     {
@@ -411,13 +392,13 @@ if (Convert.ToBoolean(configuration["AuthServer:IsContainerizedOnLocalhost"]))
 
 This is used when the **AuthServer is running on docker containers(or pods)** to configure the redirection URLs for the internal network and the web. The application must be redirected to real DNS (localhost in this case) when the `/authorize` and `/logout` requests over the browser but handle the token validation inside the isolated network without going out to the internet. `"AuthServer:MetaAddress"` appsetting should indicate the container/pod service name while the `AuthServer:Authority` should be pointing to real DNS for the browser to redirect.
 
-The `appsettings.json` file does not contain `AuthServer:IsContainerizedOnLocalhost` and `AuthServer:MetaAddress` settings since they are used for orchestrated deployment scenarios, you can see these settings are overridden by the `docker-compose.yml` file.
+The `appsettings.json` file does not contain `AuthServer:IsOnK8s` and `AuthServer:MetaAddress` settings since they are used for orchestrated deployment scenarios, you can see these settings are overridden by the `docker-compose.yml` file.
 
 `Dockerfile.local` is provided under this project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
-COPY bin/Release/net7.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+COPY bin/Release/net9.0/publish/ app/
 WORKDIR /app
 ENTRYPOINT ["dotnet", "Acme.BookStore.Blazor.dll"]
 ```
@@ -432,11 +413,11 @@ docker build -f Dockerfile.local -t acme/bookstore-blazor:latest . #Builds the i
 ​	{{ end }}	{{ if Tiered == "No" }}Blazor Server application is a server-side rendering application that contains both the OpenID-provider and the Http.Api endpoints within self; it will be a single application to deploy. `Dockerfile.local` is provided under this project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-COPY bin/Release/net7.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+COPY bin/Release/net9.0/publish/ app/
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 RUN dotnet dev-certs https -v -ep authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED
 
@@ -461,36 +442,17 @@ if (!hostingEnvironment.IsDevelopment())
         options.AddDevelopmentEncryptionAndSigningCertificate = false;
     });
 
-    PreConfigure<OpenIddictServerBuilder>(builder =>
+    PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
     {
-        builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment, configuration));
-        builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment, configuration));
-        builder.SetIssuer(new Uri(configuration["AuthServer:Authority"]));
+        serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", configuration["AuthServer:CertificatePassPhrase"]!);
+        serverBuilder.SetIssuer(new Uri(configuration["AuthServer:Authority"]!));
     });
 }
 ```
 
 This configuration disables the *DevelopmentEncryptionAndSigningCertificate* and uses a self-signed certificate called `authserver.pfx`. for **signing and encrypting the tokens**. This certificate is created when the docker image is built using the `dotnet dev-certs` tooling. It is a sample-generated certificate, and it is **recommended** to update it for the production environment. You can check the [OpenIddict Encryption and signing credentials documentation](https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html) for different options and customization.
 
-The `GetSigningCertificate` method is a private method located under the same **BlazorModule**:
-
-```csharp
-private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv, IConfiguration configuration)
-{
-    var fileName = "authserver.pfx";
-    var passPhrase = "2D7AA457-5D33-48D6-936F-C48E5EF468ED";
-    var file = Path.Combine(hostingEnv.ContentRootPath, fileName);
-
-    if (!File.Exists(file))
-    {
-        throw new FileNotFoundException($"Signing Certificate couldn't found: {file}");
-    }
-
-    return new X509Certificate2(file, passPhrase);
-}
-```
-
-> You can always create any self-signed certificate using any other tooling outside the dockerfile. You need to remember to set them as **embedded resource** since the `GetSigningCertificate` method will be checking this file physically. 
+> You can always create any self-signed certificate using any other tooling outside the Dockerfile. You need to remember to set them as **embedded resource**.
 
 If you don't want to use the `build-images-locally.ps1` to build the images or to build this image individually and manually, navigate to the **BlazorModule** folder and run:
 
@@ -562,7 +524,7 @@ server {
 }
 ```
 
-This configuration allows returning the `dynamic-env.json` file as a static file, which ABP Angular application uses for environment variables in one of the first initial requests when rendering the page. **The `dynamic-env.json` file you need to override is located under `aspnet-core/etc/docker`** folder.
+This configuration allows returning the `dynamic-env.json` file as a static file, which ABP Angular application uses for environment variables in one of the first initial requests when rendering the page. **The `dynamic-env.json` file you need to override is located under `aspnet-core/etc/docker-compose`** folder.
 
 ​	{{ if Tiered == "No" }}
 
@@ -645,8 +607,8 @@ docker build -f Dockerfile.local -t acme/bookstore-angular:latest . #Builds the 
 The Blazor application uses [nginx:alpine-slim](https://hub.docker.com/layers/library/nginx/alpine-slim/images/sha256-0f859db466fda2c52f62b48d0602fb26867d98edbd62c26ae21414b3dea8d8f4?context=explore) base image to host the blazor application. You can modify the base image based on your preference in the `Dockerfile.local` which provided under the Blazor folder of your solution as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS build
-COPY bin/Release/net7.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS build
+COPY bin/Release/net9.0/publish/ app/
   
 FROM nginx:alpine-slim AS final
 WORKDIR /usr/share/nginx/html
@@ -701,11 +663,11 @@ docker build -f Dockerfile.local -t acme/bookstore-blazor:latest . #Builds the i
 This is the backend application that contains the openid-provider functionality as well. The `dockerfile.local` is located under the `Http.Api.Host` project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-COPY bin/Release/net7.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+COPY bin/Release/net9.0/publish/ app/
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 RUN dotnet dev-certs https -v -ep authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED
 
@@ -730,36 +692,17 @@ if (!hostingEnvironment.IsDevelopment())
         options.AddDevelopmentEncryptionAndSigningCertificate = false;
     });
 
-    PreConfigure<OpenIddictServerBuilder>(builder =>
+    PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
     {
-        builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment, configuration));
-        builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment, configuration));
-        builder.SetIssuer(new Uri(configuration["AuthServer:Authority"]));
+        serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", configuration["AuthServer:CertificatePassPhrase"]!);
+        serverBuilder.SetIssuer(new Uri(configuration["AuthServer:Authority"]!));
     });
 }
 ```
 
 This configuration disables the *DevelopmentEncryptionAndSigningCertificate* and uses a self-signed certificate called `authserver.pfx`. for **signing and encrypting the tokens**. This certificate is created when the docker image is built using the `dotnet dev-certs` tooling. It is a sample-generated certificate, and it is **recommended** to update it for the production environment. You can check the [OpenIddict Encryption and signing credentials documentation](https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html) for different options and customization.
 
-The `GetSigningCertificate` method is a private method located under the same **HttpApiHostModule**:
-
-```csharp
-private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv, IConfiguration configuration)
-{
-    var fileName = "authserver.pfx";
-    var passPhrase = "2D7AA457-5D33-48D6-936F-C48E5EF468ED";
-    var file = Path.Combine(hostingEnv.ContentRootPath, fileName);
-
-    if (!File.Exists(file))
-    {
-        throw new FileNotFoundException($"Signing Certificate couldn't found: {file}");
-    }
-
-    return new X509Certificate2(file, passPhrase);
-}
-```
-
-> You can always create any self-signed certificate using any other tooling outside of the dockerfile. You need to keep in mind to set them as **embedded resource** since the `GetSigningCertificate` method will be checking this file physically. 
+> You can always create any self-signed certificate using any other tooling outside the Dockerfile. You need to remember to set them as **embedded resource**.
 
 If you don't want to use the `build-images-locally.ps1` to build the images or to build this image individually and manually, navigate to **Http.Api.Host** folder and run:
 
@@ -777,11 +720,11 @@ docker build -f Dockerfile.local -t acme/bookstore-api:latest . #Builds the imag
 This is the backend application that contains the OpenID-provider functionality as well. The `dockerfile.local` is located under the `Http.Api.Host` project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-COPY bin/Release/net7.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+COPY bin/Release/net9.0/publish/ app/
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 RUN dotnet dev-certs https -v -ep authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED
 
@@ -806,36 +749,17 @@ if (!hostingEnvironment.IsDevelopment())
         options.AddDevelopmentEncryptionAndSigningCertificate = false;
     });
 
-    PreConfigure<OpenIddictServerBuilder>(builder =>
+    PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
     {
-        builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment, configuration));
-        builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment, configuration));
-        builder.SetIssuer(new Uri(configuration["AuthServer:Authority"]));
+        serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", configuration["AuthServer:CertificatePassPhrase"]!);
+        serverBuilder.SetIssuer(new Uri(configuration["AuthServer:Authority"]!));
     });
 }
 ```
 
-This configuration disables the *DevelopmentEncryptionAndSigningCertificate* and uses a self-signed certificate called `authserver.pfx`. for **signing and encrypting the tokens**. This certificate is created when the docker image is built using the `dotnet dev-certs` tooling. It is a sample-generated certificate, and it is **recommended** to update it for the production environment. You can check the [OpenIddict Encryption and signing credentials documentation](https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html) for different customization options.
+This configuration disables the *DevelopmentEncryptionAndSigningCertificate* and uses a self-signed certificate called `authserver.pfx`. for **signing and encrypting the tokens**. This certificate is created when the docker image is built using the `dotnet dev-certs` tooling. It is a sample-generated certificate, and it is **recommended** to update it for the production environment. You can check the [OpenIddict Encryption and signing credentials documentation](https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html) for different options and customization.
 
-The `GetSigningCertificate` method is a private method located under the same **HttpApiHostModule**:
-
-```csharp
-private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv, IConfiguration configuration)
-{
-    var fileName = "authserver.pfx";
-    var passPhrase = "2D7AA457-5D33-48D6-936F-C48E5EF468ED";
-    var file = Path.Combine(hostingEnv.ContentRootPath, fileName);
-
-    if (!File.Exists(file))
-    {
-        throw new FileNotFoundException($"Signing Certificate couldn't found: {file}");
-    }
-
-    return new X509Certificate2(file, passPhrase);
-}
-```
-
-> You can always create any self-signed certificate using any other tooling outside the dockerfile. You need to remember to set them as **embedded resource** since the `GetSigningCertificate` method will be checking this file physically. 
+> You can always create any self-signed certificate using any other tooling outside the Dockerfile. You need to remember to set them as **embedded resource**.
 
 If you don't want to use the `build-images-locally.ps1` to build the images or to build this image individually and manually, navigate to **Http.Api.Host** folder and run:
 
@@ -855,11 +779,11 @@ docker build -f Dockerfile.local -t acme/bookstore-api:latest . #Builds the imag
 This is the openid-provider application, the authentication server, which should be individually hosted compared to non-tiered application templates. The `dockerfile.local` is located under the `AuthServer` project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-COPY bin/Release/net7.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+COPY bin/Release/net9.0/publish/ app/
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 RUN dotnet dev-certs https -v -ep authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED
 
@@ -884,36 +808,17 @@ if (!hostingEnvironment.IsDevelopment())
         options.AddDevelopmentEncryptionAndSigningCertificate = false;
     });
 
-    PreConfigure<OpenIddictServerBuilder>(builder =>
+    PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
     {
-        builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment, configuration));
-        builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment, configuration));
-        builder.SetIssuer(new Uri(configuration["AuthServer:Authority"]));
+        serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", configuration["AuthServer:CertificatePassPhrase"]!);
+        serverBuilder.SetIssuer(new Uri(configuration["AuthServer:Authority"]!));
     });
 }
 ```
 
 This configuration disables the *DevelopmentEncryptionAndSigningCertificate* and uses a self-signed certificate called `authserver.pfx`. for **signing and encrypting the tokens**. This certificate is created when the docker image is built using the `dotnet dev-certs` tooling. It is a sample-generated certificate, and it is **recommended** to update it for the production environment. You can check the [OpenIddict Encryption and signing credentials documentation](https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html) for different options and customization.
 
-The `GetSigningCertificate` method is a private method located under the same **AuthServerModule**:
-
-```csharp
-private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv, IConfiguration configuration)
-{
-    var fileName = "authserver.pfx";
-    var passPhrase = "2D7AA457-5D33-48D6-936F-C48E5EF468ED";
-    var file = Path.Combine(hostingEnv.ContentRootPath, fileName);
-
-    if (!File.Exists(file))
-    {
-        throw new FileNotFoundException($"Signing Certificate couldn't found: {file}");
-    }
-
-    return new X509Certificate2(file, passPhrase);
-}
-```
-
-> You can always create any self-signed certificate using any other tooling outside the dockerfile. You need to remember to set them as **embedded resource** since the `GetSigningCertificate` method will be checking this file physically. 
+> You can always create any self-signed certificate using any other tooling outside the Dockerfile. You need to remember to set them as **embedded resource**.
 
 If you don't want to use the `build-images-locally.ps1` to build the images or to build this image individually and manually, navigate to the **AuthServer** folder and run:
 
@@ -927,8 +832,8 @@ docker build -f Dockerfile.local -t acme/bookstore-authserver:latest . #Builds t
 This is the backend application that exposes the endpoints and swagger UI. It is not a multi-stage dockerfile; hence you need to have already built this application in **Release mode** to use this dockerfile. The `dockerfile.local` is located under the `Http.Api.Host` project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
-COPY bin/Release/net7.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+COPY bin/Release/net9.0/publish/ app/
 WORKDIR /app
 ENTRYPOINT ["dotnet", "Acme.BookStore.HttpApi.Host.dll"]
 ```
@@ -944,7 +849,7 @@ docker build -f Dockerfile.local -t acme/bookstore-api:latest . #Builds the imag
 
 ## Running Docker-Compose on Localhost
 
-Under the `etc/docker` folder, you can find the `docker-compose.yml` to run your application. To ease the running process, the template provides `run-docker.ps1` (and `run-docker.sh`) scripts that handle the HTTPS certificate creation, which is used in environment variables;
+Under the `etc/docker-compose` folder, you can find the `docker-compose.yml` to run your application. To ease the running process, the template provides `run-docker.ps1` (and `run-docker.sh`) scripts that handle the HTTPS certificate creation, which is used in environment variables;
 
 ```powershell
 $currentFolder = $PSScriptRoot
@@ -1203,7 +1108,7 @@ This is the angular application we deploy on http://localhost:4200 by default us
 
 > Don't forget to rebuild the `acme/bookstore-angular:latest` image after updating the `nginx.conf` file.
 
-The bookstore-angular service mounts the `etc/docker/dynamic-env.json` file to change the existing dynamic-env.json file, which is copied during image creation, to change the environment variables on deployment time instead of re-creating the docker image after each environmental variable change. **Do not forget to override the `dynamic-env.json` located under the `aspnet-core/etc/docker`** folder.
+The bookstore-angular service mounts the `etc/docker-compose/dynamic-env.json` file to change the existing dynamic-env.json file, which is copied during image creation, to change the environment variables on deployment time instead of re-creating the docker image after each environmental variable change. **Do not forget to override the `dynamic-env.json` located under the `aspnet-core/etc/docker-compose`** folder.
 
 > If you are not using Docker with WSL, you may have problems with the volume mount permissions. You need to grant docker to be able to use the local file system. See this [SO answer](https://stackoverflow.com/a/20652410) for more information.
 
@@ -1438,7 +1343,7 @@ bookstore-web:
       - Kestrel__Certificates__Default__Password=91f91912-5ab0-49df-8166-23377efaf3cc
       - App__SelfUrl=https://localhost:44353
       - AuthServer__RequireHttpsMetadata=false        {{ if Tiered == "Yes" }}
-  	  - AuthServer__IsContainerizedOnLocalhost=true
+  	  - AuthServer__IsOnK8s=true
 	  - AuthServer__Authority=https://localhost:44334/
       - RemoteServices__Default__BaseUrl=http://bookstore-api
       - RemoteServices__AbpAccountPublic__BaseUrl=http://bookstore-authserver
@@ -1464,7 +1369,7 @@ This is the MVC/Razor Page application docker service is using the `acme/booksto
 The MVC/Razor Page is a server-side rendering application that uses the **hybrid flow**. This flow uses **browser** to login/logout process to the OpenID-provider but issues the **access_token from the back-channel** (server-side). To achieve this functionality, the module class has extra `OpenIdConnectOptions` to override some of the events:
 
 ```csharp
-if (Convert.ToBoolean(configuration["AuthServer:IsContainerizedOnLocalhost"]))
+if (Convert.ToBoolean(configuration["AuthServer:IsOnK8s"]))
 {
     context.Services.Configure<OpenIdConnectOptions>("oidc", options =>
     {
@@ -1511,7 +1416,7 @@ if (Convert.ToBoolean(configuration["AuthServer:IsContainerizedOnLocalhost"]))
 
   {{ if Tiered == "Yes" }}
 
-- `AuthServer__IsContainerizedOnLocalhost` is the configuration to enable the **OpenIdConnectOptions** to provide a different endpoint for the MetaAddress of the OpenID-provider and intercepting the URLS for *authorization* and *logout* endpoints.
+- `AuthServer__IsOnK8s` is the configuration to enable the **OpenIdConnectOptions** to provide a different endpoint for the MetaAddress of the OpenID-provider and intercepting the URLS for *authorization* and *logout* endpoints.
 
 - `AuthServer__MetaAddress` is the `.well-known/openid-configuration` endpoint for issuing access_token and internal token validation. It is the containerized `http://bookstore-authserver` by default.
 
@@ -1691,7 +1596,7 @@ bookstore-blazor:
       - Kestrel__Certificates__Default__Password=91f91912-5ab0-49df-8166-23377efaf3cc
       - App__SelfUrl=https://localhost:44314
       - AuthServer__RequireHttpsMetadata=false  {{ if Tiered == "Yes" }}
-  	  - AuthServer__IsContainerizedOnLocalhost=true
+  	  - AuthServer__IsOnK8s=true
 	  - AuthServer__Authority=https://localhost:44334/
       - AuthServer__MetaAddress=http://bookstore-authserver
       - RemoteServices__Default__BaseUrl=http://bookstore-api
@@ -1718,7 +1623,7 @@ This is the Blazor Server application Docker service is using the `acme/bookstor
 The Blazor Server is a server-side rendering application that uses the **hybrid flow**. This flow uses **browser** to login/logout process to the OpenID-provider but issues the **access_token from the back-channel** (server-side). To achieve this functionality, the module class has extra `OpenIdConnectOptions` to override some of the events:
 
 ```csharp
-if (Convert.ToBoolean(configuration["AuthServer:IsContainerizedOnLocalhost"]))
+if (Convert.ToBoolean(configuration["AuthServer:IsOnK8s"]))
 {
     context.Services.Configure<OpenIdConnectOptions>("oidc", options =>
     {
@@ -1765,7 +1670,7 @@ if (Convert.ToBoolean(configuration["AuthServer:IsContainerizedOnLocalhost"]))
 
   {{ if Tiered == "Yes" }}
 
-- `AuthServer__IsContainerizedOnLocalhost` is the configuration to enable the **OpenIdConnectOptions** to provide a different endpoint for the MetaAddress of the OpenID-provider and intercept the URLS for *authorization* and *logout* endpoints.
+- `AuthServer__IsOnK8s` is the configuration to enable the **OpenIdConnectOptions** to provide a different endpoint for the MetaAddress of the OpenID-provider and intercept the URLS for *authorization* and *logout* endpoints.
 
 - `AuthServer__MetaAddress` is the `.well-known/openid-configuration` endpoint for issuing the access_token and internal token validation. It is the containerized `http://bookstore-authserver` by default.
 
