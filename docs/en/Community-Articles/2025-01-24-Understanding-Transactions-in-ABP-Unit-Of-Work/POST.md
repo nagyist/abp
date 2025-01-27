@@ -1,10 +1,12 @@
 # Understanding Transactions in ABP Unit of Work
 
+[The Unit of Work](https://en.wikipedia.org/wiki/Unit_of_work) is a software design pattern that maintains a list of objects affected by a business transaction and coordinates the writing out of changes and the resolution of concurrency problems to ensure that all changes are made within a single transaction. 
+
 ![pic](./pic.png)
 
 ## Transaction Management Overview
 
-One of the primary responsibilities of Unit of Work is managing database transactions. It provides the following transaction management features:
+One of the primary responsibilities of the Unit of Work is managing database transactions. It provides the following transaction management features:
 
 - Automatically manages database connections and transaction scopes, eliminating the need for manual transaction control
 - Ensures business operation integrity by making all database operations within a unit of work either succeed or roll back completely
@@ -38,12 +40,12 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 
 ### Automatic Transaction Management
 
-ABP framework implements automatic management of unit of work and transactions through middleware, MVC global filters, and interceptors. In most cases, you don't need to manage them manually
+ABP Framework implements automatic management of Unit of Work and transactions through middlewares, MVC global filters, and interceptors. In most cases, you don't need to manage them manually
 
 ### Transaction Behavior for HTTP Requests
 
 By default, the framework adopts an intelligent transaction management strategy for HTTP requests:
-- `GET` requests won't start a transactional unit of work
+- `GET` requests won't start a transactional unit of work because there is no data modification
 - Other HTTP requests (`POST/PUT/DELETE` etc.) will start a transactional unit of work
 
 ### Manual Transaction Control
@@ -114,7 +116,7 @@ public virtual async Task ImportDataAsync(List<DataItem> items)
 ```
 
 Applicable scenarios:
-- Batch import data scenarios where partial success is allowed
+- Batch import data scenarios where partial success is accepted
 - Read-only operations, such as queries
 - Scenarios with low data consistency requirements
 
@@ -122,7 +124,7 @@ Applicable scenarios:
 
 #### In Transactional Unit of Work
 
-A unit of work provides several methods to commit changes to the database:
+A Unit of Work provides several methods to commit changes to the database:
 
 1. **IUnitOfWork.SaveChangesAsync**
 
@@ -136,7 +138,7 @@ await _unitOfWorkManager.Current.SaveChangesAsync();
 await _repository.InsertAsync(entity, autoSave: true);
 ```
 
-Both `autoSave` and `SaveChangesAsync` commit changes in the current context to the database. However, these changes remain reversible until `CompleteAsync` is called. If the unit of work throws an exception or `CompleteAsync` is not called, the transaction will be rolled back. Only after successfully executing `CompleteAsync` will the transaction be permanently committed to the database.
+Both `autoSave` and `SaveChangesAsync` commit changes in the current context to the database. However, these are not applied until `CompleteAsync` is called. If the unit of work throws an exception or `CompleteAsync` is not called, the transaction will be rolled back. It means all the DB operations will be reverted back. Only after successfully executing `CompleteAsync` will the transaction be permanently committed to the database.
 
 3. **CompleteAsync**
 
@@ -148,21 +150,21 @@ using (var uow = _unitOfWorkManager.Begin())
 }
 ```
 
-The `CompleteAsync` method is crucial for transaction completion. The unit of work maintains a `DbTransaction` object internally, and the `CompleteAsync` method invokes `DbTransaction.CommitAsync` to commit the transaction. The transaction will not be committed if `CompleteAsync` is either not executed or fails to execute successfully.
+When you manually control the Unit of Work with `UnitOfWorkManager`, the `CompleteAsync` method is crucial for transaction completion. The unit of work maintains a `DbTransaction` object internally, and the `CompleteAsync` method invokes `DbTransaction.CommitAsync` to commit the transaction. The transaction will not be committed if `CompleteAsync` is either not executed or fails to execute successfully.
 
 This method not only commits all database transactions but also:
 
-- Executes and processes all pending domain events within the unit of work
-- Executes all registered post-operations and cleanup tasks within the unit of work
-- Releases all DbTransaction resources upon disposal of the unit of work object
+- Executes and processes all pending domain events within the Unit of Work
+- Executes all registered post-operations and cleanup tasks within the Unit of Work
+- Releases all DbTransaction resources upon disposal of the Unit of Work object
 
 > Note: `CompleteAsync` method should be called only once. Multiple calls are not supported.
 
 #### In Non-Transactional Unit of Work
 
-In non-transactional units of work, these methods behave differently:
+In non-transactional  Unit of Work, these methods behave differently:
 
-Both `autoSave` and `SaveChangesAsync` will persist changes to the database immediately, and these changes cannot be rolled back. Even in non-transactional units of work, calling the `CompleteAsync` method remains necessary as it handles other essential tasks.
+Both `autoSave` and `SaveChangesAsync` will persist changes to the database immediately, and these changes cannot be rolled back. Even in non-transactional Unit of Work, calling the `CompleteAsync` method remains necessary as it handles other essential tasks.
 
 Example:
 ```csharp
@@ -186,13 +188,13 @@ A unit of work provides multiple approaches to roll back transactions:
 
 1. **Automatic Rollback**
 
-For transactions automatically managed by the ABP framework, any uncaught exceptions during the request will trigger an automatic rollback.
+For transactions automatically managed by the ABP Framework, any uncaught exceptions during the request will trigger an automatic rollback.
 
 2. **Manual Rollback**
 
-For manually managed transactions, you can explicitly invoke the `RollbackAsync()` method to immediately roll back the current transaction.
+For manually managed transactions, you can explicitly invoke the `RollbackAsync` method to immediately roll back the current transaction.
 
-> Important: Once `RollbackAsync()` is called, the entire unit of work transaction will be rolled back immediately, and any subsequent calls to `CompleteAsync()` will have no effect.
+> Important: Once `RollbackAsync` is called, the entire  Unit of Work transaction will be rolled back immediately, and any subsequent calls to `CompleteAsync` will have no effect.
 
 ```csharp
 using (var uow = _unitOfWorkManager.Begin(
@@ -303,7 +305,7 @@ public async Task Method1()
 
 ### 3. Use `virtual` Methods
 
-Remember to use the `virtual` modifier for methods in dependency injection class services, because ABP framework uses interceptors, and it cannot intercept non-`virtual` methods, thus unable to implement unit of work functionality.
+To be able to use Unit of Work attribute, you must use the `virtual` modifier for methods in dependency injection class services, because ABP Framework uses interceptors, and it cannot intercept non `virtual` methods, thus unable to implement  Unit of Work functionality.
 
 ### 4. Avoid Long Transactions
 
@@ -316,7 +318,7 @@ Enabling long-running transactions can lead to resource locking, excessive trans
 - Use the `requiresNew` parameter reasonably to control transaction boundaries
 - Pay attention to setting appropriate transaction timeout periods
 - Ensure transactions can properly roll back when exceptions occur
-- For read-only operations, it's recommended to use non-transactional unit of work to improve performance
+- For read-only operations, it's recommended to use non-transactional  Unit of Work to improve performance
 
 ## References
 
