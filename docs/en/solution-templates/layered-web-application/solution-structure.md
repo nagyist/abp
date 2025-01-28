@@ -214,3 +214,7 @@ This project is an application that hosts the API of the solution. It has its ow
 Just like the default structure, this project contains the User Interface (UI) of the application. It contains razor pages, JavaScript files, style files, images and so on...
 
 This project contains an `appsettings.json` file, but this time it does not have a connection string because it never connects to the database. Instead, it mainly contains the endpoint of the remote API server and the authentication server.
+
+### Docker Compose
+
+The **docker-compose** configuration files in the `etc/docker-compose` folder is configured to run the solution with Docker. See [Docker Deployment using Docker Compose](deployment/deployment-docker-compose.md) for more information.

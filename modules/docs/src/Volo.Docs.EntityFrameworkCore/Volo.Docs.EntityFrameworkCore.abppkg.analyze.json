@@ -67,7 +67,26 @@
     {
       "namespace": "Volo.Docs.EntityFrameworkCore",
       "connectionStringName": "Docs",
-      "databaseTables": [],
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Docs.Projects.Project",
+          "contentType": "databaseTable",
+          "name": "Projects",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Docs.Documents.Document",
+          "contentType": "databaseTable",
+          "name": "Documents",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Docs.Documents.DocumentContributor",
+          "contentType": "databaseTable",
+          "name": "DocumentContributors",
+          "summary": null
+        }
+      ],
       "replacedDbContexts": [],
       "modelBuilderExtensionMethods": [
         {

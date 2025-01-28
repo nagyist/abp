@@ -85,38 +85,6 @@
       "summary": null
     },
     {
-      "apis": [
-        {
-          "path": "document-resources",
-          "method": "GET",
-          "groupName": "DocumentResource",
-          "responseType": "Volo.Abp.Http.RemoteServiceErrorResponse",
-          "responseTypeAsJson": "",
-          "parameterDescriptions": [
-            {
-              "name": "ProjectId",
-              "type": "Guid"
-            },
-            {
-              "name": "Name",
-              "type": "String"
-            },
-            {
-              "name": "Version",
-              "type": "String"
-            },
-            {
-              "name": "LanguageCode",
-              "type": "String"
-            }
-          ]
-        }
-      ],
-      "contentType": "httpApi",
-      "name": "Defined Http Apis",
-      "summary": null
-    },
-    {
       "namespace": "Volo.Docs.Pages.Documents.Project",
       "contentType": "webPage",
       "name": "IndexModel",

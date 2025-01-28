@@ -345,7 +345,9 @@ public class OrderAppService : OrderingAppService, IOrderAppService
 }
 ````
 
-Open the `ModularCrmModule` class in the main application's solution (the `ModularCrm` solution), find the `ConfigureAutoApiControllers` method and add the following lines inside that method:
+### Exposing Application Services as HTTP API Controllers
+
+After implementing the application service, now we need to create HTTP API endpoints for the ordering module. For that purpose, open the `ModularCrmModule` class in the main application's solution (the `ModularCrm` solution), find the `ConfigureAutoApiControllers` method and add the following lines inside that method:
 
 ````csharp
 private void ConfigureAutoApiControllers()
@@ -353,10 +355,16 @@ private void ConfigureAutoApiControllers()
     Configure<AbpAspNetCoreMvcOptions>(options =>
     {
         options.ConventionalControllers.Create(typeof(ModularCrmModule).Assembly);
-        options.ConventionalControllers.Create(typeof(ProductsApplicationModule).Assembly);
+        options.ConventionalControllers.Create(typeof(ProductsApplicationModule).Assembly, settings => 
+        {
+            settings.RootPath = "products";
+        });
 
         //ADD THE FOLLOWING LINE:
-        options.ConventionalControllers.Create(typeof(OrderingModule).Assembly);
+        options.ConventionalControllers.Create(typeof(OrderingModule).Assembly, settings => 
+        {
+            settings.RootPath = "orders";
+        });
     });
 }
 ````
@@ -373,7 +381,7 @@ Once you see the user interface of the web application, type `/swagger` at the e
 
 ![abp-studio-ordering-swagger-ui-in-browser](images/abp-studio-ordering-swagger-ui-in-browser.png)
 
-Expand the `/api/app/order` API and click the *Try it out* button. Then, create a few orders by filling in the request body and clicking the *Execute* button:
+Expand the `/api/orders/order` API and click the *Try it out* button. Then, create a few orders by filling in the request body and clicking the *Execute* button:
 
 ![abp-studio-swagger-ui-create-order-execute](images/abp-studio-swagger-ui-create-order-execute.png)
 

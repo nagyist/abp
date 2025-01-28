@@ -51,8 +51,7 @@ public class MongoIdentitySecurityLogRepository :
         );
 
         return await query.OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(IdentitySecurityLog.CreationTime)} desc" : sorting)
-            .As<IMongoQueryable<IdentitySecurityLog>>()
-            .PageBy<IdentitySecurityLog, IMongoQueryable<IdentitySecurityLog>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -83,15 +82,14 @@ public class MongoIdentitySecurityLogRepository :
             cancellationToken
         );
 
-        return await query.As<IMongoQueryable<IdentitySecurityLog>>()
-            .LongCountAsync(GetCancellationToken(cancellationToken));
+        return await query.LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
 
     public virtual async Task<IdentitySecurityLog> GetByUserIdAsync(Guid id, Guid userId, bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken)).OrderBy(x => x.Id).FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId,
+        return await (await GetQueryableAsync(cancellationToken)).OrderBy(x => x.Id).FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId,
             GetCancellationToken(cancellationToken));
     }
 
@@ -108,7 +106,7 @@ public class MongoIdentitySecurityLogRepository :
         string clientIpAddress = null,
         CancellationToken cancellationToken = default)
     {
-        return (await GetMongoQueryableAsync(cancellationToken))
+        return (await GetQueryableAsync(cancellationToken))
             .WhereIf(startTime.HasValue, securityLog => securityLog.CreationTime >= startTime.Value)
             .WhereIf(endTime.HasValue, securityLog => securityLog.CreationTime < endTime.Value.AddDays(1).Date)
             .WhereIf(!applicationName.IsNullOrWhiteSpace(), securityLog => securityLog.ApplicationName == applicationName)

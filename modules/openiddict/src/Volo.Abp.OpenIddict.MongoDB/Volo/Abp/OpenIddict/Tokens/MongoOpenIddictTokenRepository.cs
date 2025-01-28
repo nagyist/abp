@@ -21,7 +21,7 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
 
     public virtual async Task DeleteManyByApplicationIdAsync(Guid applicationId, bool autoSave = false, CancellationToken cancellationToken = default)
     {
-        var tokens = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        var tokens = await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.ApplicationId == applicationId)
             .ToListAsync(GetCancellationToken(cancellationToken));
 
@@ -31,7 +31,7 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
     public virtual async Task DeleteManyByAuthorizationIdAsync(Guid authorizationId, bool autoSave = false,
         CancellationToken cancellationToken = default)
     {
-        var tokens = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        var tokens = await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.AuthorizationId == authorizationId)
             .ToListAsync(GetCancellationToken(cancellationToken));
 
@@ -40,7 +40,7 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
 
     public virtual async Task DeleteManyByAuthorizationIdsAsync(Guid[] authorizationIds, bool autoSave = false, CancellationToken cancellationToken = default)
     {
-        var tokens = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        var tokens = await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.AuthorizationId != null && authorizationIds.Contains(x.AuthorizationId.Value))
             .ToListAsync(GetCancellationToken(cancellationToken));
 
@@ -49,67 +49,62 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
 
     public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid? client, string status, string type, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .WhereIf(!subject.IsNullOrWhiteSpace(), x => x.Subject == subject)
             .WhereIf(client.HasValue, x => x.ApplicationId == client)
             .WhereIf(!status.IsNullOrWhiteSpace(), x => x.Status == status)
             .WhereIf(!type.IsNullOrWhiteSpace(), x => x.Type == type)
-            .As<IMongoQueryable<OpenIddictToken>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<OpenIddictToken>> FindByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        return await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.ApplicationId == applicationId)
-            .As<IMongoQueryable<OpenIddictToken>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<OpenIddictToken>> FindByAuthorizationIdAsync(Guid authorizationId, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        return await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.AuthorizationId == authorizationId)
-            .As<IMongoQueryable<OpenIddictToken>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<OpenIddictToken> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))).FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
+        return await (await GetQueryableAsync(GetCancellationToken(cancellationToken))).FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<OpenIddictToken> FindByReferenceIdAsync(string referenceId, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken))).FirstOrDefaultAsync(x => x.ReferenceId == referenceId, GetCancellationToken(cancellationToken));
+        return await (await GetQueryableAsync(GetCancellationToken(cancellationToken))).FirstOrDefaultAsync(x => x.ReferenceId == referenceId, GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<OpenIddictToken>> FindBySubjectAsync(string subject, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        return await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.Subject == subject)
-            .As<IMongoQueryable<OpenIddictToken>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<OpenIddictToken>> ListAsync(int? count, int? offset, CancellationToken cancellationToken = default)
     {
-        return  await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        return  await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .OrderBy(x => x.Id)
             .SkipIf<OpenIddictToken, IQueryable<OpenIddictToken>>(offset.HasValue, offset)
             .TakeIf<OpenIddictToken, IQueryable<OpenIddictToken>>(count.HasValue, count)
-            .As<IMongoQueryable<OpenIddictToken>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<long> PruneAsync(DateTime date, CancellationToken cancellationToken = default)
     {
-        var authorizationIds = await (await GetMongoQueryableAsync<OpenIddictAuthorization>(cancellationToken))
+        var authorizationIds = await (await GetQueryableAsync<OpenIddictAuthorization>(cancellationToken))
             .Where(x => x.Status != OpenIddictConstants.Statuses.Valid)
             .Select(x => x.Id)
             .ToListAsync(GetCancellationToken(cancellationToken));
 
-        var tokens = await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        var tokens = await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .Where(x => x.CreationDate < date)
             .Where(x => (x.Status != OpenIddictConstants.Statuses.Inactive &&
                          x.Status != OpenIddictConstants.Statuses.Valid) ||

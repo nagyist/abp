@@ -165,7 +165,6 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return false;
     }
 
-
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         await LocalEventBus.PublishAsync(eventType, eventData);
@@ -175,5 +174,28 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected override byte[] Serialize(object eventData)
     {
         return JsonSerializer.SerializeToUtf8Bytes(eventData);
+    }
+
+    private async Task PublishDistributedEventSentReceivedAsync(Type eventType, object eventData, bool onUnitOfWorkComplete)
+    {
+        if (eventType != typeof(DistributedEventSent))
+        {
+            await _localEventBus.PublishAsync(new DistributedEventSent
+            {
+                Source = DistributedEventSource.Direct,
+                EventName = EventNameAttribute.GetNameOrDefault(eventType),
+                EventData = eventData
+            }, onUnitOfWorkComplete);
+        }
+
+        if (eventType != typeof(DistributedEventReceived))
+        {
+            await _localEventBus.PublishAsync(new DistributedEventReceived
+            {
+                Source = DistributedEventSource.Direct,
+                EventName = EventNameAttribute.GetNameOrDefault(eventType),
+                EventData = eventData
+            }, onUnitOfWorkComplete);
+        }
     }
 }
