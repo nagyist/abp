@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Modeling;
@@ -46,7 +47,7 @@ public class TypeApiDescriptionModel
         else
         {
             typeModel.Properties = type
-                .GetProperties()
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .Where(p => p.DeclaringType == type)
                 .Select(PropertyApiDescriptionModel.Create)
                 .ToArray();

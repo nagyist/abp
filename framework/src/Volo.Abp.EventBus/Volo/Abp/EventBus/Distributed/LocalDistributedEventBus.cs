@@ -57,89 +57,116 @@ public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependen
         return Subscribe(typeof(TEvent), handler);
     }
 
-    public virtual IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
+    public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
     {
         return _localEventBus.Subscribe(action);
     }
 
-    public virtual IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
+    public IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
     {
         return _localEventBus.Subscribe(handler);
     }
 
-    public virtual IDisposable Subscribe<TEvent, THandler>() where TEvent : class where THandler : IEventHandler, new()
+    public IDisposable Subscribe<TEvent, THandler>() where TEvent : class where THandler : IEventHandler, new()
     {
         return _localEventBus.Subscribe<TEvent, THandler>();
     }
 
-    public virtual IDisposable Subscribe(Type eventType, IEventHandler handler)
+    public IDisposable Subscribe(Type eventType, IEventHandler handler)
     {
         return _localEventBus.Subscribe(eventType, handler);
     }
 
-    public virtual IDisposable Subscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
+    public IDisposable Subscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
     {
         return _localEventBus.Subscribe<TEvent>(factory);
     }
 
-    public virtual IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
+    public IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
     {
         return _localEventBus.Subscribe(eventType, factory);
     }
 
-    public virtual void Unsubscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
+    public void Unsubscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
     {
         _localEventBus.Unsubscribe(action);
     }
 
-    public virtual void Unsubscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
+    public void Unsubscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
     {
         _localEventBus.Unsubscribe(handler);
     }
 
-    public virtual void Unsubscribe(Type eventType, IEventHandler handler)
+    public void Unsubscribe(Type eventType, IEventHandler handler)
     {
         _localEventBus.Unsubscribe(eventType, handler);
     }
 
-    public virtual void Unsubscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
+    public void Unsubscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
     {
         _localEventBus.Unsubscribe<TEvent>(factory);
     }
 
-    public virtual void Unsubscribe(Type eventType, IEventHandlerFactory factory)
+    public void Unsubscribe(Type eventType, IEventHandlerFactory factory)
     {
         _localEventBus.Unsubscribe(eventType, factory);
     }
 
-    public virtual void UnsubscribeAll<TEvent>() where TEvent : class
+    public void UnsubscribeAll<TEvent>() where TEvent : class
     {
         _localEventBus.UnsubscribeAll<TEvent>();
     }
 
-    public virtual void UnsubscribeAll(Type eventType)
+    public void UnsubscribeAll(Type eventType)
     {
         _localEventBus.UnsubscribeAll(eventType);
     }
 
-    public virtual Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true)
+    public async Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true)
         where TEvent : class
     {
-        return _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
+        await PublishDistributedEventSentReceivedAsync(typeof(TEvent), eventData, onUnitOfWorkComplete);
+        await _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
     }
 
-    public virtual Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
+    public async Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
     {
-        return _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
+        await PublishDistributedEventSentReceivedAsync(eventType, eventData, onUnitOfWorkComplete);
+        await _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
     }
 
-    public virtual Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true) where TEvent : class
+    public async Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true) where TEvent : class
     {
-        return _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
+        await PublishDistributedEventSentReceivedAsync(typeof(TEvent), eventData, onUnitOfWorkComplete);
+        await _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
     }
 
-    public virtual Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
+    public async Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
     {
-        return _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
+        await PublishDistributedEventSentReceivedAsync(eventType, eventData, onUnitOfWorkComplete);
+        await _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
+    }
+
+    private async Task PublishDistributedEventSentReceivedAsync(Type eventType, object eventData, bool onUnitOfWorkComplete)
+    {
+        if (eventType != typeof(DistributedEventSent))
+        {
+            await _localEventBus.PublishAsync(new DistributedEventSent
+            {
+                Source = DistributedEventSource.Direct,
+                EventName = EventNameAttribute.GetNameOrDefault(eventType),
+                EventData = eventData
+            }, onUnitOfWorkComplete);
+        }
+
+        if (eventType != typeof(DistributedEventReceived))
+        {
+            await _localEventBus.PublishAsync(new DistributedEventReceived
+            {
+                Source = DistributedEventSource.Direct,
+                EventName = EventNameAttribute.GetNameOrDefault(eventType),
+                EventData = eventData
+            }, onUnitOfWorkComplete);
+        }
     }
 }

@@ -153,6 +153,8 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
+        await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)), outgoingEvent.Id, outgoingEvent.GetCorrelationId());
+
         using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
         {
             await TriggerDistributedEventSentAsync(new DistributedEventSent()
@@ -162,8 +164,6 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
                 EventData = outgoingEvent.EventData
             });
         }
-
-        await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)), outgoingEvent.Id, outgoingEvent.GetCorrelationId());
     }
 
     public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
@@ -172,6 +172,8 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
         foreach (var outgoingEvent in outgoingEventArray)
         {
+            await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)), outgoingEvent.Id, outgoingEvent.GetCorrelationId());
+
             using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
             {
                 await TriggerDistributedEventSentAsync(new DistributedEventSent()
@@ -181,8 +183,6 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
                     EventData = outgoingEvent.EventData
                 });
             }
-
-            await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, GetEventType(outgoingEvent.EventName)), outgoingEvent.Id, outgoingEvent.GetCorrelationId());
         }
     }
 

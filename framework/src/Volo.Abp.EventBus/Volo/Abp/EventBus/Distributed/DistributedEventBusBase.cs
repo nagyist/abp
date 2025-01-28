@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -85,14 +85,14 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             }
         }
 
+        await PublishToEventBusAsync(eventType, eventData);
+
         await TriggerDistributedEventSentAsync(new DistributedEventSent()
         {
             Source = DistributedEventSource.Direct,
             EventName = EventNameAttribute.GetNameOrDefault(eventType),
             EventData = eventData
         });
-
-        await PublishToEventBusAsync(eventType, eventData);
     }
 
     public abstract Task PublishFromOutboxAsync(
