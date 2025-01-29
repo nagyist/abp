@@ -136,6 +136,11 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         await TriggerHandlersAsync(localEventMessage.EventType, localEventMessage.EventData);
     }
 
+    public virtual List<EventTypeWithEventHandlerFactories> GetEventHandlerFactories(Type eventType)
+    {
+        return GetHandlerFactories(eventType).ToList();
+    }
+
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
         var handlerFactoryList = new List<Tuple<IEventHandlerFactory, Type, int>>();
