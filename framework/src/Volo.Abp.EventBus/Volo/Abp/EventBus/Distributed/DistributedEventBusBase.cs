@@ -62,7 +62,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         return PublishAsync(typeof(TEvent), eventData, onUnitOfWorkComplete, useOutbox);
     }
 
-    public async Task PublishAsync(
+    public virtual async Task PublishAsync(
         Type eventType,
         object eventData,
         bool onUnitOfWorkComplete = true,
@@ -227,7 +227,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
     {
         try
         {
-            await LocalEventBus.PublishAsync(distributedEvent);
+            await LocalEventBus.PublishAsync(distributedEvent, onUnitOfWorkComplete: false);
         }
         catch (Exception)
         {
@@ -239,7 +239,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
     {
         try
         {
-            await LocalEventBus.PublishAsync(distributedEvent);
+            await LocalEventBus.PublishAsync(distributedEvent, false);
         }
         catch (Exception)
         {

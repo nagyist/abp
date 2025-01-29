@@ -242,19 +242,6 @@ public abstract class EventBusBase : IEventBus
         };
     }
 
-    protected class EventTypeWithEventHandlerFactories
-    {
-        public Type EventType { get; }
-
-        public List<IEventHandlerFactory> EventHandlerFactories { get; }
-
-        public EventTypeWithEventHandlerFactories(Type eventType, List<IEventHandlerFactory> eventHandlerFactories)
-        {
-            EventType = eventType;
-            EventHandlerFactories = eventHandlerFactories;
-        }
-    }
-
     // Reference from
     // https://blogs.msdn.microsoft.com/benwilli/2017/02/09/an-alternative-to-configureawaitfalse-everywhere/
     protected struct SynchronizationContextRemover : INotifyCompletion
