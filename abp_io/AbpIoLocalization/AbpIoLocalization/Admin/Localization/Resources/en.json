@@ -685,6 +685,7 @@
     "RedisManagement": "Redis Management",
     "Permission:RedisManagement": "Redis Management",
     "UserCleanUp": "User Clean Up",
-    "Permission:UserCleanUp": "User Clean Up"
+    "Permission:UserCleanUp": "User Clean Up",
+    "AllowPrivateQuestion": "Allow Private Question"
   }
 }
