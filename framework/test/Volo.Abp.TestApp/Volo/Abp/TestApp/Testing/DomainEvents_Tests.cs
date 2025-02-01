@@ -179,7 +179,7 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
     }
 
     [Fact]
-    public async Task Should_AddOrReplace_Event_Records_In_Uow_Test()
+    public async Task Should_Trigger_Event_That_Publish_In_Event_Handler()
     {
         //Arrange
         var event1Triggered = false;
@@ -190,13 +190,13 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         LocalEventBus.Subscribe<MyCustomEventData>(async data =>
         {
             event1Triggered = true;
-            UnitOfWorkManager.Current!.AddOrReplaceDistributedEvent(new UnitOfWorkEventRecord(typeof(MyCustomEventData3), new MyCustomEventData3 { Value = "42" }, 2));
+            await DistributedEventBus.PublishAsync(new MyCustomEventData3 { Value = "42" });
         });
 
         DistributedEventBus.Subscribe<MyCustomEventData2>(async data =>
         {
             event2Triggered = true;
-            UnitOfWorkManager.Current!.AddOrReplaceLocalEvent(new UnitOfWorkEventRecord(typeof(MyCustomEventData4), new MyCustomEventData4 { Value = "42" }, 2));
+            await LocalEventBus.PublishAsync(new MyCustomEventData4 { Value = "42" });
         });
 
         LocalEventBus.Subscribe<MyCustomEventData3>(async data =>
@@ -212,8 +212,8 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         //Act
         using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
         {
-            UnitOfWorkManager.Current!.AddOrReplaceLocalEvent(new UnitOfWorkEventRecord(typeof(MyCustomEventData), new MyCustomEventData { Value = "42" }, 1));
-            UnitOfWorkManager.Current!.AddOrReplaceDistributedEvent(new UnitOfWorkEventRecord(typeof(MyCustomEventData2), new MyCustomEventData2 { Value = "42" }, 1));
+            await LocalEventBus.PublishAsync(new MyCustomEventData { Value = "42" });
+            await DistributedEventBus.PublishAsync(new MyCustomEventData2 { Value = "42" });
             await uow.CompleteAsync();
         }
 
