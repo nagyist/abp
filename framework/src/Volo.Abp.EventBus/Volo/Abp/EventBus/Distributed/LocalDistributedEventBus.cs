@@ -72,6 +72,8 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
     {
+        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        EventTypes.GetOrAdd(eventName, eventType);
         return LocalEventBus.Subscribe(eventType, factory);
     }
 
@@ -157,7 +159,12 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             EventData = outgoingEvent.EventData
         });
 
-        var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName)!;
+        var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
+        if (eventType == null)
+        {
+            return;
+        }
+
         var eventData = JsonSerializer.Deserialize(Encoding.UTF8.GetString(outgoingEvent.EventData), eventType)!;
         await LocalEventBus.PublishAsync(eventType, eventData, false);
     }
