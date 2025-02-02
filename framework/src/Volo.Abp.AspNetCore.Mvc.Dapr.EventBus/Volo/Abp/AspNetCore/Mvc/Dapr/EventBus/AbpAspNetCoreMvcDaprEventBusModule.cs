@@ -97,13 +97,21 @@ public class AbpAspNetCoreMvcDaprEventBusModule : AbpModule
         if (IsAbpDaprEventData(data))
         {
             var daprEventData = daprSerializer.Deserialize(data, typeof(AbpDaprEventData)).As<AbpDaprEventData>();
-            var eventData = daprSerializer.Deserialize(daprEventData.JsonData, distributedEventBus.GetEventType(daprEventData.Topic));
-            await distributedEventBus.TriggerHandlersAsync(distributedEventBus.GetEventType(daprEventData.Topic), eventData, daprEventData.MessageId, daprEventData.CorrelationId);
+            var eventType = distributedEventBus.GetEventType(daprEventData.Topic);
+            if (eventType != null)
+            {
+                var eventData = daprSerializer.Deserialize(daprEventData.JsonData, eventType);
+                await distributedEventBus.TriggerHandlersAsync(eventType, eventData, daprEventData.MessageId, daprEventData.CorrelationId);
+            }
         }
         else
         {
-            var eventData = daprSerializer.Deserialize(data, distributedEventBus.GetEventType(topic!));
-            await distributedEventBus.TriggerHandlersAsync(distributedEventBus.GetEventType(topic!), eventData);
+            var eventType = distributedEventBus.GetEventType(topic);
+            if (eventType != null)
+            {
+                var eventData = daprSerializer.Deserialize(data, eventType);
+                await distributedEventBus.TriggerHandlersAsync(eventType, eventData);
+            }
         }
 
         httpContext.Response.StatusCode = 200;
