@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -135,6 +136,11 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
+        if (await AddToInboxAsync(Guid.NewGuid().ToString(), EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, null))
+        {
+            return;
+        }
+
         await LocalEventBus.PublishAsync(eventType, eventData, false);
     }
 
@@ -166,6 +172,11 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
 
         var eventData = JsonSerializer.Deserialize(Encoding.UTF8.GetString(outgoingEvent.EventData), eventType)!;
+        if (await AddToInboxAsync(Guid.NewGuid().ToString(), outgoingEvent.EventName, eventType, eventData, null))
+        {
+            return;
+        }
+
         await LocalEventBus.PublishAsync(eventType, eventData, false);
     }
 
