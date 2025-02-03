@@ -1,14 +1,17 @@
 # Blazor UI: Overall
 
-## Introduction
+[Blazor](https://docs.microsoft.com/en-us/aspnet/core/blazor/) is a framework for building interactive client-side web UI with .NET. It enables .NET developers to create Single-Page Web Applications using C# and the Razor syntax.
 
-[Blazor](https://docs.microsoft.com/en-us/aspnet/core/blazor/) is a framework for building interactive client-side web UI with .NET. It is promising for a .NET developer that you can create Single-Page Web Applications using C# and the Razor syntax.
+ABP provides comprehensive infrastructure and integrations that make your Blazor development easier, comfortable and enjoyable. ABP supports multiple Blazor hosting models:
 
-ABP provides infrastructure and integrations that make your Blazor development even easier, comfortable and enjoyable.
+* **Blazor WebAssembly (WASM)**: Client-side hosting model where the entire application runs in the browser using WebAssembly
+* **Blazor Server**: Server-side hosting model with a real-time SignalR connection
+* **Blazor WebApp**: The new hybrid/united model introduced in .NET 8 combining the benefits of Server and WebAssembly approaches
+* **MAUI Blazor**: For building cross-platform native applications using Blazor & MAUI
 
-This document provides an overview for the ABP Blazor UI integration and highlights some major features.
+This document provides an overview of the ABP Blazor UI integration and highlights some major features.
 
-### Getting Started
+## Getting Started
 
 You can follow the documents below to start with the ABP and the Blazor UI now:
 
@@ -94,7 +97,7 @@ These libraries are selected as the base libraries and available to the applicat
 
 > Bootstrap's JavaScript part is not used since the Blazorise library already provides the necessary functionalities to the Bootstrap components in a native way.
 
-> Beginning from June, 2021, the Blazorise library has dual licenses; open source & commercial. Based on your yearly revenue, you may need to buy a commercial license. See [this post](https://blazorise.com/news/announcing-2022-blazorise-plans-and-pricing-updates) to learn more. The Blazorise license is bundled with ABP and commercial customers doesn’t need to buy an extra Blazorise license.
+> Beginning from June, 2021, the Blazorise library has dual licenses; open source & commercial. Based on your yearly revenue, you may need to buy a commercial license. See [this post](https://blazorise.com/news/announcing-2022-blazorise-plans-and-pricing-updates) to learn more. The Blazorise license is bundled with ABP and commercial customers doesn't need to buy an extra Blazorise license.
 
 ### The Layout
 
