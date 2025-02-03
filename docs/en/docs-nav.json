@@ -488,7 +488,7 @@
             {
               "text": "Exception Handling",
               "path": "framework/fundamentals/exception-handling.md",
-              "keywords": ["error"]
+              "keywords": ["Error"]
             },
             {
               "text": "Localization",
