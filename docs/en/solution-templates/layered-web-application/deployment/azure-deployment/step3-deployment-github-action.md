@@ -295,7 +295,7 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp-3.outputs.webapp-url }}
-
+    steps:
       - name: Download artifact from apihost
         uses: actions/download-artifact@v4
         with:
