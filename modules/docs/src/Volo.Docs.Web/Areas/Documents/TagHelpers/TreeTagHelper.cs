@@ -156,8 +156,8 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
                 sb.Clear();
 
-                var dataKeywords = node.Keywords.IsNullOrEmpty() ? "" : "data-keywords=\"" + node.Keywords.JoinAsString(",") + "\"";
-                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), dataKeywords ,textCss,
+                var additionalAttributes = node.Keywords.IsNullOrEmpty() ? "" : "data-keywords=\"" + node.Keywords.JoinAsString(",") + "\"";
+                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), additionalAttributes ,textCss,
                     node.Text.IsNullOrEmpty()
                         ? "?"
                         : sb.Append(node.Text).Append(badgeStringBuilder.ToString()).ToString());
