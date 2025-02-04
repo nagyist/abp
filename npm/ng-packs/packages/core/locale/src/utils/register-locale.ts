@@ -96,6 +96,7 @@ export function registerLocale(
         /* webpackChunkName: "locales"*/
         /* webpackInclude: /[/\\](ar|cs|en|en-GB|es|de|fi|fr|hi|hu|is|it|pt|tr|ru|ro|sk|sl|zh-Hans|zh-Hant)\.(mjs|js)$/ */
         /* webpackExclude: /[/\\]global|extra/ */
+        /* @vite-ignore */
         `@angular/common${localePath}`
       )
         .then(val => {
