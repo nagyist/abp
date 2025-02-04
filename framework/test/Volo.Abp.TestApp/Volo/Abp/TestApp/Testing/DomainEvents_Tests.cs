@@ -21,6 +21,7 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
     protected readonly IRepository<AppEntityWithNavigations, Guid> AppEntityWithNavigationsRepository;
     protected readonly ILocalEventBus LocalEventBus;
     protected readonly IDistributedEventBus DistributedEventBus;
+    protected readonly IUnitOfWorkManager UnitOfWorkManager;
 
     protected DomainEvents_Tests()
     {
@@ -28,6 +29,7 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         AppEntityWithNavigationsRepository = GetRequiredService<IRepository<AppEntityWithNavigations, Guid>>();
         LocalEventBus = GetRequiredService<ILocalEventBus>();
         DistributedEventBus = GetRequiredService<IDistributedEventBus>();
+        UnitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
     }
 
     [Fact]
@@ -176,12 +178,68 @@ public abstract class DomainEvents_Tests<TStartupModule> : TestAppTestBase<TStar
         isDistributedEventTriggered.ShouldBeTrue();
     }
 
+    [Fact]
+    public async Task Should_Trigger_Event_That_Publish_In_Event_Handler()
+    {
+        //Arrange
+        var event1Triggered = false;
+        var event2Triggered = false;
+        var event3Triggered = false;
+        var event4Triggered = false;
+
+        LocalEventBus.Subscribe<MyCustomEventData>(async data =>
+        {
+            event1Triggered = true;
+            await DistributedEventBus.PublishAsync(new MyCustomEventData3 { Value = "42" });
+        });
+
+        DistributedEventBus.Subscribe<MyCustomEventData2>(async data =>
+        {
+            event2Triggered = true;
+            await LocalEventBus.PublishAsync(new MyCustomEventData4 { Value = "42" });
+        });
+
+        LocalEventBus.Subscribe<MyCustomEventData3>(async data =>
+        {
+            event3Triggered = true;
+        });
+
+        DistributedEventBus.Subscribe<MyCustomEventData4>(async data =>
+        {
+            event4Triggered = true;
+        });
+
+        //Act
+        using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
+        {
+            await LocalEventBus.PublishAsync(new MyCustomEventData { Value = "42" });
+            await DistributedEventBus.PublishAsync(new MyCustomEventData2 { Value = "42" });
+            await uow.CompleteAsync();
+        }
+
+        //Assert
+        event1Triggered.ShouldBeTrue();
+        event2Triggered.ShouldBeTrue();
+        event3Triggered.ShouldBeTrue();
+        event4Triggered.ShouldBeTrue();
+    }
+
     private class MyCustomEventData
     {
         public string Value { get; set; }
     }
 
     private class MyCustomEventData2
+    {
+        public string Value { get; set; }
+    }
+
+    private class MyCustomEventData3
+    {
+        public string Value { get; set; }
+    }
+
+    private class MyCustomEventData4
     {
         public string Value { get; set; }
     }
