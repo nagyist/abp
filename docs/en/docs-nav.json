@@ -1431,6 +1431,10 @@
                       "path": "ui-themes/lepton-x-lite/blazor.md"
                     },
                     {
+                      "text": "LeptonX",
+                      "path": "ui-themes/lepton-x/blazor.md"
+                    },
+                    {
                       "text": "Branding",
                       "path": "framework/ui/blazor/branding.md"
                     },
@@ -1751,6 +1755,10 @@
                         {
                           "text": "LeptonX Lite",
                           "path": "ui-themes/lepton-x-lite/angular.md"
+                        },
+                        {
+                          "text": "LeptonX",
+                          "path": "ui-themes/lepton-x/angular.md"
                         }
                       ]
                     },

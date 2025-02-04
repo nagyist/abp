@@ -164,6 +164,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         bool includeDetails = false,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
+        Guid? id = null,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
@@ -183,6 +184,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             filter,
             roleId,
             organizationUnitId,
+            id,
             userName,
             phoneNumber,
             emailAddress,
@@ -243,6 +245,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         string filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
+        Guid? id = null,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
@@ -262,6 +265,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             filter,
             roleId,
             organizationUnitId,
+            id,
             userName,
             phoneNumber,
             emailAddress,
@@ -398,6 +402,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         var allOrganizationUnitRoleIds = organizationUnitAndRoleIds.SelectMany(x => x.Roles.Select(r => r.RoleId)).ToList();
         var allRoleIds = roleIds.Union(allOrganizationUnitRoleIds);
 
+
         var roles = await (await GetQueryableAsync<IdentityRole>(cancellationToken)).Where(r => allRoleIds.Contains(r.Id)).Select(r => new{ r.Id, r.Name }).ToListAsync(cancellationToken);
         var userRoles = userAndRoleIds.ToDictionary(x => x.Key, x => roles.Where(r => x.Value.Contains(r.Id)).Select(r => r.Name).ToArray());
 
@@ -412,9 +417,9 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             {
                 user.RoleNames = user.RoleNames.Union(roleNames).ToArray();
             }
-            else if(roleNames.Any())
+            else if (roleNames.Any())
             {
-                result.Add(new IdentityUserIdWithRoleNames { Id = userAndOrganizationUnitId.Key, RoleNames = roleNames});
+                result.Add(new IdentityUserIdWithRoleNames { Id = userAndOrganizationUnitId.Key, RoleNames = roleNames });
             }
         }
 
@@ -425,6 +430,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         string filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
+        Guid? id = null,
         string userName = null,
         string phoneNumber = null,
         string emailAddress = null,
@@ -443,6 +449,11 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         var upperFilter = filter?.ToUpperInvariant();
         var query = await GetQueryableAsync(cancellationToken);
 
+        if (id.HasValue)
+        {
+            return query.Where(x => x.Id == id);
+        }
+        
         if (roleId.HasValue)
         {
             var organizationUnitIds = (await GetQueryableAsync<OrganizationUnit>(cancellationToken))
