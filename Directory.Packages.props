@@ -15,6 +15,7 @@
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
     <PackageVersion Include="AWSSDK.S3" Version="3.7.410.9" />
     <PackageVersion Include="AWSSDK.SecurityToken" Version="3.7.401.16" />
+    <PackageVersion Include="BunnyCDN.Net.Storage" Version="1.0.4" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.18.1" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.22.1" />
     <PackageVersion Include="Blazorise" Version="1.7.3" />
