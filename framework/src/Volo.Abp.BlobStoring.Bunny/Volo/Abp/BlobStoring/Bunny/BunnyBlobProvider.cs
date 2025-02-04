@@ -24,7 +24,7 @@ public class BunnyBlobProvider : BlobProviderBase, ITransientDependency
         BunnyClientFactory = bunnyClientFactory;
     }
 
-    public override async Task SaveAsync(BlobProviderSaveArgs args)
+    public async override Task SaveAsync(BlobProviderSaveArgs args)
     {
         var configuration = args.Configuration.GetBunnyConfiguration();
         var containerName = GetContainerName(args);
@@ -48,7 +48,7 @@ public class BunnyBlobProvider : BlobProviderBase, ITransientDependency
         await bunnyStorage.UploadAsync(memoryStream, $"{containerName}/{blobName}");
     }
 
-    public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+    public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
     {
         var blobName = BunnyBlobNameCalculator.Calculate(args);
         var containerName = GetContainerName(args);
@@ -69,7 +69,7 @@ public class BunnyBlobProvider : BlobProviderBase, ITransientDependency
         }
     }
 
-    public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+    public async override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
     {
         var blobName = BunnyBlobNameCalculator.Calculate(args);
         var containerName = GetContainerName(args);
@@ -78,7 +78,7 @@ public class BunnyBlobProvider : BlobProviderBase, ITransientDependency
         return await BlobExistsAsync(bunnyStorage, containerName, blobName);
     }
 
-    public override async Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
+    public async override Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
     {
         var blobName = BunnyBlobNameCalculator.Calculate(args);
         var containerName = GetContainerName(args);

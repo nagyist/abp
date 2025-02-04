@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -14,16 +15,16 @@ namespace Volo.Abp.BlobStoring.Bunny;
 
 public class DefaultBunnyClientFactory : IBunnyClientFactory, ITransientDependency
 {
-    private readonly IDistributedCache<StorageZone> _cache;
+    private readonly IDistributedCache<BunnyStorageZoneModel> _cache;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IStringEncryptionService _stringEncryptionService;
 
     private const string CacheKeyPrefix = "BunnyStorageZone:";
-    private static TimeSpan CacheDuration = TimeSpan.FromHours(12);
+    private readonly static TimeSpan CacheDuration = TimeSpan.FromHours(12);
 
     public DefaultBunnyClientFactory(
         IHttpClientFactory httpClient,
-        IDistributedCache<StorageZone> cache,
+        IDistributedCache<BunnyStorageZoneModel> cache,
         IStringEncryptionService stringEncryptionService)
     {
         _cache = cache;
@@ -89,76 +90,63 @@ public class DefaultBunnyClientFactory : IBunnyClientFactory, ITransientDependen
         }
     }
 
-    protected virtual async Task<StorageZone> CreateStorageZoneAsync(
+    protected virtual async Task<BunnyStorageZoneModel> CreateStorageZoneAsync(
         string accessKey,
         string containerName,
         string region)
     {
-        using var _client = _httpClientFactory.CreateClient("BunnyApiClient");
-        _client.DefaultRequestHeaders.Add("AccessKey", accessKey);
-
-        var payload = new Dictionary<string, object>
+        using (var client = _httpClientFactory.CreateClient("BunnyApiClient"))
         {
-            { "Name", containerName },
-            { "Region", region },
-            { "ZoneTier", 0 }
-        };
+            client.DefaultRequestHeaders.Add("AccessKey", accessKey);
 
-        var content = new StringContent(
-            JsonSerializer.Serialize(payload),
-            Encoding.UTF8,
-            "application/json");
+            var payload = new Dictionary<string, object>
+            {
+                { "Name", containerName },
+                { "Region", region },
+                { "ZoneTier", 0 }
+            };
 
-        var response = await _client.PostAsync(
-            "https://api.bunny.net/storagezone",
-            content);
+            var content = new StringContent(
+                JsonSerializer.Serialize(payload),
+                Encoding.UTF8,
+                "application/json");
 
-        if (!response.IsSuccessStatusCode)
-        {
-            var errorContent = await response.Content.ReadAsStringAsync();
-            throw new AbpException(
-                $"Failed to create storage zone '{containerName}'. " +
-                $"Status: {response.StatusCode}, Error: {errorContent}");
+            var response = await client.PostAsync(
+                "https://api.bunny.net/storagezone",
+                content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new AbpException(
+                    $"Failed to create storage zone '{containerName}'. " +
+                    $"Status: {response.StatusCode}, Error: {errorContent}");
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var createdZone = JsonSerializer.Deserialize<BunnyStorageZoneModel>(responseContent);
+
+            if (createdZone == null)
+            {
+                throw new AbpException($"Failed to deserialize the created storage zone response for '{containerName}'");
+            }
+
+            return createdZone;
         }
+    }
 
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var createdZone = JsonSerializer.Deserialize<StorageZone>(responseContent);
-
-        if (createdZone == null)
+    protected virtual async Task<BunnyStorageZoneModel?> GetStorageZoneAsync(string accessKey, string containerName)
+    {
+        using (var client = _httpClientFactory.CreateClient("BunnyApiClient"))
         {
-            throw new AbpException(
-                $"Failed to deserialize the created storage zone response for '{containerName}'");
+            client.DefaultRequestHeaders.Add("AccessKey", accessKey);
+            var response = await client.GetAsync("https://api.bunny.net/storagezone");
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+            var zones = JsonSerializer.Deserialize<BunnyStorageZoneModel[]>(content);
+
+            return zones?.FirstOrDefault(x => x.Name.Equals(containerName, StringComparison.OrdinalIgnoreCase) && !x.Deleted);
         }
-
-        return createdZone;
     }
-
-    protected virtual async Task<StorageZone?> GetStorageZoneAsync(string accessKey, string containerName)
-    {
-        using var _client = _httpClientFactory.CreateClient("BunnyApiClient");
-        _client.DefaultRequestHeaders.Add("AccessKey", accessKey);
-        var response = await _client.GetAsync("https://api.bunny.net/storagezone");
-        response.EnsureSuccessStatusCode();
-
-        var content = await response.Content.ReadAsStringAsync();
-        var zones = JsonSerializer.Deserialize<StorageZone[]>(content);
-
-        return Array.Find(zones!, z =>
-            z.Name.Equals(containerName, StringComparison.OrdinalIgnoreCase) && !z.Deleted);
-    }
-
-    [Serializable]
-    public class StorageZone
-    {
-        public int Id { get; set; }
-        public string Password { get; set; } = null!;
-        public string Name { get; set; } = null!;
-        public string? Region { get; set; }
-        public bool Deleted { get; set; }
-    }
-}
-public class BunnyApiException : Exception
-{
-    public BunnyApiException(string message) : base(message) { }
-    public BunnyApiException(string message, Exception innerException) : base(message, innerException) { }
 }

@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Caching;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BlobStoring.Bunny;
 
 [DependsOn(
-    typeof(AbpBlobStoringModule), 
+    typeof(AbpBlobStoringModule),
     typeof(AbpCachingModule))]
 public class AbpBlobStoringBunnyModule : AbpModule
 {

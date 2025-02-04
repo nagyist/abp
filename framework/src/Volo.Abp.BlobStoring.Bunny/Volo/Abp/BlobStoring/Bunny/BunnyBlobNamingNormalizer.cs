@@ -7,7 +7,7 @@ namespace Volo.Abp.BlobStoring.Bunny;
 
 public class BunnyBlobNamingNormalizer : IBlobNamingNormalizer, ITransientDependency
 {
-    private static readonly Regex ValidCharactersRegex =
+    private readonly static Regex ValidCharactersRegex =
         new Regex(@"^[a-z0-9-]*$", RegexOptions.Compiled);
 
     private const int MinLength = 4;
