@@ -139,15 +139,16 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
             _isCompleting = true;
             await SaveChangesAsync(cancellationToken);
 
-            DistributedEvents.AddRange(GetEventsRecords(DistributedEventWithPredicates));
             LocalEvents.AddRange(GetEventsRecords(LocalEventWithPredicates));
+            LocalEventWithPredicates.Clear();
+            DistributedEvents.AddRange(GetEventsRecords(DistributedEventWithPredicates));
+            DistributedEventWithPredicates.Clear();
 
             while (LocalEvents.Any() || DistributedEvents.Any())
             {
                 if (LocalEvents.Any())
                 {
                     var localEventsToBePublished = LocalEvents.OrderBy(e => e.EventOrder).ToArray();
-                    LocalEventWithPredicates.Clear();
                     LocalEvents.Clear();
                     await UnitOfWorkEventPublisher.PublishLocalEventsAsync(
                         localEventsToBePublished
@@ -157,7 +158,6 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
                 if (DistributedEvents.Any())
                 {
                     var distributedEventsToBePublished = DistributedEvents.OrderBy(e => e.EventOrder).ToArray();
-                    DistributedEventWithPredicates.Clear();
                     DistributedEvents.Clear();
                     await UnitOfWorkEventPublisher.PublishDistributedEventsAsync(
                         distributedEventsToBePublished
@@ -167,7 +167,9 @@ public class UnitOfWork : IUnitOfWork, ITransientDependency
                 await SaveChangesAsync(cancellationToken);
 
                 LocalEvents.AddRange(GetEventsRecords(LocalEventWithPredicates));
+                LocalEventWithPredicates.Clear();
                 DistributedEvents.AddRange(GetEventsRecords(DistributedEventWithPredicates));
+                DistributedEventWithPredicates.Clear();
             }
 
             await CommitTransactionsAsync(cancellationToken);
