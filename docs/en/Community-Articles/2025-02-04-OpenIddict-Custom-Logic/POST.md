@@ -24,11 +24,11 @@ Here are some of the pre-defined `OpenIddictServerEvents`:
 
 ![](openiddict-server-events.png)
 
-Each event represents a specific moment in the **request processing pipeline** (e.g the moment the OpenIddict server determines whether the request is a valid OpenID Connect request it should handle, the moment it extracts it, handles it or returns a response). Thanks to that, only thing you should do as an application developer is creating an event handler to subscribe to these events when they are triggered.
+Each event represents a specific checkpoint in the **request processing pipeline**, such as validating an OpenID Connect request, extracting request parameters, processing the request, or generating a response. As an application developer, you simply need to create event handlers that subscribe to these predefined events to implement your custom logic at the desired pipeline stage.
 
 ## Example: How to add custom logic when a user signs out?
 
-Let's walk through a practical example of implementing custom sign-out logic using OpenIddict events.
+Let's walkthrough a practical example of implementing custom sign-out logic using OpenIddict events.
 
 ### Step 1: Create a Custom Event Handler
 
@@ -52,6 +52,7 @@ public class SignOutEventHandler : IOpenIddictServerHandler<OpenIddictServerEven
     public ValueTask HandleAsync(OpenIddictServerEvents.ProcessSignOutContext context)
     {
         // Implement your custom sign-out logic here
+
         // Examples:
         // - Clear custom session data
         // - Perform audit logging
