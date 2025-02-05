@@ -62,6 +62,8 @@ dotnet add package Microsoft.Extensions.AI.OpenAI --prerelease
 
 > Replace the value of the `Key` with your OpenAI API key.
 
+> **Important Security Note**: Storing sensitive information like API keys in `appsettings.json` is not recommended due to security concerns. Please refer to the [official Microsoft documentation](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) for secure secret management best practices.
+
 Next, add the following code to the `ConfigureServices` method in `OpenAIIntegrationBlazorModule`:
 
 ```csharp

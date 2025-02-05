@@ -23,6 +23,7 @@ The ABP has already the following storage provider implementations:
 * [Minio](./minio.md): Stores BLOBs on the [MinIO Object storage](https://min.io/).
 * [Aws](./aws.md): Stores BLOBs on the [Amazon Simple Storage Service](https://aws.amazon.com/s3/).
 * [Google](./google.md): Stores BLOBs on the [Google Cloud Storage](https://cloud.google.com/storage).
+* [Bunny](./bunny.md): Stores BLOBs on the [Bunny.net Storage](https://bunny.net/storage/).
 
 More providers will be implemented by the time. You can [request](https://github.com/abpframework/abp/issues/new) it for your favorite provider or [create it yourself](./custom-provider.md) and [contribute](../../../contribution) to the ABP.
 
