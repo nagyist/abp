@@ -1,7 +1,5 @@
 # ABP Framework: Background Jobs vs Background Workers — When to Use Which?
 
-![cover](cover.png)
-
 In the ABP Framework, **Background Jobs** and **Background Workers** serve different purposes but can sometimes seem interchangeable. Sometimes it can be confusing. Let’s clarify their differences, and I'll show you some real-world cases to help you understand how to decide between these two. We have official documents for these:
 
 📕 **Background Workers ABP Document**  https://abp.io/docs/latest/framework/infrastructure/background-workers
