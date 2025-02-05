@@ -78,6 +78,7 @@
     "EndDate": "結束時間",
     "Feature:AuditLoggingGroup": "審計日誌",
     "Feature:AuditLoggingEnable": "啟用審計日誌頁面",
-    "Feature:AuditLoggingEnableDescription": "在應用程序中啟用審計日誌頁面."
+    "Feature:AuditLoggingEnableDescription": "在應用程序中啟用審計日誌頁面.",
+    "TenantId": "租戶 ID"
   }
 }
