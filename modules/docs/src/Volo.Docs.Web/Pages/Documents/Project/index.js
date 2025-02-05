@@ -112,7 +112,7 @@ var doc = doc || {};
                 var filteredItems = $navigation
                     .find('li > a')
                     .filter(function () {
-                        var keywords = ($(this).data('keywords') ?? "").split(",");
+                        var keywords = ($(this).data('keywords') || "").split(",");
                         var text = $(this).text();
                         
                         if(text.toUpperCase().indexOf(filterText.toUpperCase()) > -1)
