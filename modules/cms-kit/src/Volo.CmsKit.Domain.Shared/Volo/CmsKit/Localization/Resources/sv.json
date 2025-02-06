@@ -254,6 +254,11 @@
     "CommentAlertMessage": "Det finns {0} kommentarer som väntar på godkännande",
     "Settings:Menu:CmsKit": "CMS",
     "CommentsAwaitingApproval": "Kommentarer som väntar på godkännande",
-    "CommentSubmittedForApproval": "Din kommentar har skickats in för godkännande."
+    "CommentSubmittedForApproval": "Din kommentar har skickats in för godkännande.",
+    "ChooseAnActionForBlog": "Välj en åtgärd för bloggen",
+    "AssignBlogPostsToOtherBlog": "Tilldela blogginlägg till en annan blogg",
+    "SelectAnBlogToAssign": "Välj en blogg att tilldela",
+    "DeleteAllBlogPostsOfThisBlog": "Radera alla blogginlägg i denna blogg",
+    "RequiredPermissionName": "Nödvändigt behörighetsnamn"
   }
 }

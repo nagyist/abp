@@ -38,7 +38,7 @@ public class PropertyApiDescriptionModel
             JsonName = AbpApiProxyScriptingConfiguration.PropertyNameGenerator.Invoke(propertyInfo),
             Type = ApiTypeNameHelper.GetTypeName(propertyInfo.PropertyType),
             TypeSimple = ApiTypeNameHelper.GetSimpleTypeName(propertyInfo.PropertyType),
-            IsRequired = customAttributes.OfType<RequiredAttribute>().Any(),
+            IsRequired = customAttributes.OfType<RequiredAttribute>().Any() || propertyInfo.GetCustomAttributesData().Any(attr => attr.AttributeType.Name == "RequiredMemberAttribute"),
             Minimum = customAttributes.OfType<RangeAttribute>().Select(x => x.Minimum).FirstOrDefault()?.ToString(),
             Maximum = customAttributes.OfType<RangeAttribute>().Select(x => x.Maximum).FirstOrDefault()?.ToString(),
             MinLength = customAttributes.OfType<MinLengthAttribute>().FirstOrDefault()?.Length ?? customAttributes.OfType<StringLengthAttribute>().FirstOrDefault()?.MinimumLength,

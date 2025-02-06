@@ -8,6 +8,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
 
 public class IncomingEventRecord :
     BasicAggregateRoot<Guid>,
+    IIncomingEventInfo,
     IHasExtraProperties,
     IHasCreationTime
 {

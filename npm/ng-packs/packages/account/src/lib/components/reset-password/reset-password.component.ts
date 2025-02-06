@@ -9,6 +9,7 @@ import { finalize } from 'rxjs/operators';
 const PASSWORD_FIELDS = ['password', 'confirmPassword'];
 
 @Component({
+  standalone: false,
   selector: 'abp-reset-password',
   templateUrl: './reset-password.component.html',
 })

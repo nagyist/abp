@@ -227,6 +227,11 @@
     "CssClass": "CSS-Klasse",
     "TagsHelpText": "Tags sollten durch Kommas getrennt werden (z. B. Tag1, Tag2, Tag3).",
     "ThisPartOfContentCouldntBeLoaded": "Dieser Teil des Inhalts konnte nicht geladen werden.",
-    "DuplicateCommentAttemptMessage": "Es wurde versucht, einen doppelten Kommentar zu posten. Ihr Kommentar wurde bereits übermittelt."
+    "DuplicateCommentAttemptMessage": "Es wurde versucht, einen doppelten Kommentar zu posten. Ihr Kommentar wurde bereits übermittelt.",
+    "ChooseAnActionForBlog": "Wählen Sie eine Aktion für den Blog",
+    "AssignBlogPostsToOtherBlog": "Blogbeiträge einem anderen Blog zuweisen",
+    "SelectAnBlogToAssign": "Wählen Sie einen Blog aus, um Blogbeiträge zuzuweisen",
+    "DeleteAllBlogPostsOfThisBlog": "Alle Blogbeiträge dieses Blogs löschen",
+    "RequiredPermissionName": "Erforderlicher Berechtigungsname"
   }
 }

@@ -227,6 +227,11 @@
     "CssClass": "Classe CSS",
     "TagsHelpText": "As tags devem ser separadas por vírgula (por exemplo: tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "Esta parte do conteúdo não pôde ser carregada.",
-    "DuplicateCommentAttemptMessage": "Tentativa duplicada de postagem de comentário detectada. Seu comentário já foi enviado."
+    "DuplicateCommentAttemptMessage": "Tentativa duplicada de postagem de comentário detectada. Seu comentário já foi enviado.",
+    "ChooseAnActionForBlog": "Escolha uma ação para o blog",
+    "AssignBlogPostsToOtherBlog": "Atribuir postagens de blog a outro blog",
+    "SelectAnBlogToAssign": "Selecione um blog para atribuir",
+    "DeleteAllBlogPostsOfThisBlog": "Excluir todas as postagens de blog deste blog",
+    "RequiredPermissionName": "Nome da permissão necessária"
   }
 }

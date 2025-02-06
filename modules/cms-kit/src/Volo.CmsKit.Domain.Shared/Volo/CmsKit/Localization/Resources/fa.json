@@ -183,6 +183,11 @@
     "Status": "وضعیت",
     "CmsKit.BlogPost.ScrollIndex": "نوار پیمایش سریع در پست های وبلاگ",
     "CmsKit.BlogPost.PreventXssFeature": "جلوگیری از XSS",
-    "ThisPartOfContentCouldntBeLoaded": "این قسمت از محتوا قابل بارگیری نیست."
+    "ThisPartOfContentCouldntBeLoaded": "این قسمت از محتوا قابل بارگیری نیست.",
+    "ChooseAnActionForBlog": "یک عمل برای وبلاگ انتخاب کنید",
+    "AssignBlogPostsToOtherBlog": "پست های وبلاگ را به وبلاگ دیگری اختصاص دهید",
+    "SelectAnBlogToAssign": "یک وبلاگ برای اختصاص دادن انتخاب کنید",
+    "DeleteAllBlogPostsOfThisBlog": "تمام پست های وبلاگ این وبلاگ را حذف کنید",
+    "RequiredPermissionName": "نام مجوز مورد نیاز"
   }
 }

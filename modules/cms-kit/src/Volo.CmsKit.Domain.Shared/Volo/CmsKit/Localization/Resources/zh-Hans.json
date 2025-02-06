@@ -227,6 +227,11 @@
     "CssClass": "CSS 类",
     "TagsHelpText": "标签应以逗号分隔（例如：标签 1,标签 2,标签 3）",
     "ThisPartOfContentCouldntBeLoaded": "这部分内容无法加载。",
-    "DuplicateCommentAttemptMessage": "检测到重复发表评论。您的评论已经提交。"
+    "DuplicateCommentAttemptMessage": "检测到重复发表评论。您的评论已经提交。",
+    "ChooseAnActionForBlog": "选择博客的操作",
+    "AssignBlogPostsToOtherBlog": "将博客文章分配给其他博客",
+    "SelectAnBlogToAssign": "选择要分配的博客",
+    "DeleteAllBlogPostsOfThisBlog": "删除此博客的所有博客文章",
+    "RequiredPermissionName": "所需权限名称"
   }
 }

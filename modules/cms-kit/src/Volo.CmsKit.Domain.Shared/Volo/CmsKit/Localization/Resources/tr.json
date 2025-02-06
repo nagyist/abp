@@ -218,6 +218,11 @@
     "CaptchaCode": "Captcha kodu",
     "CommentTextRequired": "Yorum zorunlu",
     "PopularTags": "Popüler Etiketler",
-    "ThisPartOfContentCouldntBeLoaded": "Bu içerik yüklenemedi"
+    "ThisPartOfContentCouldntBeLoaded": "Bu içerik yüklenemedi",
+    "ChooseAnActionForBlog": "Blog için bir eylem seçin",
+    "AssignBlogPostsToOtherBlog": "Diğer bloglara blog yazıları atayın",
+    "SelectAnBlogToAssign": "Atanacak bir blog seçin",
+    "DeleteAllBlogPostsOfThisBlog": "Bu blogun tüm blog yazılarını sil",
+    "RequiredPermissionName": "Gerekli izin adı"
   }
 }

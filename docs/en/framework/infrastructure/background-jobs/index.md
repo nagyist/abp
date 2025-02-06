@@ -221,6 +221,13 @@ public class MyModule : AbpModule
 }
 ````
 
+* `JobPollPeriod` is used to determine the interval between two job polling operations. Default is 5000 ms (5 seconds).
+* `MaxJobFetchCount` is used to determine the maximum job count to fetch in a single polling operation. Default is 1000.
+* `DefaultFirstWaitDuration` is used to determine the duration to wait before the first retry. Default is 60 seconds.
+* `DefaultTimeout` is used to determine the timeout duration for a job. Default is 172800 seconds (2 days).
+* `DefaultWaitFactor` is used to determine the factor to increase the wait duration between retries. Default is 2.0.
+* `DistributedLockName` is used to determine the distributed lock name to use. Default is `AbpBackgroundJobWorker`.
+
 ### Data Store
 
 The default background job manager needs a data store to save and read jobs. It defines `IBackgroundJobStore` as an abstraction to store the jobs.
