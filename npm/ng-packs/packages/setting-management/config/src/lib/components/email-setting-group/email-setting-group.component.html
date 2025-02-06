@@ -51,7 +51,7 @@
     <div
       [@collapse]="{
         value: form.get('smtpUseDefaultCredentials')?.value ? 'collapsed' : 'expanded',
-        params: { time: '200ms', easing: 'linear' }
+        params: { time: '200ms', easing: 'linear' },
       }"
     >
       <div class="mb-3 form-group">
@@ -93,7 +93,7 @@
 
 <abp-modal [(visible)]="isEmailTestModalOpen" [options]="modalSize">
   <ng-template #abpHeader>
-    <h3>{{ 'SendTestEmail' | abpLocalization }}</h3>
+    <h3>{{ 'AbpSettingManagement::SendTestEmail' | abpLocalization }}</h3>
   </ng-template>
 
   <ng-template #abpBody>
