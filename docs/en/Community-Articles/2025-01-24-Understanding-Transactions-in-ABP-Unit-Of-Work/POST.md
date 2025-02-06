@@ -2,8 +2,6 @@
 
 [The Unit of Work](https://en.wikipedia.org/wiki/Unit_of_work) is a software design pattern that maintains a list of objects affected by a business transaction and coordinates the writing out of changes and the resolution of concurrency problems to ensure that all changes are made within a single transaction. 
 
-![pic](./pic.png)
-
 ## Transaction Management Overview
 
 One of the primary responsibilities of the Unit of Work is managing database transactions. It provides the following transaction management features:

@@ -2,8 +2,6 @@
 
 In this article, I will show you how to integrate and use the [OpenAI API](https://github.com/openai/openai-dotnet?tab=readme-ov-file#getting-started) with the [ABP Framework](https://abp.io/). We will explore step-by-step how these technologies can work together to enhance your application with powerful AI capabilities, such as natural language processing, image generation, and more.
 
-![cover-image](cover-image.png)
-
 ## Creating an ABP Project
 
 To begin integrating OpenAI API with ABP Framework, you first need to create an ABP project. Follow these steps to create and set up your ABP project:
