@@ -131,10 +131,10 @@ namespace Volo.Docs.Pages.Documents.Project
                 return Redirect(decodedUrl);
             }
 
-            if(displayUrl.EndsWith("/Index", StringComparison.OrdinalIgnoreCase))
+            var redirectUrl = _uiOptions.GetRedirectUrlIfNeeded(displayUrl);
+            if (redirectUrl != null)
             {
-                displayUrl = displayUrl.Substring(0, displayUrl.LastIndexOf("/Index", StringComparison.OrdinalIgnoreCase));
-                return RedirectPermanent(displayUrl);
+                return RedirectPermanent(redirectUrl);
             }
 
             return await SetPageAsync();

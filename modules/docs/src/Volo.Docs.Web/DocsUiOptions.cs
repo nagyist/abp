@@ -39,6 +39,21 @@ namespace Volo.Docs
         
         public bool EnableEnlargeImage { get; set; } = true;
 
+        public Func<string, string?> RedirectUrlResolver { get; set; } = url =>
+        {
+            if (!url.EndsWith("/Index", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+                
+            }
+            return url.Substring(0, url.LastIndexOf("/Index", StringComparison.OrdinalIgnoreCase));
+        };
+
+        public string? GetRedirectUrlIfNeeded(string url)
+        {
+            return RedirectUrlResolver.Invoke(url);
+        }
+
         private string GetFormattedRoutePrefix()
         {
             if (string.IsNullOrWhiteSpace(_routePrefix))
