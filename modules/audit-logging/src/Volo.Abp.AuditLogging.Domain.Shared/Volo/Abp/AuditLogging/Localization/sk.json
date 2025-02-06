@@ -78,6 +78,7 @@
     "EndDate": "Dátum konca",
     "Feature:AuditLoggingGroup": "Audit logovanie",
     "Feature:AuditLoggingEnable": "Povoliť stránku audit logovania",
-    "Feature:AuditLoggingEnableDescription": "Povolená stránka audit logovania v aplikácii."
+    "Feature:AuditLoggingEnableDescription": "Povolená stránka audit logovania v aplikácii.",
+    "TenantId": "ID nájomníka"
   }
 }

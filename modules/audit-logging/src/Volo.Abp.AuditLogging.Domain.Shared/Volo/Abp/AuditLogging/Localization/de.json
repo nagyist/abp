@@ -78,6 +78,7 @@
     "EndDate": "Endtermin",
     "Feature:AuditLoggingGroup": "Audit-Protokollierung",
     "Feature:AuditLoggingEnable": "Aktivierte Audit-Logging-Seite",
-    "Feature:AuditLoggingEnableDescription": "Aktivieren Sie die Audit-Logging-Seite in der Anwendung."
+    "Feature:AuditLoggingEnableDescription": "Aktivieren Sie die Audit-Logging-Seite in der Anwendung.",
+    "TenantId": "Mandanten-ID"
   }
 }

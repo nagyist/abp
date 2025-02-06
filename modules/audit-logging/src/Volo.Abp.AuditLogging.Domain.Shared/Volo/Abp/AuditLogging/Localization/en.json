@@ -93,6 +93,7 @@
     "DisplayName:ExpiredDeleterPeriod": "Expired item deletion period",
     "Description:ExpiredDeleterPeriod": "Set the number of days after which expired items will be automatically deleted.",
     "ExpiredDeleterPeriodUnit": "day(s)",
-    "AuditLogsBeforeXWillBeDeleted": "Audit logs before {0} will be deleted."
+    "AuditLogsBeforeXWillBeDeleted": "Audit logs before {0} will be deleted.",
+    "TenantId": "Tenant Id"
   }
 }

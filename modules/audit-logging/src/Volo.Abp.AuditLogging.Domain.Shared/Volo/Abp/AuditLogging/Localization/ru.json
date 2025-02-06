@@ -78,6 +78,7 @@
     "EndDate": "Дата окончания",
     "Feature:AuditLoggingGroup": "Ведение журнала аудита",
     "Feature:AuditLoggingEnable": "Включенная страница ведения журнала аудита",
-    "Feature:AuditLoggingEnableDescription": "Включить страницу ведения журнала аудита в приложении."
+    "Feature:AuditLoggingEnableDescription": "Включить страницу ведения журнала аудита в приложении.",
+    "TenantId": "Идентификатор арендатора"
   }
 }

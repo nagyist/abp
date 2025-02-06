@@ -78,6 +78,7 @@
     "EndDate": "Ngày cuối",
     "Feature:AuditLoggingGroup": "Ghi nhật ký kiểm tra",
     "Feature:AuditLoggingEnable": "Đã bật trang ghi nhật ký kiểm tra",
-    "Feature:AuditLoggingEnableDescription": "Kích hoạt trang ghi nhật ký kiểm tra trong ứng dụng."
+    "Feature:AuditLoggingEnableDescription": "Kích hoạt trang ghi nhật ký kiểm tra trong ứng dụng.",
+    "TenantId": "ID người thuê"
   }
 }
