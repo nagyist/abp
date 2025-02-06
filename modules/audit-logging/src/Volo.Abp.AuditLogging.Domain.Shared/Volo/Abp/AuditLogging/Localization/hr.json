@@ -78,6 +78,7 @@
     "EndDate": "Datum završetka",
     "Feature:AuditLoggingGroup": "Zapisivanje revizije",
     "Feature:AuditLoggingEnable": "Omogućena stranica za bilježenje revizije",
-    "Feature:AuditLoggingEnableDescription": "Omogućite stranicu za bilježenje revizije u aplikaciji."
+    "Feature:AuditLoggingEnableDescription": "Omogućite stranicu za bilježenje revizije u aplikaciji.",
+    "TenantId": "ID stanara"
   }
 }

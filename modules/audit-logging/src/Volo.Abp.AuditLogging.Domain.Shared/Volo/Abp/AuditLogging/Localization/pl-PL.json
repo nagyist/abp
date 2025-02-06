@@ -78,6 +78,7 @@
     "EndDate": "Data końcowa",
     "Feature:AuditLoggingGroup": "Rejestrowanie audytu",
     "Feature:AuditLoggingEnable": "Włączono stronę rejestrowania audytu",
-    "Feature:AuditLoggingEnableDescription": "Włącz stronę rejestrowania audytu w aplikacji."
+    "Feature:AuditLoggingEnableDescription": "Włącz stronę rejestrowania audytu w aplikacji.",
+    "TenantId": "Identyfikator najemcy"
   }
 }

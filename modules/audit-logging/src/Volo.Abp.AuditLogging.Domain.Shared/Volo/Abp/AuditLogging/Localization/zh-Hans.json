@@ -78,6 +78,7 @@
     "EndDate": "结束日期",
     "Feature:AuditLoggingGroup": "审计日志",
     "Feature:AuditLoggingEnable": "启用审计记录页面",
-    "Feature:AuditLoggingEnableDescription": "在应用程序中启用审计日志页面。"
+    "Feature:AuditLoggingEnableDescription": "在应用程序中启用审计日志页面。",
+    "TenantId": "租户 ID"
   }
 }

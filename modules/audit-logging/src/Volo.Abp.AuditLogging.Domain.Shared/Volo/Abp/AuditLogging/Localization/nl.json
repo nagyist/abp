@@ -78,6 +78,7 @@
     "EndDate": "Einddatum",
     "Feature:AuditLoggingGroup": "Auditregistratie",
     "Feature:AuditLoggingEnable": "Pagina voor auditregistratie ingeschakeld",
-    "Feature:AuditLoggingEnableDescription": "Schakel de auditlogboekpagina in de applicatie in."
+    "Feature:AuditLoggingEnableDescription": "Schakel de auditlogboekpagina in de applicatie in.",
+    "TenantId": "Huurder-ID"
   }
 }
