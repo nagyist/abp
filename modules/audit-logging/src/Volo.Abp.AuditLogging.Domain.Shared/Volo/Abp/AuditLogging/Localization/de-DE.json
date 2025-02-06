@@ -77,6 +77,7 @@
     "EndDate": "Endtermin",
     "Feature:AuditLoggingGroup": "Audit-Protokollierung",
     "Feature:AuditLoggingEnable": "Aktivieren Sie die Überwachungsprotokollseite",
-    "Feature:AuditLoggingEnableDescription": "Aktivieren Sie die Überwachungsprotokollseite in der App."
+    "Feature:AuditLoggingEnableDescription": "Aktivieren Sie die Überwachungsprotokollseite in der App.",
+    "TenantId": "Mandanten-ID"
   }
 }

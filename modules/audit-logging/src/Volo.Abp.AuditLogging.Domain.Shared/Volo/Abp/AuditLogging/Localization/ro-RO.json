@@ -78,6 +78,7 @@
     "EndDate": "Data de încheiere",
     "Feature:AuditLoggingGroup": "Înregistrare de audit",
     "Feature:AuditLoggingEnable": "Pagina de înregistrare a auditului activată",
-    "Feature:AuditLoggingEnableDescription": "Activați pagina de înregistrare a auditului în aplicație."
+    "Feature:AuditLoggingEnableDescription": "Activați pagina de înregistrare a auditului în aplicație.",
+    "TenantId": "ID chiriaș"
   }
 }

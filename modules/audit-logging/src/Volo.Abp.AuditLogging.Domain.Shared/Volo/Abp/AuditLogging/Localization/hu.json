@@ -78,6 +78,7 @@
     "EndDate": "Befejezés dátuma",
     "Feature:AuditLoggingGroup": "Audit naplózás",
     "Feature:AuditLoggingEnable": "Engedélyezett naplózási oldal",
-    "Feature:AuditLoggingEnableDescription": "Engedélyezze a naplózási oldalt az alkalmazásban."
+    "Feature:AuditLoggingEnableDescription": "Engedélyezze a naplózási oldalt az alkalmazásban.",
+    "TenantId": "Bérlő azonosító"
   }
 }

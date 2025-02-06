@@ -93,6 +93,7 @@
     "DisplayName:ExpiredDeleterPeriod": "Utgången raderingsperiod för objekt",
     "Description:ExpiredDeleterPeriod": "Ställ in antalet dagar efter vilka utgångna objekt automatiskt ska raderas.",
     "ExpiredDeleterPeriodUnit": "dag(ar)",
-    "AuditLogsBeforeXWillBeDeleted": "Granskningsloggar före {0} kommer att raderas."
+    "AuditLogsBeforeXWillBeDeleted": "Granskningsloggar före {0} kommer att raderas.",
+    "TenantId": "Hyresgäst-ID"
   }
 }

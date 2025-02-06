@@ -78,6 +78,7 @@
     "EndDate": "Končni datum",
     "Feature:AuditLoggingGroup": "Revizijsko beleženje",
     "Feature:AuditLoggingEnable": "Omogočena stran za beleženje revizije",
-    "Feature:AuditLoggingEnableDescription": "Omogočite stran za beleženje revizije v aplikaciji."
+    "Feature:AuditLoggingEnableDescription": "Omogočite stran za beleženje revizije v aplikaciji.",
+    "TenantId": "ID najemnika"
   }
 }

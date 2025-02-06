@@ -78,6 +78,7 @@
     "EndDate": "تاريخ الانتهاء",
     "Feature:AuditLoggingGroup": "تدوين التسجيل",
     "Feature:AuditLoggingEnable": "تمكين صفحة تسجيل التدقيق",
-    "Feature:AuditLoggingEnableDescription": "تفعيل صفحة تسجيل التدقيق في التطبيق."
+    "Feature:AuditLoggingEnableDescription": "تفعيل صفحة تسجيل التدقيق في التطبيق.",
+    "TenantId": "معرف المستأجر"
   }
 }
