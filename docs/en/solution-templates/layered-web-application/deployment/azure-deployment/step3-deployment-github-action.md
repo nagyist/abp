@@ -49,7 +49,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.x'
+          dotnet-version: '9.x'
           include-prerelease: true
 
       - name: Install ABP CLI
@@ -150,7 +150,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.x'
+          dotnet-version: '9.x'
           include-prerelease: true
       
       - name: Install ABP CLI
@@ -250,7 +250,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.x'
+          dotnet-version: '9.x'
           include-prerelease: true
 
       - name: Install ABP CLI
@@ -355,7 +355,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.x'
+          dotnet-version: '9.x'
           include-prerelease: true
 
       - name: Install ABP CLI
@@ -489,7 +489,7 @@ build:
     - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-        dotnet-version: '8.x'
+        dotnet-version: '9.x'
         include-prerelease: true
 
     - name: Install ABP CLI
@@ -569,7 +569,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.x'
+          dotnet-version: '9.x'
           include-prerelease: true
 
       - name: Install ABP CLI
