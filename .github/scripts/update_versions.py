@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from github import Github
 
 def get_latest_release_branch():
-    """ GitHub repository'deki tüm `rel-x.x` branch'lerini listeleyerek en büyük sürüme sahip olanı döndürür. """
+    """ Lists all `rel-x.x` branches in the GitHub repository and returns the one with the highest version. """
     g = Github(os.environ["GITHUB_TOKEN"])
     repo = g.get_repo("abpframework/abp")
 
@@ -28,7 +28,7 @@ def get_latest_release_branch():
     return latest_branch
 
 def get_version_from_common_props(branch):
-    """ Belirtilen branch'teki `common.props` dosyasından `Version` ve `LeptonXVersion` bilgilerini çeker. """
+    """ Fetches the `Version` and `LeptonXVersion` information from the `common.props` file in the specified branch. """
     g = Github(os.environ["GITHUB_TOKEN"])
     repo = g.get_repo("abpframework/abp")
 
