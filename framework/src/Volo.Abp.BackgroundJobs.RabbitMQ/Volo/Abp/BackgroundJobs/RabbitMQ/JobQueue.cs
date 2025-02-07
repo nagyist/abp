@@ -122,7 +122,7 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
 
     protected virtual Task EnsureInitializedAsync()
     {
-        if (ChannelAccessor != null)
+        if (ChannelAccessor != null && ChannelAccessor.Channel.IsOpen)
         {
             return Task.CompletedTask;
         }
