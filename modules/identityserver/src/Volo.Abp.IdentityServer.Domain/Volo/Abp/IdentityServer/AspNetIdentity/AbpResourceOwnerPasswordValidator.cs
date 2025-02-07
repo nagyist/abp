@@ -128,21 +128,29 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                 }
                 else if (result.IsNotAllowed)
                 {
-                    Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.UserName);
-
-                    if (user.ShouldChangePasswordOnNextLogin)
+                    if (!await UserManager.CheckPasswordAsync(user, context.Password))
                     {
-                        await HandleShouldChangePasswordOnNextLoginAsync(context, user, context.Password);
-                        return;
+                        Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", context.UserName);
+                        errorDescription = Localizer["InvalidUserNameOrPassword"];
                     }
-
-                    if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                    else
                     {
-                        await HandlePeriodicallyChangePasswordAsync(context, user, context.Password);
-                        return;
-                    }
+                        Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.UserName);
 
-                    errorDescription = Localizer["LoginIsNotAllowed"];
+                        if (user.ShouldChangePasswordOnNextLogin)
+                        {
+                            await HandleShouldChangePasswordOnNextLoginAsync(context, user, context.Password);
+                            return;
+                        }
+
+                        if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                        {
+                            await HandlePeriodicallyChangePasswordAsync(context, user, context.Password);
+                            return;
+                        }
+
+                        errorDescription = Localizer["LoginIsNotAllowed"];
+                    }
                 }
                 else
                 {
