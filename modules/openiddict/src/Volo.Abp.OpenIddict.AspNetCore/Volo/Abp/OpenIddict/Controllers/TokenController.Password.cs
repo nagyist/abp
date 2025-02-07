@@ -115,24 +115,32 @@ public partial class TokenController
                     }
                     else if (result.IsNotAllowed)
                     {
-                        Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", request.Username);
-
-                        if (user.ShouldChangePasswordOnNextLogin)
+                        if (!await UserManager.CheckPasswordAsync(user, request.Password))
                         {
-                            return await HandleShouldChangePasswordOnNextLoginAsync(request, user, request.Password);
+                            Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", request.Username);
+                            errorDescription = "Invalid username or password!";
                         }
-
-                        if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                        else
                         {
-                            return await HandlePeriodicallyChangePasswordAsync(request, user, request.Password);
-                        }
+                            Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", request.Username);
 
-                        if (user.IsActive)
-                        {
-                            return await HandleConfirmUserAsync(request, user);
-                        }
+                            if (user.ShouldChangePasswordOnNextLogin)
+                            {
+                                return await HandleShouldChangePasswordOnNextLoginAsync(request, user, request.Password);
+                            }
 
-                        errorDescription = "You are not allowed to login! Your account is inactive.";
+                            if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                            {
+                                return await HandlePeriodicallyChangePasswordAsync(request, user, request.Password);
+                            }
+
+                            if (user.IsActive)
+                            {
+                                return await HandleConfirmUserAsync(request, user);
+                            }
+
+                            errorDescription = "You are not allowed to login! Your account is inactive.";
+                        }
                     }
                     else
                     {
