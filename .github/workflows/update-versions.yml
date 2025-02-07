@@ -1,41 +1,33 @@
-import os
-import json
-import xml.etree.ElementTree as ET
+name: Update Latest Versions
 
-def get_version_from_common_props():
-    """ common.props dosyasındaki versiyon bilgilerini çeker. """
-    tree = ET.parse("common.props")
-    root = tree.getroot()
-    
-    version = root.find(".//Version").text
-    leptonx_version = root.find(".//LeptonXVersion").text
+on:
+  release:
+    types:
+      - published
+      
+permissions:
+  contents: write
+  pull-requests: write
 
-    return version, leptonx_version
+jobs:
+  update-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-def update_latest_versions():
-    version, leptonx_version = get_version_from_common_props()
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
 
-    # Eğer versiyon "preview" içeriyorsa PR oluşturma (sadece stable versiyonlar için)
-    if "preview" in version or "rc" in version:
-        return False
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PyGithub
 
-    with open("latest-versions.json", "r") as f:
-        latest_versions = json.load(f)
-
-    # Yeni versiyon bilgisini en üst sıraya ekle
-    new_version_entry = {
-        "version": version,
-        "releaseDate": "",
-        "type": "stable",
-        "message": "",
-        "leptonx": {
-            "version": leptonx_version
-        }
-    }
-    
-    latest_versions.insert(0, new_version_entry)  # Yeni versiyonu en üste ekliyoruz
-
-    with open("latest-versions.json", "w") as f:
-        json.dump(latest_versions, f, indent=2)
-
-    return True
+      - name: Update latest-versions.json and create PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          python .github/scripts/update_versions.py
