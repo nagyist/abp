@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Whether the username can be updated by the user.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Whether the email can be updated by the user.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Enforce email verification to register",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "User accounts will be created in the database after users verify their email addresses.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "User accounts will not be created unless they verify their email addresses.",
     "Details": "Details",
     "CreatedBy": "Created by",
     "ModifiedBy": "Modified by",

@@ -128,6 +128,6 @@
     "LockoutEndTime": "Ora di fine del blocco",
     "FailedAccessCount": "Conteggio accessi non riusciti",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Richiedi verifica email per la registrazione",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Gli account utente verranno creati nel database dopo che gli utenti avranno verificato i loro indirizzi email."
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Gli account utente non verranno creati a meno che non verifichino i loro indirizzi email."
   }
 }

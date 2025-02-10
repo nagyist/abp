@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Voiko käyttäjä päivittää käyttäjänimen?",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Voiko käyttäjä päivittää sähköpostiosoitteen.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Vaadi sähköpostin vahvistus rekisteröitymiseen",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Käyttäjätilit luodaan tietokantaan sen jälkeen, kun käyttäjät ovat vahvistaneet sähköpostiosoitteensa.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Käyttäjätilejä ei luoda, elleivät he vahvista sähköpostiosoitteitaan.",
     "Details": "Tiedot",
     "CreatedBy": "Luonut",
     "ModifiedBy": "Muokannut",

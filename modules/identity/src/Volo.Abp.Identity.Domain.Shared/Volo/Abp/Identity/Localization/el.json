@@ -120,7 +120,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Εάν το όνομα χρήστη μπορεί να ενημερωθεί από τον χρήστη.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Εάν το email μπορεί να ενημερωθεί από τον χρήστη.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Επιβολή επαλήθευσης email για εγγραφή",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Οι λογαριασμοί χρηστών θα δημιουργηθούν στη βάση δεδομένων αφού οι χρήστες επαληθεύσουν τις διευθύνσεις email τους.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Οι λογαριασμοί χρηστών δεν θα δημιουργηθούν εκτός αν επαληθεύσουν τις διευθύνσεις email τους.",
     "Details": "Λεπτομέρειες"
   }
 }

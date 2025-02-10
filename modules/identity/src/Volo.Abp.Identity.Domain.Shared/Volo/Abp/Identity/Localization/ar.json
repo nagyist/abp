@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "ما إذا كان يمكن تحديث اسم المستخدم بواسطة المستخدم.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "ما إذا كان يمكن تحديث البريد الإلكتروني من قبل المستخدم.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "فرض التحقق من البريد الإلكتروني للتسجيل",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "سيتم إنشاء حسابات المستخدمين في قاعدة البيانات بعد أن يتحقق المستخدمون من عناوين بريدهم الإلكتروني.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "لن يتم إنشاء حسابات المستخدمين ما لم يتحققوا من عناوين بريدهم الإلكتروني.",
     "Details": "تفاصيل",
     "CreatedBy": "انشأ من قبل",
     "ModifiedBy": "تم التعديل بواسطة",

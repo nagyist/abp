@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Hvort notandi geti uppfært notanda nafnið sitt.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Hvort notandi geti uppfært netfangið.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Krefjast staðfestingar á netfangi fyrir skráningu",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Notendareikningar verða búnir til í gagnagrunninum eftir að notendur staðfesta netföng sín.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Notendareikningar verða ekki búnir til nema þeir staðfesti netfangið sitt.",
     "Details": "Upplýsingar",
     "CreatedBy": "Búið til af",
     "ModifiedBy": "Breytt af",

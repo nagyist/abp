@@ -134,6 +134,6 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "کاربران می‌توانند شماره تلفن خود را تایید کنند. نیاز به یکپارچه‌سازی پیامک دارد.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "کاربران می‌توانند حساب ایجاد کنند اما تا زمانی که شماره تلفن خود را تایید نکنند نمی‌توانند وارد شوند.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "اجباری کردن تایید ایمیل برای ثبت‌نام",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "حساب‌های کاربری پس از تایید آدرس ایمیل توسط کاربران در پایگاه داده ایجاد خواهند شد."
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "حساب‌های کاربری ایجاد نخواهند شد مگر اینکه آدرس ایمیل خود را تایید کنند."
   }
 }

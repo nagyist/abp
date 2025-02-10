@@ -128,6 +128,6 @@
     "LockoutEndTime": "Czas zakończenia blokady",
     "FailedAccessCount": "Liczba nieudanych dostępów",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Wymagaj weryfikacji e-mail do rejestracji",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Konta użytkowników zostaną utworzone w bazie danych po zweryfikowaniu przez nich adresów e-mail."
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Konta użytkowników nie zostaną utworzone, dopóki nie zweryfikują swoich adresów e-mail."
   }
 }

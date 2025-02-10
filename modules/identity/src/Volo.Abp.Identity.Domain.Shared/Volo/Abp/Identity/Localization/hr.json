@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Može li korisnik ažurirati korisničko ime.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Može li korisnik ažurirati e-poštu.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Zahtijevaj verifikaciju e-pošte za registraciju",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Korisnički računi bit će stvoreni u bazi podataka nakon što korisnici potvrde svoje adrese e-pošte.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Računi korisnika neće se stvarati ako ne potvrde svoje e-mail adrese.",
     "Details": "Detalji",
     "CreatedBy": "Napravio",
     "ModifiedBy": "Izmijenio",

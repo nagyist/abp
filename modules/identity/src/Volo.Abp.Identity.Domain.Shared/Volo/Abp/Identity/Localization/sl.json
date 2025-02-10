@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Ali lahko uporabnik posodobi uporabniško ime.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Ali lahko uporabnik posodobi e-pošto.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Zahtevaj preverjanje e-pošte za registracijo",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Uporabniški računi bodo ustvarjeni v bazi podatkov po tem, ko uporabniki preverijo svoje e-poštne naslove.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Uporabniški računi ne bodo ustvarjeni, dokler ne preverijo svojih e-poštnih naslovov.",
     "Details": "Podrobnosti",
     "CreatedBy": "Ustvaril",
     "ModifiedBy": "Spremenil",

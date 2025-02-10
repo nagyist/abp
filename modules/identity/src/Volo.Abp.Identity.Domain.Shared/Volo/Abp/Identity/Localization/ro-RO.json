@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Dacă numele de utilizator poate fi actualizat de către utilizator.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Dacă e-mailul poate fi actualizat de către utilizator.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Impune verificarea e-mailului pentru înregistrare",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Conturile de utilizator vor fi create în baza de date după ce utilizatorii își verifică adresele de e-mail.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Conturile de utilizator nu vor fi create decât dacă își verifică adresele de e-mail.",
     "Details": "Detalii",
     "CreatedBy": "Creat de",
     "ModifiedBy": "Modificat de",

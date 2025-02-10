@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Se o nome de usuário pode ser atualizado pelo usuário.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Se o e-mail pode ser atualizado pelo usuário.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Exigir verificação de e-mail para registro",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "As contas de usuário serão criadas no banco de dados após os usuários verificarem seus endereços de e-mail.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "As contas de usuário não serão criadas a menos que verifiquem seus endereços de e-mail.",
     "Details": "Detalhes",
     "CreatedBy": "Criado por",
     "ModifiedBy": "Modificado por",

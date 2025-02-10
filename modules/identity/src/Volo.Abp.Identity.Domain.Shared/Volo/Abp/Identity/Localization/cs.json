@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Zda může uživatel změnit uživatelské jméno.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Zda může uživatel aktualizovat e-mail.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Vyžadovat ověření e-mailu pro registraci",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Uživatelské účty budou vytvořeny v databázi poté, co uživatelé ověří své e-mailové adresy.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Uživatelské účty nebudou vytvořeny, dokud neověří své e-mailové adresy.",
     "Details": "Podrobnosti",
     "CreatedBy": "Vytvořil",
     "ModifiedBy": "Upraven",

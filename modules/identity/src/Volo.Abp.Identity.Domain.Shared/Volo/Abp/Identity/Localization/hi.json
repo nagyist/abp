@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "उपयोगकर्ता द्वारा उपयोगकर्ता नाम अपडेट किया जा सकता है या नहीं।",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "क्या उपयोगकर्ता द्वारा ईमेल अपडेट किया जा सकता है.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "पंजीकरण के लिए ईमेल सत्यापन अनिवार्य करें",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "उपयोगकर्ता खाते डेटाबेस में तब बनाए जाएंगे जब उपयोगकर्ता अपने ईमेल पते सत्यापित कर लेंगे.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "उपयोगकर्ता खाते तब तक नहीं बनाए जाएंगे जब तक वे अपने ईमेल पते की पुष्टि नहीं करते हैं।",
     "Details": "विवरण",
     "CreatedBy": "के द्वारा बनाई गई",
     "ModifiedBy": "द्वारा संशोधित",

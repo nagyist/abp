@@ -128,6 +128,6 @@
     "LockoutEndTime": "Endzeit der Sperrung",
     "FailedAccessCount": "Anzahl der fehlgeschlagenen Zugriffe",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "E-Mail-Verifizierung für die Registrierung erzwingen",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Benutzerkonten werden in der Datenbank erstellt, nachdem Benutzer ihre E-Mail-Adressen verifiziert haben."
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Benutzerkonten werden nicht erstellt, es sei denn, sie verifizieren ihre E-Mail-Adressen."
   }
 }

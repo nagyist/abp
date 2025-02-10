@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Om användarnamnet kan uppdateras av användaren.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Om e-postadressen kan uppdateras av användaren.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Kräv e-postverifiering för registrering",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Användarkonton kommer att skapas i databasen efter att användarna verifierat sina e-postadresser.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Användarkonton kommer inte att skapas om de inte verifierar sina e-postadresser.",
     "Details": "Detaljer",
     "CreatedBy": "Skapad av",
     "ModifiedBy": "Ändrad av",

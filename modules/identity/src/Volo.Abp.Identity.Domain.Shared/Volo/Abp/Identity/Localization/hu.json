@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Meg tudja e módosítani a felhasználónevet a felhasználó?.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Meg tudja-e módosítani az e-mail címét a felhasználó.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "E-mail ellenőrzés megkövetelése a regisztrációhoz",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "A felhasználói fiókok az adatbázisban csak azután jönnek létre, hogy a felhasználók ellenőrizték e-mail címüket.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Felhasználói fiókok nem lesznek létrehozva, amíg nem ellenőrzik e-mail címüket.",
     "Details": "Részletek",
     "CreatedBy": "Készítette",
     "ModifiedBy": "Módosította",

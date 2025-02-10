@@ -121,7 +121,7 @@
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "是否允许用户更新用户名。",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "用户是否可以更新电子邮件.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "强制要求验证电子邮件才能注册",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "用户验证其电子邮件地址后,用户帐户将在数据库中创建.",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "用户帐户将不会被创建，除非他们验证他们的电子邮件地址。",
     "Details": "详细信息",
     "CreatedBy": "创建者",
     "ModifiedBy": "修改者",

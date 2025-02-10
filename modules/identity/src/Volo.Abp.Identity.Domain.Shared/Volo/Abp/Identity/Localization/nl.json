@@ -128,6 +128,6 @@
     "LockoutEndTime": "Eindtijd uitsluiting",
     "FailedAccessCount": "Aantal mislukte toegangen",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "E-mailverificatie vereisen voor registratie",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Gebruikersaccounts worden in de database aangemaakt nadat gebruikers hun e-mailadressen hebben geverifieerd."
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Gebruikersaccounts worden niet aangemaakt tenzij ze hun e-mailadressen verifiëren."
   }
 }
