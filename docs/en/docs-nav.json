@@ -1974,7 +1974,68 @@
         },
         {
           "text": "Single-Layer Solution",
-          "path": "solution-templates/single-layer-web-application"
+          "isLazyExpandable": true,
+          "path": "solution-templates/single-layer-web-application",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "solution-templates/single-layer-web-application/overview.md"
+            },
+            {
+              "text": "Solution Structure",
+              "path": "solution-templates/single-layer-web-application/solution-structure.md"
+            },
+            {
+              "text": "Main Components",
+              "isLazyExpandable": true,
+              "path": "solution-templates/single-layer-web-application/main-components.md",
+              "items": [
+                {
+                  "text": "Web Applications",
+                  "path": "solution-templates/single-layer-web-application/web-applications.md"
+                },
+                {
+                  "text": "Db Migrator",
+                  "path": "solution-templates/single-layer-web-application/db-migrator.md"
+                }
+              ]
+            },
+            {
+              "text": "Built-In Features",
+              "isLazyExpandable": true,
+              "path": "solution-templates/single-layer-web-application/built-in-features.md",
+              "items": [
+                {
+                  "text": "Authentication",
+                  "path": "solution-templates/single-layer-web-application/authentication.md"
+                },
+                {
+                  "text": "Database configurations",
+                  "path": "solution-templates/single-layer-web-application/database-configurations.md"
+                },
+                {
+                  "text": "Logging (with Serilog)",
+                  "path": "solution-templates/single-layer-web-application/logging.md"
+                },
+                {
+                  "text": "Swagger integration",
+                  "path": "solution-templates/single-layer-web-application/swagger-integration.md"
+                },
+                {
+                  "text": "Multi-Tenancy",
+                  "path": "solution-templates/single-layer-web-application/multi-tenancy.md"
+                },
+                {
+                  "text": "BLOB Storing",
+                  "path": "solution-templates/single-layer-web-application/blob-storing.md"
+                },
+                {
+                  "text": "CORS configuration",
+                  "path": "solution-templates/single-layer-web-application/cors-configuration.md"
+                }
+              ]
+            }
+          ]
         },
         {
           "text": "Layered Solution",
