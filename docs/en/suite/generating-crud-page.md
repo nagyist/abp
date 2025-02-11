@@ -273,7 +273,7 @@ Alternatively, you can add `IdentityUser` entity (or any other entity) as a navi
 
 ### New book dialog
 
-###### ![New book dialog](../images/suite-ui-new-book.png)
+### ![New book dialog](../images/suite-ui-new-book.png)
 
 ### Book list page
 

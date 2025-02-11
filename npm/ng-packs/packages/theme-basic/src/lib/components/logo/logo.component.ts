@@ -2,16 +2,12 @@ import { ApplicationInfo, EnvironmentService } from '@abp/ng.core';
 import { Component } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'abp-logo',
   template: `
     <a class="navbar-brand" routerLink="/">
       @if (appInfo.logoUrl) {
-        <img
-          [src]="appInfo.logoUrl"
-          [alt]="appInfo.name"
-          width="100%"
-          height="auto"
-        />
+        <img [src]="appInfo.logoUrl" [alt]="appInfo.name" width="100%" height="auto" />
       } @else {
         {{ appInfo.name }}
       }

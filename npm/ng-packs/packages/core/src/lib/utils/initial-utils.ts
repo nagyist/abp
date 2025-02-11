@@ -1,5 +1,5 @@
 import { registerLocaleData } from '@angular/common';
-import { InjectFlags, Injector } from '@angular/core';
+import { inject, Injector } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { lastValueFrom, throwError } from 'rxjs';
 import { ABP } from '../models/common';
@@ -16,60 +16,54 @@ import { AuthService } from '../abstracts';
 import { CHECK_AUTHENTICATION_STATE_FN_KEY } from '../tokens/check-authentication-state';
 import { noop } from './common-utils';
 
-export function getInitialData(injector: Injector) {
-  const fn = async () => {
-    const environmentService = injector.get(EnvironmentService);
-    const configState = injector.get(ConfigStateService);
-    const options = injector.get(CORE_OPTIONS) as ABP.Root;
+export async function getInitialData() {
+  const injector = inject(Injector);
+  const environmentService = injector.get(EnvironmentService);
+  const configState = injector.get(ConfigStateService);
+  const options = injector.get(CORE_OPTIONS) as ABP.Root;
 
-    environmentService.setState(options.environment as Environment);
-    await getRemoteEnv(injector, options.environment);
-    await parseTenantFromUrl(injector);
-    const authService = injector.get(AuthService, undefined, { optional: true });
-    const checkAuthenticationState = injector.get(CHECK_AUTHENTICATION_STATE_FN_KEY, noop, {
-      optional: true,
-    });
-    if (!options.skipInitAuthService && authService) {
-      await authService.init();
-    }
-    if (options.skipGetAppConfiguration) return;
+  environmentService.setState(options.environment as Environment);
+  await getRemoteEnv(injector, options.environment);
+  await parseTenantFromUrl(injector);
+  const authService = injector.get(AuthService, undefined, { optional: true });
+  const checkAuthenticationState = injector.get(CHECK_AUTHENTICATION_STATE_FN_KEY, noop, {
+    optional: true,
+  });
+  if (!options.skipInitAuthService && authService) {
+    await authService.init();
+  }
+  if (options.skipGetAppConfiguration) return;
 
-    const result$ = configState.refreshAppState().pipe(
-      tap(() => checkAuthenticationState(injector)),
-      tap(() => {
-        const currentTenant = configState.getOne('currentTenant') as CurrentTenantDto;
-        injector.get(SessionStateService).setTenant(currentTenant);
-      }),
-      catchError(error => {
-        const appInitErrorHandlers = injector.get(APP_INIT_ERROR_HANDLERS, null);
-        if (appInitErrorHandlers && appInitErrorHandlers.length) {
-          appInitErrorHandlers.forEach(func => func(error));
-        }
+  const result$ = configState.refreshAppState().pipe(
+    tap(() => checkAuthenticationState(injector)),
+    tap(() => {
+      const currentTenant = configState.getOne('currentTenant') as CurrentTenantDto;
+      injector.get(SessionStateService).setTenant(currentTenant);
+    }),
+    catchError(error => {
+      const appInitErrorHandlers = injector.get(APP_INIT_ERROR_HANDLERS, null);
+      if (appInitErrorHandlers && appInitErrorHandlers.length) {
+        appInitErrorHandlers.forEach(func => func(error));
+      }
 
-        return throwError(error);
-      }),
-    );
-    await lastValueFrom(result$);
-  };
-
-  return fn;
+      return throwError(() => error);
+    }),
+  );
+  await lastValueFrom(result$);
 }
 
-export function localeInitializer(injector: Injector) {
-  const fn = () => {
-    const sessionState = injector.get(SessionStateService);
-    const { registerLocaleFn }: ABP.Root = injector.get(CORE_OPTIONS);
+export function localeInitializer() {
+  const injector = inject(Injector);
+  const sessionState = injector.get(SessionStateService);
+  const { registerLocaleFn }: ABP.Root = injector.get(CORE_OPTIONS);
 
-    const lang = sessionState.getLanguage() || 'en';
+  const lang = sessionState.getLanguage() || 'en';
 
-    return new Promise((resolve, reject) => {
-      registerLocaleFn(lang).then(module => {
-        if (module?.default) registerLocaleData(module.default);
+  return new Promise((resolve, reject) => {
+    registerLocaleFn(lang).then(module => {
+      if (module?.default) registerLocaleData(module.default);
 
-        return resolve('resolved');
-      }, reject);
-    });
-  };
-
-  return fn;
+      return resolve('resolved');
+    }, reject);
+  });
 }

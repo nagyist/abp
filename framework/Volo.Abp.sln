@@ -467,11 +467,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.RemoteServices.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Abstractions", "src\Volo.Abp.AspNetCore.Abstractions\Volo.Abp.AspNetCore.Abstractions.csproj", "{E1051CD0-9262-4869-832D-B951723F4DDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling", "src\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling.csproj", "{2F9BA650-395C-4BE0-8CCB-9978E753562A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling", "src\Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling\Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling.csproj", "{7ADB6D92-82CC-4A2A-8BCF-FC6C6308796D}"
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Google", "src\Volo.Abp.BlobStoring.Google\Volo.Abp.BlobStoring.Google.csproj", "{DEEB5200-BBF9-464D-9B7E-8FC035A27E94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Google.Tests", "test\Volo.Abp.BlobStoring.Google.Tests\Volo.Abp.BlobStoring.Google.Tests.csproj", "{40FB8907-9CF7-44D0-8B5F-538AC6DAF8B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.ExceptionHandling.Tests", "test\Volo.Abp.ExceptionHandling.Tests\Volo.Abp.ExceptionHandling.Tests.csproj", "{E50739A7-5E2F-4EB5-AEA9-554115CB9613}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Sms.TencentCloud", "src\Volo.Abp.Sms.TencentCloud\Volo.Abp.Sms.TencentCloud.csproj", "{BE7109C5-7368-4688-8557-4A15D3F4776A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Sms.TencentCloud.Tests", "test\Volo.Abp.Sms.TencenCloud.Tests\Volo.Abp.Sms.TencentCloud.Tests.csproj", "{C753DDD6-5699-45F8-8669-08CE0BB816DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1399,6 +1406,14 @@ Global
 		{E1051CD0-9262-4869-832D-B951723F4DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1051CD0-9262-4869-832D-B951723F4DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1051CD0-9262-4869-832D-B951723F4DDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F9BA650-395C-4BE0-8CCB-9978E753562A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F9BA650-395C-4BE0-8CCB-9978E753562A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F9BA650-395C-4BE0-8CCB-9978E753562A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F9BA650-395C-4BE0-8CCB-9978E753562A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ADB6D92-82CC-4A2A-8BCF-FC6C6308796D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ADB6D92-82CC-4A2A-8BCF-FC6C6308796D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ADB6D92-82CC-4A2A-8BCF-FC6C6308796D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ADB6D92-82CC-4A2A-8BCF-FC6C6308796D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DEEB5200-BBF9-464D-9B7E-8FC035A27E94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DEEB5200-BBF9-464D-9B7E-8FC035A27E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEEB5200-BBF9-464D-9B7E-8FC035A27E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1411,6 +1426,14 @@ Global
 		{E50739A7-5E2F-4EB5-AEA9-554115CB9613}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E50739A7-5E2F-4EB5-AEA9-554115CB9613}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E50739A7-5E2F-4EB5-AEA9-554115CB9613}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE7109C5-7368-4688-8557-4A15D3F4776A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE7109C5-7368-4688-8557-4A15D3F4776A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE7109C5-7368-4688-8557-4A15D3F4776A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE7109C5-7368-4688-8557-4A15D3F4776A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C753DDD6-5699-45F8-8669-08CE0BB816DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C753DDD6-5699-45F8-8669-08CE0BB816DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C753DDD6-5699-45F8-8669-08CE0BB816DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C753DDD6-5699-45F8-8669-08CE0BB816DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1646,9 +1669,13 @@ Global
 		{DFAF8763-D1D6-4EB4-B459-20E31007FE2F} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{DACD4485-61BE-4DE5-ACAE-4FFABC122500} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{E1051CD0-9262-4869-832D-B951723F4DDE} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{2F9BA650-395C-4BE0-8CCB-9978E753562A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{7ADB6D92-82CC-4A2A-8BCF-FC6C6308796D} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{DEEB5200-BBF9-464D-9B7E-8FC035A27E94} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{40FB8907-9CF7-44D0-8B5F-538AC6DAF8B9} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{E50739A7-5E2F-4EB5-AEA9-554115CB9613} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{BE7109C5-7368-4688-8557-4A15D3F4776A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{C753DDD6-5699-45F8-8669-08CE0BB816DE} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

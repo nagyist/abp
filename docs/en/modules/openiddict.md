@@ -279,7 +279,7 @@ UserInfoController  -> connect/userinfo
 
 > **Device flow** implementation will be done in the commercial module.
 
-#### AbpOpenIddictAspNetCoreOptions
+### AbpOpenIddictAspNetCoreOptions
 
 `AbpOpenIddictAspNetCoreOptions` can be configured in the `PreConfigureServices` method of your OpenIddict [module](../framework/architecture/modularity/basics.md). 
 

@@ -227,6 +227,11 @@
     "CssClass": "Razred CSS",
     "TagsHelpText": "Oznake morajo biti ločene z vejicami (npr. oznaka1, oznaka2, oznaka3)",
     "ThisPartOfContentCouldntBeLoaded": "Ta del vsebine ni bil naložen.",
-    "DuplicateCommentAttemptMessage": "Zaznan poskus podvojene objave komentarja. Vaš komentar je že oddan."
+    "DuplicateCommentAttemptMessage": "Zaznan poskus podvojene objave komentarja. Vaš komentar je že oddan.",
+    "ChooseAnActionForBlog": "Izberite dejanje za blog",
+    "AssignBlogPostsToOtherBlog": "Dodeli objave v blogu drugemu blogu",
+    "SelectAnBlogToAssign": "Izberite blog, ki mu želite dodeliti objave",
+    "DeleteAllBlogPostsOfThisBlog": "Izbriši vse objave v tem blogu",
+    "RequiredPermissionName": "Ime zahtevane dovoljenja"
   }
 }

@@ -12,6 +12,7 @@ import { ConfigStateService, LocalizationService } from '@abp/ng.core';
 const { required, email } = Validators;
 
 @Component({
+  standalone: false,
   selector: 'abp-email-setting-group',
   templateUrl: 'email-setting-group.component.html',
   animations: [collapse],

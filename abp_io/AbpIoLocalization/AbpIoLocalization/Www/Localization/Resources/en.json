@@ -446,6 +446,7 @@
     "PackageDetailPage_InstallingUsingPMCDescription1": "Open the <strong>Package Manager Console</strong> in Visual Studio (Tools -> Nuget Package Manager -> Package Manager Console) and execute the following command",
     "UIOptions": "UI Options",
     "Testimonials": "Testimonials",
+    "TestimonialsDescription": "Our clients' feedback is invaluable to us. Discover what they have to say about their experience working with us.",
     "CoolestCompaniesUseABPFramework": "Coolest Companies Use <span class=\"fw-bold\">ABP Framework</span>",
     "Index_Page_Testimonial_1": "ABP Framework is not just a tool but a catalyst that has accelerated my growth as a developer. It has made it possible for me to build new features faster than ever before, reminiscent of the experiences of other users. The unified coding pattern has streamlined my projects, giving me more time to focus on creating rather than troubleshooting.\nI would say the ABP Framework has been the cornerstone of my early professional journey. It has facilitated my transition from an aspiring developer to a confident professional ready to make a mark in the software world. I am looking forward to the exciting projects that await me, knowing that ABP will be there to guide me. It is more than just a product; it's a partner in success.",
     "Index_Page_Testimonial_2": "ABP Framework is not only a framework, it is also a guidance for project development/management, because it provides DDD, GenericRepository, DI, Microservice, Modularity trainings. Even if you are not going to use framework itself, you can develop yourself with abp.io/docs which is well and professionally prepared. (OpenIddict, Redis, Quartz etc.)\nBecause many thing pre-built, it shortens project development time significantly. (Such as login page, exception handling, data filtering-seeding, audit logging, localization, auto api controller etc.)\nAs an example from our app, i have used Local Event Bus for stock control. So, I am able to manage order movements by writing stock handler.\nIt is wonderful not to lose time for CreationTime, CreatorId. They are filled automatically.",
@@ -458,7 +459,7 @@
     "FullName": "Full name",
     "CompanySize": "Company size",
     "TestimonialTitle": "Let's hear your testimonial",
-    "TestimonialInfo": "What our customers say matters! Tell us about your experience with our product and service. It is recommended to write the testimonial in English to reach a wider audience.",
+    "TestimonialInfo": "What you say matters! Tell us about your experience with ABP in a few sentences. Please write it in English to reach a wider audience.",
     "Country": "Country",
     "TestimonialTextPlaceholder": "Write a brief story about how ABP helped you build and deliver your project.",
     "PositionPlaceholder": "Your position at your company",
@@ -549,7 +550,7 @@
     "CommercialLicenses": "Commercial Licenses",
     "WhatIsDifferencePaidLicenses": "What is the difference between a personal license and other types of paid licenses?",
     "DifferencePaidLicenseExplanation1": "A non-personal paid license is the standard licensing option for enterprises and commercial entities. Licenses are purchased by the company and can be used by anyone within the organization.",
-    "DifferencePaidLicenseExplanation2": "Personal License; on the other hand, is a type of license for private individuals/freelancers/independent developers who purchase licenses with their own funds and solely for their own use. The Personal License has some limitations. In this plan, there can only be 1 developer working on the ABP project and no additional developers are allowed to be added later to the project. Downloading the source-code of PRO modules is not allowed in the personal license plan. Also, there is no microservice template and tier (layered) architecture in this plan. Personal License holders can only use the following modules: <a href=\"/modules/Volo.Account.Pro\">Account</a>, <a href=\"/modules/Volo.AuditLogging.Ui\">Audit Logging UI</a>, <a href=\"/modules/Volo.Gdpr\">GDPR</a>, <a href=\"/modules/Volo.Identity.Pro\">Identity</a>, <a href=\"/modules/Volo.LanguageManagement\">Language Management</a>, <a href=\"/modules/Volo.Abp.LeptonXTheme.Pro\">LeptonX PRO</a>, <a href=\"/modules/Volo.OpenIddict.Pro\">OpenIddict UI</a> and <a href=\"/modules/Volo.Saas\">SaaS</a>. Personal License holders cannot use the following modules: <a href=\"/modules/Volo.Chat\">Chat</a>, <a href=\"/modules/Volo.CmsKit.Pro\">CMS-Kit PRO</a>, <a href=\"/modules/Volo.FileManagement\">File Management</a>, <a href=\"/modules/Volo.Forms\">Forms</a>, <a href=\"/modules/Volo.Payment\">Payment</a>, <a href=\"/modules/Volo.TextTemplateManagement\">Text Template Management</a>, and <a href=\"/modules/Volo.Abp.Sms.Twilio\">Twilio SMS</a>. You can access the full module list at <a href=\"/modules\">abp.io/modules</a>.",
+    "DifferencePaidLicenseExplanation2": "Personal License; on the other hand, is a type of license for private individuals/freelancers/independent developers who purchase licenses with their own funds and solely for their own use. The Personal License has some limitations. In this plan, there can only be 1 developer working on the ABP project and no additional developers are allowed to be added later to the project. Downloading the source-code of PRO modules is not allowed in the personal license plan. There is no microservice template in this plan. There is no tier architecture (Web and HTTP API layers are physically separated) in this plan. Personal License holders can only use the following modules: <a href=\"/modules/Volo.Account.Pro\">Account</a>, <a href=\"/modules/Volo.AuditLogging.Ui\">Audit Logging UI</a>, <a href=\"/modules/Volo.Gdpr\">GDPR</a>, <a href=\"/modules/Volo.Identity.Pro\">Identity</a>, <a href=\"/modules/Volo.LanguageManagement\">Language Management</a>, <a href=\"/modules/Volo.Abp.LeptonXTheme.Pro\">LeptonX PRO</a>, <a href=\"/modules/Volo.OpenIddict.Pro\">OpenIddict UI</a> and <a href=\"/modules/Volo.Saas\">SaaS</a>. Personal License holders cannot use the following modules: <a href=\"/modules/Volo.Chat\">Chat</a>, <a href=\"/modules/Volo.CmsKit.Pro\">CMS-Kit PRO</a>, <a href=\"/modules/Volo.FileManagement\">File Management</a>, <a href=\"/modules/Volo.Forms\">Forms</a>, <a href=\"/modules/Volo.Payment\">Payment</a>, <a href=\"/modules/Volo.TextTemplateManagement\">Text Template Management</a>, and <a href=\"/modules/Volo.Abp.Sms.Twilio\">Twilio SMS</a>. You can access the full module list at <a href=\"/modules\">abp.io/modules</a>.",
     "ReadyToStart": "Ready to start?",
     "TransformYourIdeasIntoRealityWithOurProfessionalNETDevelopmentServices": "Transform your ideas into reality with our professional .NET development services.",
     "ReadyToUpgrade": "Ready to upgrade?",
@@ -1690,8 +1691,8 @@
     "HurryUpLastDay": "Hurry Up! Last Day: {0}",
     "CreatingCRUDPagesWithABPSuite": "Creating CRUD pages with ABP Suite",
     "MultipleYearDiscount": "Multiple Year Discount",
-    "CampaignDiscountText": "New Platform Discount",
-    "CampaignDiscountName": "New Platform",
+    "CampaignDiscountText": "Black Friday Discount",
+    "CampaignDiscountName": "Black Friday",
     "CampaignName:BlackFriday": "Black Friday",
     "MultipleOrganizationInfo": "See All Your Organizations",
     "AbpStudioBetaAccessInfoTitle": "ABP Studio Beta Access",
@@ -1866,6 +1867,7 @@
     "NewsletterEmailFooterTemplateDeleteSubscription": "<a style=\"color: #007bff;\" href=\"{0}\" data-root=\"{1}\">If you change your mind, you're always welcome to resubscribe!</a>",
     "GenerateQuote" : "Generate Quote" ,
     "GeneratePriceQuote": "Generate a Price Quote",
-    "Qa:QuestionPageTitle": "Support"
+    "Qa:QuestionPageTitle": "Support",
+    "SelectedTrainingName" : "Trainings"
   }
 }

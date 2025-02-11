@@ -4,6 +4,16 @@ This document contains **brief release notes** for each release. Release notes o
 
 > If you want to read the release notes for each ABP Studio release, check it out from [here](../studio/release-notes.md).
 
+## 9.1 (2025-01-16)
+
+This is currently a RC (release-candidate) and you can see the detailed **[blog post / announcement](https://abp.io/blog/abp-9-1-release-candidate)** for the v9.1 release.
+
+* Upgraded to Angular 19
+* Upgraded to OpenIddict 6.0
+* New Blazor WASM Bundling System
+* Idle Session Warning
+* Lazy Expandable Feature for Documentation System
+
 ## 9.0 (2024-11-19)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/abp-9-0-stable-release-with-dotnet-9-0)** for the v9.0 release.

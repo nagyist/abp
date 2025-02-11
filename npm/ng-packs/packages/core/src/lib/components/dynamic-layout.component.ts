@@ -14,6 +14,7 @@ import { DYNAMIC_LAYOUTS_TOKEN } from '../tokens/dynamic-layout.token';
 import { EnvironmentService } from '../services';
 
 @Component({
+  standalone: false,
   selector: 'abp-dynamic-layout',
   template: `
     @if (isLayoutVisible) {
@@ -27,7 +28,6 @@ export class DynamicLayoutComponent implements OnInit {
   layoutKey?: eLayoutType;
   readonly layouts = inject(DYNAMIC_LAYOUTS_TOKEN);
   isLayoutVisible = true;
-
 
   protected readonly router = inject(Router);
   protected readonly route = inject(ActivatedRoute);
@@ -46,7 +46,7 @@ export class DynamicLayoutComponent implements OnInit {
     this.checkLayoutOnNavigationEnd();
     this.listenToLanguageChange();
   }
-  
+
   ngOnInit(): void {
     if (this.layout) {
       return;

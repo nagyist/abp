@@ -15,7 +15,6 @@ import { NgClass, NgComponentOutlet } from '@angular/common';
 @Component({
   exportAs: 'abpPageToolbar',
   selector: 'abp-page-toolbar',
-  standalone: true,
   imports: [
     CreateInjectorPipe,
     PermissionDirective,
