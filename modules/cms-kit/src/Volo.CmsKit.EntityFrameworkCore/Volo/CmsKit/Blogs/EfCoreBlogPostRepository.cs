@@ -53,14 +53,14 @@ public class EfCoreBlogPostRepository : EfCoreRepository<ICmsKitDbContext, BlogP
         BlogPostStatus? statusFilter = null,
         CancellationToken cancellationToken = default)
     {
-        List<string> entityIdFilters = null;
+        List<Guid> entityIdFilters = null;
         if (tagId.HasValue)
         {
-            entityIdFilters = await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken);
+            entityIdFilters = (await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken)).Select(Guid.Parse).ToList();
         }
 
         var queryable = (await GetDbSetAsync())
-            .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id.ToString()))
+            .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id))
             .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
             .WhereIf(authorId.HasValue, x => x.AuthorId == authorId)
             .WhereIf(statusFilter.HasValue, x => x.Status == statusFilter)
@@ -86,14 +86,14 @@ public class EfCoreBlogPostRepository : EfCoreRepository<ICmsKitDbContext, BlogP
         var blogPostsDbSet = dbContext.Set<BlogPost>();
         var usersDbSet = dbContext.Set<CmsUser>();
 
-        List<string> entityIdFilters = null;
+        List<Guid> entityIdFilters = null;
         if (tagId.HasValue)
         {
-            entityIdFilters = await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken);
+            entityIdFilters = (await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken)).Select(Guid.Parse).ToList();
         }
 
         var queryable = (await GetDbSetAsync())
-            .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id.ToString()))
+            .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id))
             .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
             .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Title.Contains(filter) || x.Slug.Contains(filter))
             .WhereIf(authorId.HasValue, x => x.AuthorId == authorId)
