@@ -230,3 +230,11 @@ CLI applications uses the [powershell](https://learn.microsoft.com/en-us/powersh
 - `Remove`: This option allows you to delete the selected application.
 
 > When CLI applications start chain icon won't be visible, because only C# applications can connect the ABP Studio.
+
+## Docker Compose
+
+You can manually run applications using [Docker Compose](https://docs.docker.com/compose/). This allows for easy setup and management of multi-container Docker applications. To get started, ensure you have Docker and Docker Compose installed on your machine.
+
+Refer to the [Deployment with Docker Compose](../solution-templates/layered-web-application/deployment/deployment-docker-compose.md) documentation for detailed instructions on how to configure and run your applications using `docker-compose`.
+
+> Note: The **Docker Compose** is not available in the ABP Studio interface.

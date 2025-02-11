@@ -24,8 +24,7 @@
     "@abp/moment": "~9.1.0-rc.1",
     "@abp/select2": "~9.1.0-rc.1",
     "@abp/sweetalert2": "~9.1.0-rc.1",
-    "@abp/timeago": "~9.1.0-rc.1",
-    "@abp/toastr": "~9.1.0-rc.1"
+    "@abp/timeago": "~9.1.0-rc.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",
