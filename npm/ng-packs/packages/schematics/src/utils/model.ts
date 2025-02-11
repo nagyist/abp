@@ -148,7 +148,12 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
     typeDef.properties?.forEach(prop => {
       let name = prop.jsonName || camel(prop.name);
       name = shouldQuote(name) ? `'${name}'` : name;
-      const type = simplifyType(prop.type);
+
+      let type = simplifyType(prop.typeSimple);
+      if (prop.typeSimple.includes('enum')) {
+        type = simplifyType(prop.type);
+      }
+
       const refs = parseType(prop.type).reduce(
         (acc: string[], r) => acc.concat(parseGenerics(r).toGenerics()),
         [],
@@ -182,7 +187,10 @@ export function createRefToImportReducerCreator(params: ModelGeneratorParams) {
 }
 
 function isOptionalProperty(prop: PropertyDef) {
-  return prop.typeSimple.endsWith('?') || (prop.typeSimple === 'string' && !prop.isRequired);
+  return (
+    prop.typeSimple.endsWith('?') ||
+    ((prop.typeSimple === 'string' || prop.typeSimple.includes('enum')) && !prop.isRequired)
+  );
 }
 
 export function parseBaseTypeWithGenericTypes(type: string): string[] {
