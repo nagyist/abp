@@ -44,6 +44,7 @@ public class ChannelPool : IChannelPool, ISingletonDependency
 
         if (poolItem.Channel.IsClosed)
         {
+            poolItem.Dispose();
             Channels.TryRemove(channelName, out _);
             poolItem = Channels.GetOrAdd(
                 channelName,
