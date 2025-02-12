@@ -1,9 +1,5 @@
 # ABP Now Supports .NET 9
 
-![Cover image](cover.png)
-
-
-
 **.NET 9.0.100-rc.2**  has been released on **October 8, 2024**. To align with the latest .NET, we also released the ABP Platform [9.0.0-rc.1](https://github.com/abpframework/abp/releases/tag/9.0.0-rc.1) version. 
 **With this release, ABP now supports .NET 9.**
 

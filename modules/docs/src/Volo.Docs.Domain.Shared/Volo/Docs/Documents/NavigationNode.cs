@@ -21,6 +21,9 @@ namespace Volo.Docs.Documents
         
         [JsonPropertyName("isIndex")]
         public bool IsIndex { get; set; }
+        
+        [JsonPropertyName("keywords")]
+        public string[] Keywords { get; set; }
 
         public bool IsLeaf => !HasChildItems;
 

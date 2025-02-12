@@ -1,10 +1,5 @@
 ### ASP.NET Core SignalR New Features — Summary
-
 In this article, I’ll highlight the latest .**NET 9 SignalR updates** for ASP.NET Core 9.0.
-
-![Cover](cover.png)
-
-
 
 ### SignalR Hub Accepts Base Classes
 
