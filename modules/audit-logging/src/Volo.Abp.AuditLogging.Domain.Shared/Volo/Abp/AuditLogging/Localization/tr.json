@@ -46,7 +46,7 @@
     "Date": "Tarih",
     "Url": "Url",
     "UserName": "Kullanıcı adı",
-    "TenantImpersonator": "Kiracı Taklitçisi",
+    "TenantImpersonator": "Müşteri Taklitçisi",
     "UserImpersonator": "Kullanıcı Taklitçisi",
     "UrlFilter": "Url Filtresi",
     "User": "Kullanıcı",
@@ -78,6 +78,7 @@
     "Feature:AuditLoggingGroup": "İşlem Kayıtları",
     "Feature:AuditLoggingEnable": "İşlem kayıtları sayfasını etkinleştirin",
     "Feature:AuditLoggingEnableDescription": "Uygulamadanızdaki işlem kayıtları sayfasını etkinleştirir.",
-    "MinMaxDuration": "Süre (Min. - Max.)"
+    "MinMaxDuration": "Süre (Min. - Max.)",
+    "TenantId": "Müşteri Id"
   }
 }

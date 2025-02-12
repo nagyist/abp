@@ -78,6 +78,7 @@
     "EndDate": "Loka dagsetning",
     "Feature:AuditLoggingGroup": "Endurskoðunarskráning",
     "Feature:AuditLoggingEnable": "Virkjað endurskoðunarskráningarsíða",
-    "Feature:AuditLoggingEnableDescription": "Virkjaðu endurskoðunarskráningarsíðu í forritinu."
+    "Feature:AuditLoggingEnableDescription": "Virkjaðu endurskoðunarskráningarsíðu í forritinu.",
+    "TenantId": "Leigutakaauðkenni"
   }
 }

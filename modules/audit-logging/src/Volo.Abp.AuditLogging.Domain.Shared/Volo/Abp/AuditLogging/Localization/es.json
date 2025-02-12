@@ -78,6 +78,7 @@
     "EndDate": "Fecha final",
     "Feature:AuditLoggingGroup": "Registros de auditoría",
     "Feature:AuditLoggingEnable": "Habilitar la página de registro de auditoría",
-    "Feature:AuditLoggingEnableDescription": "Habilite la página de registro de auditoría en la aplicación."
+    "Feature:AuditLoggingEnableDescription": "Habilite la página de registro de auditoría en la aplicación.",
+    "TenantId": "ID de inquilino"
   }
 }

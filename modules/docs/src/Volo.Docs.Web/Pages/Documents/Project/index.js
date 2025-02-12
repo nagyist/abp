@@ -29,7 +29,8 @@ var doc = doc || {};
                 var $ul =  $(`<ul class="nav nav-list tree" ${uiCss}></ul>`);
                 var $li = $(`<li class="${node.hasChildItems ? 'nav-header' : 'last-link'}"></li>`);
                 
-                $li.append(`<span class="plus-icon"> <i class="fa fa-${node.hasChildItems ? 'chevron-right' : node.path === "javascript:;" ? 'has-link' : 'no-link'}"></i></span><a href="${node.path}" class="${textCss}">${node.text}</a>`)
+                var dataKeywords =  node.keywords ? `data-keywords="${node.keywords}"` : "";
+                $li.append(`<span class="plus-icon"> <i class="fa fa-${node.hasChildItems ? 'chevron-right' : node.path === "javascript:;" ? 'has-link' : 'no-link'}"></i></span><a href="${node.path}" ${dataKeywords} class="${textCss}">${node.text}</a>`)
 
                 if(node.isLazyExpandable){
                     $li.addClass("lazy-expand");
@@ -111,12 +112,17 @@ var doc = doc || {};
                 var filteredItems = $navigation
                     .find('li > a')
                     .filter(function () {
-                        return (
-                            $(this)
-                                .text()
-                                .toUpperCase()
-                                .indexOf(filterText.toUpperCase()) > -1
-                        );
+                        var keywords = ($(this).data('keywords') || "").split(",");
+                        var text = $(this).text();
+                        
+                        if(text.toUpperCase().indexOf(filterText.toUpperCase()) > -1)
+                        {
+                            return true;
+                        }
+                        
+                        return keywords.some(function(keyword){
+                            return keyword.toUpperCase().indexOf(filterText.toUpperCase()) > -1;
+                        });
                     });
 
                 filteredItems.each(function () {

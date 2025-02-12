@@ -78,6 +78,7 @@
     "EndDate": "Datum ukončení",
     "Feature:AuditLoggingGroup": "Protokolování auditu",
     "Feature:AuditLoggingEnable": "Povolena stránka protokolování auditu",
-    "Feature:AuditLoggingEnableDescription": "Povolit stránku protokolování auditu v aplikaci."
+    "Feature:AuditLoggingEnableDescription": "Povolit stránku protokolování auditu v aplikaci.",
+    "TenantId": "ID nájemce"
   }
 }
