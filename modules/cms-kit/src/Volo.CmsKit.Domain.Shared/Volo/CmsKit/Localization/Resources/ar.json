@@ -98,6 +98,8 @@
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "إدارة التعليق",
     "Permission:Comments.Delete": "حذف",
+    "Permission:Comments.Update": "تحديث",
+    "Permission:Comments.SettingManagement": "إدارة الإعدادات",
     "Permission:Contents": "ادارة المحتوى",
     "Permission:Contents.Create": "إنشاء المحتوى",
     "Permission:Contents.Delete": "حذف المحتوى",

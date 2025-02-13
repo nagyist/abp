@@ -90,6 +90,8 @@
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "टिप्पणी प्रबंधन",
     "Permission:Comments.Delete": "हटाएं",
+    "Permission:Comments.Update": "अपडेट करें",
+    "Permission:Comments.SettingManagement": "सेटिंग प्रबंधन",
     "Permission:Contents": "सामग्री प्रबंधन",
     "Permission:Contents.Create": "सामग्री बनाएँ",
     "Permission:Contents.Delete": "सामग्री हटाएं",

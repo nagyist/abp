@@ -89,6 +89,8 @@
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "مدیریت نظرات",
     "Permission:Comments.Delete": "حذف",
+    "Permission:Comments.Update": "به روز رسانی",
+    "Permission:Comments.SettingManagement": "مدیریت تنظیمات",
     "Permission:Contents": "مدیریت محتوا",
     "Permission:Contents.Create": "ایجاد محتوی",
     "Permission:Contents.Delete": "حذف محتوی",

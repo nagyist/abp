@@ -90,6 +90,8 @@
     "Permission:CmsKit": "CMS-Kit",
     "Permission:Comments": "Reactiebeheer",
     "Permission:Comments.Delete": "Verwijderen",
+    "Permission:Comments.Update": "Bijwerken",
+    "Permission:Comments.SettingManagement": "Instellingenbeheer",
     "Permission:Contents": "Inhoud beheer",
     "Permission:Contents.Create": "Inhoud toevoegen",
     "Permission:Contents.Delete": "Inhoud verwijderen",
