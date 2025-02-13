@@ -38,43 +38,7 @@ public partial class PermissionManagementModal
     
     protected string _permissionGroupSearchText;
 
-    protected bool GrantAll {
-        get {
-            if (_notGrantedPermissionCount == 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-        set {
-            if (_groups == null)
-            {
-                return;
-            }
-
-            _grantedPermissionCount = 0;
-            _notGrantedPermissionCount = 0;
-            Task.Run(()=>OnPermissionGroupSearchTextChangedAsync(null));
-
-            foreach (var permission in _allGroups.SelectMany(x => x.Permissions))
-            {
-                if (!IsDisabledPermission(permission))
-                {
-                    permission.IsGranted = value;
-
-                    if (value)
-                    {
-                        _grantedPermissionCount++;
-                    }
-                    else
-                    {
-                        _notGrantedPermissionCount++;
-                    }
-                }
-            }
-        }
-    }
+    protected bool GrantAll { get; set; }
 
     protected Dictionary<string, int> _permissionDepths = new Dictionary<string, int>();
 
@@ -98,12 +62,45 @@ public partial class PermissionManagementModal
             _groups = _allGroups.ToList();
 
             NormalizePermissionGroup();
+            
+            GrantAll = _notGrantedPermissionCount == 0;
 
             await InvokeAsync(_modal.Show);
         }
         catch (Exception ex)
         {
             await HandleErrorAsync(ex);
+        }
+    }
+
+    protected virtual async Task GrantAllAsync(bool grantAll)
+    {
+        GrantAll = grantAll;
+        
+        if (_allGroups == null)
+        {
+            return;
+        }
+        _grantedPermissionCount = 0;
+        _notGrantedPermissionCount = 0;
+
+        await OnPermissionGroupSearchTextChangedAsync(string.Empty);
+
+        foreach (var permission in _allGroups.SelectMany(x => x.Permissions))
+        {
+            if (!IsDisabledPermission(permission))
+            {
+                permission.IsGranted = grantAll;
+
+                if (grantAll)
+                {
+                    _grantedPermissionCount++;
+                }
+                else
+                {
+                    _notGrantedPermissionCount++;
+                }
+            }
         }
     }
     
