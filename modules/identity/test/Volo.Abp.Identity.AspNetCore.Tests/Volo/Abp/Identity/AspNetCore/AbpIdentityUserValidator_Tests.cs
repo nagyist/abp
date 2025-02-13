@@ -20,6 +20,17 @@ public class AbpIdentityUserValidator_Tests : AbpIdentityAspNetCoreTestBase
     }
 
     [Fact]
+    public async Task InvalidUserName_Messages_Test()
+    {
+        var user = new IdentityUser(Guid.NewGuid(), "abp 123", "user@volosoft.com");
+        var identityResult = await _identityUserManager.CreateAsync(user);
+        identityResult.Succeeded.ShouldBeFalse();
+        identityResult.Errors.Count().ShouldBe(1);
+        identityResult.Errors.First().Code.ShouldBe("InvalidUserName");
+        identityResult.Errors.First().Description.ShouldBe(Localizer["Volo.Abp.Identity:InvalidUserName", "abp 123"]);
+    }
+
+    [Fact]
     public async Task Can_Not_Use_Another_Users_Email_As_Your_Username_Test()
     {
         var user1 = new IdentityUser(Guid.NewGuid(), "user1", "user1@volosoft.com");
