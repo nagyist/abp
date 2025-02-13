@@ -90,6 +90,8 @@
     "Permission:CmsKit": "cmsKit",
     "Permission:Comments": "Kommentarverwaltung",
     "Permission:Comments.Delete": "Löschen",
+    "Permission:Comments.Update": "Aktualisieren",
+    "Permission:Comments.SettingManagement": "Einstellungsverwaltung",
     "Permission:Contents": "Inhaltsverwaltung",
     "Permission:Contents.Create": "Inhalte erstellen",
     "Permission:Contents.Delete": "Inhalt löschen",

@@ -98,6 +98,8 @@
     "Permission:CmsKit": "CmsKit admin",
     "Permission:Comments": "Comment management",
     "Permission:Comments.Delete": "Delete",
+    "Permission:Comments.Update": "Update",
+    "Permission:Comments.SettingManagement": "Setting Management",
     "Permission:Contents": "Content management",
     "Permission:Contents.Create": "Create content",
     "Permission:Contents.Delete": "Delete content",
