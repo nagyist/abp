@@ -24,27 +24,39 @@ public class ConnectionPool : IConnectionPool, ISingletonDependency
     public virtual IConnection Get(string? connectionName = null)
     {
         connectionName ??= RabbitMqConnections.DefaultConnectionName;
-
+        var connectionFactory = Options.Connections.GetOrDefault(connectionName);
         try
         {
-            var lazyConnection = Connections.GetOrAdd(
-                connectionName, () => new Lazy<IConnection>(() =>
-                {
-                    var connection = Options.Connections.GetOrDefault(connectionName);
-                    var hostnames = connection.HostName.TrimEnd(';').Split(';');
-                        // Handle Rabbit MQ Cluster.
-                        return hostnames.Length == 1 ? connection.CreateConnection() : connection.CreateConnection(hostnames);
-
-                })
-            );
-
-            return lazyConnection.Value;
+            var connection = GetConnection(connectionName, connectionFactory);
+        
+            if (connection.IsOpen)
+            {
+                return connection;
+            }
+            
+            connection.Dispose();
+            Connections.TryRemove(connectionName, out _);
+            return GetConnection(connectionName, connectionFactory);
         }
         catch (Exception)
         {
             Connections.TryRemove(connectionName, out _);
             throw;
         }
+    }
+
+    protected virtual IConnection GetConnection(string connectionName, ConnectionFactory connectionFactory)
+    {
+        return Connections.GetOrAdd(
+            connectionName, () => new Lazy<IConnection>(() =>
+            {
+                var hostnames = connectionFactory.HostName.TrimEnd(';').Split(';');
+                // Handle Rabbit MQ Cluster.
+                return hostnames.Length == 1
+                    ? connectionFactory.CreateConnection()
+                    : connectionFactory.CreateConnection(hostnames);
+            })
+        ).Value;
     }
 
     public void Dispose()

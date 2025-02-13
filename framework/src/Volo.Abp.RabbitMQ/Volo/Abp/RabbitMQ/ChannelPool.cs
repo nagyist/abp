@@ -42,6 +42,18 @@ public class ChannelPool : IChannelPool, ISingletonDependency
 
         poolItem.Acquire();
 
+        if (poolItem.Channel.IsClosed)
+        {
+            poolItem.Dispose();
+            Channels.TryRemove(channelName, out _);
+            poolItem = Channels.GetOrAdd(
+                channelName,
+                _ => new ChannelPoolItem(CreateChannel(channelName, connectionName))
+            );
+            
+            poolItem.Acquire();
+        }
+
         return new ChannelAccessor(
             poolItem.Channel,
             channelName,
