@@ -250,7 +250,12 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         OutgoingEventInfo outgoingEvent,
         OutboxConfig outboxConfig)
     {
-        var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName)!;
+        var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
+        if (eventType == null)
+        {
+            return;
+        }
+
         var eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
 
         var headers = new Dictionary<string, string>();
