@@ -90,6 +90,8 @@
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Athugasemdastjórnun",
     "Permission:Comments.Delete": "Eyða",
+    "Permission:Comments.Update": "Uppfæra",
+    "Permission:Comments.SettingManagement": "Stillingar stjórnun",
     "Permission:Contents": "Efnisstjórnun",
     "Permission:Contents.Create": "Búa til efni",
     "Permission:Contents.Delete": "Eyða efni",
