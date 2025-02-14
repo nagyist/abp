@@ -38,10 +38,8 @@
   "devDependencies": {
     "@abp/ng.schematics": "~9.0.5",
     "@angular-devkit/build-angular": "~18.1.0",
-    "@angular-eslint/builder": "~18.1.0",
     "@angular-eslint/eslint-plugin": "~18.1.0",
     "@angular-eslint/eslint-plugin-template": "~18.1.0",
-    "@angular-eslint/schematics": "~18.1.0",
     "@angular-eslint/template-parser": "~18.1.0",
     "@angular/cli": "~18.1.0",
     "@angular/compiler-cli": "~18.1.0",
@@ -60,5 +58,9 @@
     "ng-packagr": "~17.3.0",
     "symlink": "^2.0.0",
     "typescript": "~5.5.0"
+  },
+  "peerDependencies": {
+    "@angular-eslint/builder": "~18.1.0",
+    "@angular-eslint/schematics": "~18.1.0"
   }
 }
