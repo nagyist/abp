@@ -112,7 +112,7 @@
                                                 Sortable="@column.Sortable"
                                                 Displayable="column.Visible">
                                     <DisplayTemplate>
-                                        @(GetConvertedFieldValue(context, column))
+                                        @((MarkupString)GetConvertedFieldValue(context, column))
                                     </DisplayTemplate>
                                 </DataGridColumn>
                             }
@@ -140,7 +140,7 @@
                                         {
                                             if (column.ValueConverter != null)
                                             {
-                                                @(GetConvertedFieldValue(context, column))
+                                                @((MarkupString)GetConvertedFieldValue(context, column))
                                             }
                                             else
                                             {

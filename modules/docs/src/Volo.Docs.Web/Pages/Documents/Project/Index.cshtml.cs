@@ -461,7 +461,6 @@ namespace Volo.Docs.Pages.Documents.Project
                         Version = Version
                     }
                 );
-                
             }
             catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
             {

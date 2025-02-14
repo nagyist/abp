@@ -78,4 +78,11 @@ public class MenuItemAdminController : CmsKitAdminController, IMenuItemAdminAppS
     {
         return MenuItemAdminAppService.GetPageLookupAsync(input);
     }
+
+    [HttpGet]
+    [Route("lookup/permissions")]
+    public Task<ListResultDto<PermissionLookupDto>> GetPermissionLookupAsync(PermissionLookupInputDto inputDto)
+    {
+        return MenuItemAdminAppService.GetPermissionLookupAsync(inputDto);
+    }
 }

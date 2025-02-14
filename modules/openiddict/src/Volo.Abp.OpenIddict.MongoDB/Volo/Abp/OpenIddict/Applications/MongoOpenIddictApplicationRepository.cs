@@ -23,7 +23,7 @@ public class MongoOpenIddictApplicationRepository : MongoDbRepository<OpenIddict
     {
         return await ((await GetMongoQueryableAsync(cancellationToken)))
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
-            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictApplication.ClientId) : sorting)
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictApplication.CreationTime) + " desc" : sorting)
             .PageBy(skipCount, maxResultCount)
             .As<IMongoQueryable<OpenIddictApplication>>()
             .ToListAsync(GetCancellationToken(cancellationToken));

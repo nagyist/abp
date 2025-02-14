@@ -4,7 +4,7 @@ using Volo.Abp.Data;
 
 namespace Volo.Abp.EventBus.Distributed;
 
-public class OutgoingEventInfo : IHasExtraProperties
+public class OutgoingEventInfo : IOutgoingEventInfo
 {
     public static int MaxEventNameLength { get; set; } = 256;
 

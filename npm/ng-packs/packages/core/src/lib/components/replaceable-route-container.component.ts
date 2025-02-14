@@ -6,6 +6,7 @@ import { ReplaceableComponentsService } from '../services/replaceable-components
 import { SubscriptionService } from '../services/subscription.service';
 
 @Component({
+  standalone: false,
   selector: 'abp-replaceable-route-container',
   template: `
     <ng-container *ngComponentOutlet="externalComponent || defaultComponent"></ng-container>

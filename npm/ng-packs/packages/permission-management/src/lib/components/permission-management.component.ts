@@ -34,6 +34,7 @@ type PermissionWithGroupName = PermissionGrantInfoDto & {
 };
 
 @Component({
+  standalone: false,
   selector: 'abp-permission-management',
   templateUrl: './permission-management.component.html',
   exportAs: 'abpPermissionManagement',

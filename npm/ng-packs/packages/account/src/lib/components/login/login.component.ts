@@ -10,6 +10,7 @@ import { getRedirectUrl } from '../../utils/auth-utils';
 const { maxLength, required } = Validators;
 
 @Component({
+  standalone: false,
   selector: 'abp-login',
   templateUrl: './login.component.html',
 })
