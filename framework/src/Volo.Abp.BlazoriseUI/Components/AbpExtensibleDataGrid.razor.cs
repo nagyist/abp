@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Blazorise.DataGrid;
 using Blazorise.Extensions;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
@@ -35,11 +36,14 @@ public partial class AbpExtensibleDataGrid<TItem> : ComponentBase
     [Parameter] public string? Class { get; set; }
 
     [Parameter] public bool Responsive { get; set; }
-    
+
     [Parameter] public bool AutoGenerateColumns { get; set; }
 
     [Inject]
     public IStringLocalizerFactory StringLocalizerFactory { get; set; } = default!;
+
+    [Inject]
+    public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; } = default!;
 
     protected virtual RenderFragment RenderCustomTableColumnComponent(Type type, object data)
     {
