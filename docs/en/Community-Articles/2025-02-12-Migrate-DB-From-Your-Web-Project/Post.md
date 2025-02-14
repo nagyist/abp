@@ -1,5 +1,3 @@
-# Migrate Your DB from the Web Application — Adding a DB Migration Controller in ABP Framework 
-
 In some scenarios, you might prefer to **update your ABP project's database by simply visiting a URL** rather than running a console application (such as a typical `DbMigrator` project). This post demonstrates how to do that in an ABP application. In my sample application I used the single-layer project but you can benefit the same approach for other templates. My sample project name was created with this name: **Acme.BookStore**.
 
 ------
