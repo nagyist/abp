@@ -90,6 +90,8 @@
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Upravljanje komentarjev",
     "Permission:Comments.Delete": "Izbriši",
+    "Permission:Comments.Update": "Posodobi",
+    "Permission:Comments.SettingManagement": "Upravljanje nastavitev",
     "Permission:Contents": "Upravljanje vsebine",
     "Permission:Contents.Create": "Ustvarite vsebino",
     "Permission:Contents.Delete": "Izbriši vsebino",

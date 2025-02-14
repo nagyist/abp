@@ -90,6 +90,8 @@
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Управление комментариями",
     "Permission:Comments.Delete": "Удалить",
+    "Permission:Comments.Update": "Обновить",
+    "Permission:Comments.SettingManagement": "Управление настройками",
     "Permission:Contents": "Управление содержанием",
     "Permission:Contents.Create": "Создать контент",
     "Permission:Contents.Delete": "Удалить содержимое",

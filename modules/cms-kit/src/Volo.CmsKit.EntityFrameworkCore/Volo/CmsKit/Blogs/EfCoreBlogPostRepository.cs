@@ -58,6 +58,12 @@ public class EfCoreBlogPostRepository : EfCoreRepository<ICmsKitDbContext, BlogP
         BlogPostStatus? statusFilter = null,
         CancellationToken cancellationToken = default)
     {
+        List<Guid> entityIdFilters = null;
+        if (tagId.HasValue)
+        {
+            entityIdFilters = (await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken)).Select(Guid.Parse).ToList();
+        }
+
         var tagFilteredEntityIds = tagId.HasValue
                 ? await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken)
                 : null;
@@ -67,6 +73,7 @@ public class EfCoreBlogPostRepository : EfCoreRepository<ICmsKitDbContext, BlogP
             : null;
 
         var queryable = (await GetDbSetAsync())
+            .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id))
             .WhereIf(tagFilteredEntityIds != null, x => tagFilteredEntityIds.Contains(x.Id.ToString()))
             .WhereIf(favoriteUserFilteredEntityIds != null, x => favoriteUserFilteredEntityIds.Contains(x.Id.ToString()))
             .WhereIf(blogId.HasValue, x => x.BlogId == blogId)
@@ -95,6 +102,12 @@ public class EfCoreBlogPostRepository : EfCoreRepository<ICmsKitDbContext, BlogP
         var blogPostsDbSet = dbContext.Set<BlogPost>();
         var usersDbSet = dbContext.Set<CmsUser>();
 
+        List<Guid> entityIdFilters = null;
+        if (tagId.HasValue)
+        {
+            entityIdFilters = (await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken)).Select(Guid.Parse).ToList();
+        }
+
         var tagFilteredEntityIds = tagId.HasValue
                 ? await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken)
                 : null;
@@ -104,6 +117,7 @@ public class EfCoreBlogPostRepository : EfCoreRepository<ICmsKitDbContext, BlogP
             : null;
 
         var queryable = (await GetDbSetAsync())
+            .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id))
             .WhereIf(tagFilteredEntityIds != null, x => tagFilteredEntityIds.Contains(x.Id.ToString()))
             .WhereIf(favoriteUserFilteredEntityIds != null, x => favoriteUserFilteredEntityIds.Contains(x.Id.ToString()))
             .WhereIf(blogId.HasValue, x => x.BlogId == blogId)

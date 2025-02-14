@@ -90,6 +90,8 @@
     "Permission:CmsKit": "CmsKit 管理员",
     "Permission:Comments": "评论管理",
     "Permission:Comments.Delete": "删除",
+    "Permission:Comments.Update": "更新",
+    "Permission:Comments.SettingManagement": "设置管理",
     "Permission:Contents": "内容管理",
     "Permission:Contents.Create": "创建内容",
     "Permission:Contents.Delete": "删除内容",
