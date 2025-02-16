@@ -6,17 +6,17 @@
 
 ## Authorization Code Flow
 
-Let's examine the current `Code Flow` in ABP Framework project.
+Let's examine the current `Code Flow` in the ABP Framework project.
 
 A typical ABP layered architecture usually includes the following projects:
 
 - `Acme.AuthServer`: OAuth 2.0 authorization server integrated with `OpenIddict`.
-- `Acme.AuthServer.Api.Host`: API project that uses JWT bearer` authentication scheme and authenticates through the `Acme.AuthServer` project.
-- `Acme.Web`: Project configured with `OpenID Connect` authentication scheme to authenticate through the `Acme.AuthServer` project.
+- `Acme.AuthServer.Api.Host`: API project that uses `JWT Bearer` authentication scheme and authenticates through the `Acme.AuthServer` project.
+- `Acme.Web`: The project is configured with an `OpenID Connect` authentication scheme to authenticate through the `Acme.AuthServer` project.
 
 When we attempt to use `OpenID Connect` authentication in the `Acme.Web` project, it constructs an authorization request and redirects the browser to the `Acme.AuthServer` project.
 
-```http
+```csharp
 GET https//auth-server.acme.com/connect/authorize
 
 Query String Parameters:
@@ -32,7 +32,7 @@ state: CfDJ8N...
 
 > If you have enabled `Pkce`, the `code_challenge` and `code_challenge_method` parameters will also appear in the request.
 
-```http
+```csharp
 code_challenge: mJxMdU...
 code_challenge_method: S256
 ```
@@ -41,7 +41,7 @@ After the user successfully authenticates on the `Acme.AuthServer` project (via 
 
 The `Acme.AuthServer` project will construct either a `POST` or `GET` request to the `Acme.Web` project.
 
-```http
+```csharp
 POST https://web.acme.com/signin-oidc
 
 Form Data Parameters(application/x-www-form-urlencoded):
@@ -53,7 +53,7 @@ iss: https://auth-server.acme.com/
 
 When the `Acme.Web` project receives the `code`, it sends an HTTP request from the application (**not the browser**) to `Acme.AuthServer` to request an `access token` using the received `code`.
 
-```http
+```csharp
 POST https://auth-server.acme.com/connect/token
 
 Form Data Parameters(application/x-www-form-urlencoded):
@@ -75,7 +75,7 @@ However, `Code Flow` may have the following issues:
 * No guarantee of confidentiality. Although the browser sends the authorization request via HTTPS, the request parameters can be intercepted by third-party applications, such as a proxy, a load balancer, or even a browser plugin. A malicious network component of this type can inject or change the request parameters, not to mention that the request itself can be logged.
 * Browser limitations. Finally, a very complex query string in the authorization request may incur possible browser limitations on URL length.
 
-To address these issues, OAuth 2.0 defined `Pushed Authorization Requests (PAR)`.
+OAuth 2.0 defined `Pushed Authorization Requests (PAR)` to address these issues.
 
 ## Pushed Authorization Requests (PAR)
 
@@ -87,9 +87,9 @@ You can configure `Pushed Authorization Requests (PAR)` when `creating/updating`
 
 Let's examine the authentication flow using `Pushed Authorization Requests (PAR)`.
 
-When we attempt to use OpenID Connect authentication in the `Acme.Web` project, it sends a `POST` request to the authorization server's `par` endpoint.
+When we attempt to use OpenID Connect authentication in the `Acme.Web` project, it sends an HTTP request from the application (**not the browser**) to the authorization server's `par` endpoint.
 
-```http
+```csharp
 POST https://auth-server.acme.com/connect/par
 
 Form Data Parameters:
@@ -106,7 +106,7 @@ state: CfDJ8NwA4...
 
 > If you have enabled `Pkce`, the code_challenge and code_challenge_method parameters will also appear in the `POST` request.
 
-```http
+```csharp
 code_challenge: mJxMdULFXnvdWfaDUfyDIb77IFlMpGyKkHN1_UWYKDk
 code_challenge_method: S256
 ```
@@ -122,7 +122,7 @@ After successful verification and validation, the authorization server returns a
 
 Upon receiving a successful response, the `Acme.Web` project constructs an authorization request and redirects the browser to the authorization server.
 
-```http
+```csharp
 GET https//auth-server.acme.com/connect/authorize
 
 Query String Parameters:
