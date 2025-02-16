@@ -12,7 +12,7 @@ A typical ABP layered architecture usually includes the following projects:
 
 - `Acme.AuthServer`: OAuth 2.0 authorization server integrated with `OpenIddict`.
 - `Acme.AuthServer.Api.Host`: API project that uses `JWT Bearer` authentication scheme and authenticates through the `Acme.AuthServer` project.
-- `Acme.Web`: The project is configured with an `OpenID Connect` authentication scheme to authenticate through the `Acme.AuthServer` project.
+- `Acme.Web`: An UI project configured with an `OpenID Connect` authentication scheme to authenticate through the `Acme.AuthServer` project.
 
 When we attempt to use `OpenID Connect` authentication in the `Acme.Web` project, it constructs an authorization request and redirects the browser to the `Acme.AuthServer` project.
 
@@ -115,8 +115,8 @@ After successful verification and validation, the authorization server returns a
 
 ```json
 {
-	"request_uri": "urn:ietf:params:oauth:request_uri:1FPVWnrwFAesetV-r-66_b7BAF_vCQm7UmPWfBqRENg",
-	"expires_in": 3599
+    "request_uri": "urn:ietf:params:oauth:request_uri:1FPVWnrwFAesetV-r-66_b7BAF_vCQm7UmPWfBqRENg",
+    "expires_in": 3599
 }
 ```
 
