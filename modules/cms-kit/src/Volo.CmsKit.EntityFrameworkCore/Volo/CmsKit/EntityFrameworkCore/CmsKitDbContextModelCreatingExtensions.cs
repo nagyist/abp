@@ -261,6 +261,8 @@ public static class CmsKitDbContextModelCreatingExtensions
                 b.Property(x => x.DisplayName).IsRequired().HasMaxLength(MenuItemConsts.MaxDisplayNameLength);
 
                 b.Property(x => x.Url).IsRequired().HasMaxLength(MenuItemConsts.MaxUrlLength);
+                
+                b.Property(x => x.RequiredPermissionName).HasMaxLength(MenuItemConsts.MaxRequiredPermissionNameLength);
             });
         }
         else

@@ -67,10 +67,10 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
                 {
                     OpenIddictConstants.Permissions.Endpoints.Authorization,
                     OpenIddictConstants.Permissions.Endpoints.Token,
-                    OpenIddictConstants.Permissions.Endpoints.Device,
+                    OpenIddictConstants.Permissions.Endpoints.DeviceAuthorization,
                     OpenIddictConstants.Permissions.Endpoints.Introspection,
                     OpenIddictConstants.Permissions.Endpoints.Revocation,
-                    OpenIddictConstants.Permissions.Endpoints.Logout,
+                    OpenIddictConstants.Permissions.Endpoints.EndSession,
 
                     OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
                     OpenIddictConstants.Permissions.GrantTypes.Implicit,
@@ -125,10 +125,10 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
                 {
                     OpenIddictConstants.Permissions.Endpoints.Authorization,
                     OpenIddictConstants.Permissions.Endpoints.Token,
-                    OpenIddictConstants.Permissions.Endpoints.Device,
+                    OpenIddictConstants.Permissions.Endpoints.DeviceAuthorization,
                     OpenIddictConstants.Permissions.Endpoints.Introspection,
                     OpenIddictConstants.Permissions.Endpoints.Revocation,
-                    OpenIddictConstants.Permissions.Endpoints.Logout,
+                    OpenIddictConstants.Permissions.Endpoints.EndSession,
 
                     OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
                     OpenIddictConstants.Permissions.GrantTypes.Implicit,
@@ -153,6 +153,38 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
                     OpenIddictConstants.Permissions.Scopes.Phone,
 
                     OpenIddictConstants.Permissions.Prefixes.Scope + "AbpAPI"
+                }
+            });
+        }
+
+        if (await _applicationManager.FindByClientIdAsync("Swagger") == null)
+        {
+            await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+            {
+                ApplicationType = OpenIddictConstants.ApplicationTypes.Web,
+                ClientId = "Swagger",
+                ClientType = OpenIddictConstants.ClientTypes.Public,
+                ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
+                DisplayName = "Abp Swagger Application",
+                RedirectUris =
+                {
+                    new Uri("https://localhost:44303/swagger/oauth2-redirect.html")
+                },
+                Permissions =
+                {
+                    OpenIddictConstants.Permissions.Endpoints.Authorization,
+                    OpenIddictConstants.Permissions.Endpoints.Token,
+
+                    OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
+
+                    OpenIddictConstants.Permissions.ResponseTypes.Code,
+
+                    OpenIddictConstants.Permissions.Prefixes.Scope + "AbpAPI"
+                },
+                Settings =
+                {
+                    // Use a shorter access token lifetime for tokens issued to the Postman application.
+                    [OpenIddictConstants.Settings.TokenLifetimes.AccessToken] = TimeSpan.FromMinutes(5).ToString("c", CultureInfo.InvariantCulture)
                 }
             });
         }

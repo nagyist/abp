@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -28,6 +29,8 @@ public class UpdateModalModel : CmsKitAdminPageModel
     public Guid Id { get; set; }
 
     public bool IsPageFeatureEnabled { get; set; }
+    
+    public IReadOnlyList<PermissionLookupDto> Permissions { get; set; }
 
     public UpdateModalModel(IMenuItemAdminAppService menuAdminAppService, IFeatureChecker featureChecker)
     {
@@ -39,7 +42,7 @@ public class UpdateModalModel : CmsKitAdminPageModel
     public async Task OnGetAsync()
     {
         var menuItemDto = await MenuAdminAppService.GetAsync(Id);
-
+        Permissions = (await MenuAdminAppService.GetPermissionLookupAsync(new PermissionLookupInputDto())).Items;
         IsPageFeatureEnabled = GlobalFeatureManager.Instance.IsEnabled<PagesFeature>()
             && await FeatureChecker.IsEnabledAsync(CmsKitFeatures.PageEnable);
 
@@ -76,6 +79,8 @@ public class UpdateModalModel : CmsKitAdminPageModel
         public Guid? PageId { get; set; }
 
         public string? PageTitle { get; set; }
+        
+        public string RequiredPermissionName { get; set; }
 
         [HiddenInput]
         public string ConcurrencyStamp { get; set; }

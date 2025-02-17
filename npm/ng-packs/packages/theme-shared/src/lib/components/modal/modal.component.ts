@@ -26,6 +26,7 @@ import { DismissableModal, ModalDismissMode, ModalRefService } from './modal-ref
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
+  standalone: false,
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],

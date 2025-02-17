@@ -4,15 +4,13 @@ This document provides a road map, release schedule, and planned features for th
 
 ## Next Versions
 
-### v9.1
+### v9.2
 
-The next version will be 9.1 and planned to release the stable 9.1 version in January 2025. We will be mostly working on the following topics:
+The next version will be 9.2 and planned to release the stable 9.2 version in June 2025. We will be mostly working on the following topics:
 
 * Framework
-  * Lazy expandable feature for documentation
-  * Unify the bundling system of Blazor and MVC
-  * SSR support for the Angular UI
   * Upgrading 3rd-party dependencies
+  * Enhancements in the core points
 
 * ABP Suite
   * Define navigation properties without target string property dependency
@@ -32,12 +30,12 @@ The next version will be 9.1 and planned to release the stable 9.1 version in Ja
   * Modular Monolith Application Startup Template
 
 * Application modules
-  * Account module: Support mixed social/local login scenarios
-  * Idle session warning
+  * Account module: Support mixed social/local login scenarios & enforcing email verification in wide aspect
   * UI/UX improvements on existing application modules
 
-* New tutorials
+* Updating existing tutorials & documents (with other UI & DB options)
   * Microservice development
+  * Modular monolith development
 
 ## Backlog Items
 
@@ -64,7 +62,6 @@ ABP Platform provides many (free and commercial) [pre-built application modules]
 
 * LeptonX theme: New layouts, styles and components
 * CMS Kit module: Meta information for SEO, media gallery, RSS feed, content versioning, social media streams
-* Identity module: Idle session warning
 * Payment module: Invoice system
 * New module: User notification
 * New module: Dynamic dashboard
@@ -108,7 +105,6 @@ Here, are some of the important planned features for the next ABP Suite versions
 * Allow to create pages instead of modals for CRUD page generation
 * View-only (detail view) modal/page for an entity
 * Export child/detail entity records as a part of export operation for a main (master) entity
-* Allow to accept attachments (files) for an entity
 * Allow to add custom entity actions for an entity
 * Allow to inherit from an existing entity class
 * Custom form layouts on CRUD page generation

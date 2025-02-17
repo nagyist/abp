@@ -4,6 +4,7 @@ import { toastInOut } from '../../animations/toast.animations';
 import { Toaster } from '../../models/toaster';
 
 @Component({
+  standalone: false,
   selector: 'abp-toast-container',
   templateUrl: './toast-container.component.html',
   styleUrls: ['./toast-container.component.scss'],

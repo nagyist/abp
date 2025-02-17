@@ -119,7 +119,7 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext,
             .WhereIf(!filter.IsNullOrWhiteSpace(),
                 x => x.Name.Contains(filter) ||
                      x.NormalizedName.Contains(filter))
-            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityRole.Name) : sorting)
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityRole.CreationTime) + " desc" : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

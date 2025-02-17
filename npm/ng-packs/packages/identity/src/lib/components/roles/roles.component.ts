@@ -13,6 +13,7 @@ import { finalize } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
 
 @Component({
+  standalone: false,
   selector: 'abp-roles',
   templateUrl: './roles.component.html',
   providers: [
