@@ -8,6 +8,8 @@ This document contains **brief release notes** for each release. Release notes o
 
 See the detailed **[blog post / announcement](https://abp.io/blog/abp-9-0-stable-release-with-dotnet-9-0)** for the v9.0 release.
 
+> **Note**: ABP has upgraded to .NET 9.0, so if you plan to use ABP 9.0, you’ll need to migrate your solutions to .NET 9.0. You can refer to the [Migrate from ASP.NET Core 8.0 to 9.0](https://learn.microsoft.com/en-us/aspnet/core/migration/80-90) documentation for guidance. However, ABP’s NuGet packages are compatible with both .NET 8 and .NET 9, allowing developers to continue using .NET 8 while still enjoying the latest features and improvements of the ABP Framework without upgrading their SDK.
+
 * Upgraded to .NET 9.0
 * Introducing the `Extension Property Policy`
 * Google Cloud Storage BLOB Provider
