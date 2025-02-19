@@ -88,8 +88,8 @@ public static class AbpOpenIdConnectExtensions
                 }
             };
 
-            // The application needs to be granted the `OpenIddictConstants.Permissions.Endpoints.PushedAuthorization` permission to using PAR endpoint.
-            // You can enable it after you have granted the permission.
+            // The application needs to be granted the `OpenIddictConstants.Permissions.Endpoints.PushedAuthorization` permission to use the PAR endpoint.
+            // You can enable it after you have granted the `PushedAuthorization` permission.
             options.PushedAuthorizationBehavior = PushedAuthorizationBehavior.Disable;
             configureOptions?.Invoke(options);
         });
