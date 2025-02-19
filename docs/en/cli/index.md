@@ -44,7 +44,7 @@ Here, is the list of all available commands before explaining their details:
 * **`add-package-ref`**: Adds package to given project.
 * **`install-module`**: Adds a [multi-package application module](../modules/index.md) to a given module.
 * **`install-local-module`**: Installs a local module to given module.
-* **`list-modules`**: Lists names of open-source application modules.
+* **`list-modules`**: Lists names of application modules.
 * **`list-templates`**: Lists the names of available templates to create a solution.
 * **`get-source`**: Downloads the source code of a module.
 * **`add-source-code`**: Downloads the source code and replaces package references with project references.
