@@ -119,7 +119,7 @@
                         }
                         else
                         {
-                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" SortField="@column.PropertyName" Width="@column.Width" Caption="@column.Title" Displayable="column.Visible">
+                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" SortField="@column.PropertyName" Width="@column.Width" Caption="@column.Title" Displayable="column.Visible" Sortable="@column.Sortable">
                                 <DisplayTemplate>
                                     @{
                                         var entity = context as IHasExtraProperties;
