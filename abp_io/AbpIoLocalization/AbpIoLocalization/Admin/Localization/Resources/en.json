@@ -688,6 +688,8 @@
     "Permission:UserCleanUp": "User Clean Up",
     "AllowPrivateQuestion": "Allow Private Question",
     "Permission:Campaigns": "Campaigns",
-    "Permission:Licenses": "License Settings"
+    "Permission:Licenses": "License Settings",
+    "BlockUserPolicy": "Block User Policy",
+    "Permission:BlockUserPolicy": "Block User Policy"
   }
 }
