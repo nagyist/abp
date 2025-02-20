@@ -98,9 +98,9 @@
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "Ενεργοποιήθηκε για νέους χρήστες",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Διάρκεια κλειδώματος (δευτερόλεπτα)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Μέγιστες αποτυχημένες προσπάθειες πρόσβασης",
-    "DisplayName:Abp.Identity.SignIn.RequireConfirmedEmail": "Απαιτείται επιβεβαιωμένο email",
+    "DisplayName:Abp.Identity.SignIn.RequireConfirmedEmail": "Επιβολή επαλήθευσης email για σύνδεση",
     "DisplayName:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Επιτρέψτε στους χρήστες να επιβεβαιώσουν τον αριθμό τηλεφώνου τους",
-    "DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Απαιτείται επιβεβαιωμένος αριθμός τηλεφώνου",
+    "DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Επιβολή επαλήθευσης αριθμού τηλεφώνου για σύνδεση",
     "DisplayName:Abp.Identity.User.IsUserNameUpdateEnabled": "Επιτρέψτε στους χρήστες να αλλάξουν τα ονόματα χρήστη τους",
     "DisplayName:Abp.Identity.User.IsEmailUpdateEnabled": "Επιτρέψτε στους χρήστες να αλλάξουν τις διευθύνσεις email τους",
     "Description:Abp.Identity.Password.RequiredLength": "Το ελάχιστο μήκος ενός κωδικού πρόσβασης πρέπει να είναι.",
@@ -114,10 +114,13 @@
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "Εάν ένας νέος χρήστης μπορεί να κλειδωθεί.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "Η διάρκεια για την οποία ένας χρήστης είναι κλειδωμένος όταν εμφανίζεται ένα κλείδωμα.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Ο αριθμός των αποτυχημένων προσπαθειών πρόσβασης που επιτρέπονται πριν από το κλείδωμα ενός χρήστη, με την προϋπόθεση ότι το κλείδωμα είναι ενεργοποιημένο.",
-    "Description:Abp.Identity.SignIn.RequireConfirmedEmail": "Εάν απαιτείται επιβεβαιωμένη διεύθυνση ηλεκτρονικού ταχυδρομείου για τη σύνδεση.",
-    "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Εάν ο αριθμός τηλεφώνου μπορεί να επιβεβαιωθεί από τον χρήστη.",
-    "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Εάν απαιτείται επιβεβαιωμένος αριθμός τηλεφώνου για τη σύνδεση.",
+    "Description:Abp.Identity.SignIn.RequireConfirmedEmail": "Οι χρήστες μπορούν να δημιουργήσουν λογαριασμούς αλλά δεν μπορούν να συνδεθούν μέχρι να επαληθεύσουν τη διεύθυνση email τους.",
+    "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Οι χρήστες μπορούν να επαληθεύσουν τους αριθμούς τηλεφώνου τους. Απαιτείται ενσωμάτωση SMS.",
+    "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Οι χρήστες μπορούν να δημιουργήσουν λογαριασμούς αλλά δεν μπορούν να συνδεθούν μέχρι να επαληθεύσουν τον αριθμό τηλεφώνου τους.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Εάν το όνομα χρήστη μπορεί να ενημερωθεί από τον χρήστη.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Εάν το email μπορεί να ενημερωθεί από τον χρήστη."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Εάν το email μπορεί να ενημερωθεί από τον χρήστη.",
+    "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Επιβολή επαλήθευσης email για εγγραφή",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Οι λογαριασμοί χρηστών δεν θα δημιουργηθούν εκτός αν επαληθεύσουν τις διευθύνσεις email τους.",
+    "Details": "Λεπτομέρειες"
   }
 }
