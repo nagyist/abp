@@ -62,7 +62,7 @@ This module doesn't seed any data.
 
 ## Options
 
-### AbpIdentityAspNetCoreOptions
+### AbpAccountOptions
 
 `AbpAccountOptions` can be configured in the UI layer in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md). Example:
 
@@ -76,6 +76,10 @@ Configure<AbpAccountOptions>(options =>
 `AbpAccountOptions` properties:
 
 * `WindowsAuthenticationSchemeName` (default: Windows): Name of the Windows authentication scheme.
+* `TenantAdminUserName` (default: admin): The tenant admin user name.
+* `ImpersonationTenantPermission`: The permission name for tenant impersonation.
+* `ImpersonationUserPermission`: The permission name for user impersonation.
+* `ExternalProviderIconMap`: A dictionary of external provider names and their corresponding font-awesome icon classes. You can add new mapping to this dictionary to change the icon of an external provider.(Popular external provider icons are already defined, such as `Facebook`, `Google`, `Microsoft`, `Twitter`, etc.)
 
 ### AbpProfilePictureOptions
 
