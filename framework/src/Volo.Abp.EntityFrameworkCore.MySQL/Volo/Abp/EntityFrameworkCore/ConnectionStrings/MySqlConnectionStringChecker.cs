@@ -12,16 +12,16 @@ public class MySqlConnectionStringChecker : IConnectionStringChecker, ITransient
     public virtual async Task<AbpConnectionStringCheckResult> CheckAsync(string connectionString)
     {
         var result = new AbpConnectionStringCheckResult();
-        var connString = new MySqlConnectionStringBuilder(connectionString)
-        {
-            ConnectionLifeTime = 1
-        };
-
-        var oldDatabaseName = connString.Database;
-        connString.Database = "mysql";
-
         try
         {
+            var connString = new MySqlConnectionStringBuilder(connectionString)
+            {
+                ConnectionLifeTime = 1
+            };
+
+            var oldDatabaseName = connString.Database;
+            connString.Database = "mysql";
+
             await using var conn = new MySqlConnection(connString.ConnectionString);
             await conn.OpenAsync();
             result.Connected = true;
