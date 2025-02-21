@@ -33,7 +33,6 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
   const reduceImportRefsToInterfaces = createImportRefToInterfaceReducerCreator(params);
   const createRefToImportReducer = createRefToImportReducerCreator(params);
   const { solution, types } = params;
-
   return (models: Model[], importRefs: string[]) => {
     const enums: string[] = [];
     const interfaces = importRefs.reduce(reduceImportRefsToInterfaces, []);
@@ -214,8 +213,6 @@ export function resolveAbpPackages(models: Model[]) {
     renamePropForTenant(model.interfaces);
 
     model.imports.forEach((imp, i) => {
-      fixImportNameForTenant(imp);
-
       for (const ref of imp.refs) {
         const path = VOLO_PACKAGE_PROXY_IMPORTS.get(ref);
         if (path) {
@@ -237,16 +234,6 @@ function renamePropForTenant(interfaces: Interface[]) {
       }
     }
   }
-}
-
-function fixImportNameForTenant(imp: Import) {
-  imp.specifiers.forEach((spe, index) => {
-    const isTenant = spe.toLocaleLowerCase().includes(TENANT_KEY);
-
-    if (isTenant) {
-      imp.specifiers[index] = 'Saas' + spe;
-    }
-  });
 }
 
 export function resolveSelfGenericProps(params: Partial<ModelGeneratorParams>) {
