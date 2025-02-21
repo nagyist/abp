@@ -99,9 +99,9 @@
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "Abilitato per i nuovi utenti",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Durata blocco (secondi)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Numero massimo di tentativi di accesso non riusciti",
-    "DisplayName:Abp.Identity.SignIn.RequireConfirmedEmail": "Richiedi email confermata",
-    "DisplayName:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Consenti agli utenti di confermare il proprio numero di telefono",
-    "DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Richiedi un numero di telefono confermato",
+    "DisplayName:Abp.Identity.SignIn.RequireConfirmedEmail": "Richiedi verifica email per accedere",
+    "DisplayName:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Consenti agli utenti di confermare il loro numero di telefono",
+    "DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Richiedi verifica numero di telefono per accedere",
     "DisplayName:Abp.Identity.User.IsUserNameUpdateEnabled": "Consenti agli utenti di Modifica i propri nomi utente",
     "DisplayName:Abp.Identity.User.IsEmailUpdateEnabled": "Consenti agli utenti di Modifica i propri indirizzi email",
     "Description:Abp.Identity.Password.RequiredLength": "La lunghezza minima di caratteri della password.",
@@ -115,9 +115,9 @@
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "Se un nuovo utente può essere bloccato.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "La durata per cui un utente viene bloccato quando si verifica un blocco.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Il numero di tentativi di accesso non riusciti consentiti prima che un utente venga bloccato, a condizione che il blocco sia abilitato.",
-    "Description:Abp.Identity.SignIn.RequireConfirmedEmail": "Indica se è necessario un indirizzo email confermato per accedere.",
-    "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Se il numero di telefono può essere confermato dall'utente.",
-    "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Indica se è necessario un numero di telefono confermato per accedere.",
+    "Description:Abp.Identity.SignIn.RequireConfirmedEmail": "Gli utenti possono creare account ma non possono accedere finché non verificano il loro indirizzo email.",
+    "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Gli utenti possono verificare i loro numeri di telefono. Richiesta integrazione SMS.",
+    "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Gli utenti possono creare account ma non possono accedere finché non verificano il loro numero di telefono.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Se il nome utente può essere aggiornato dall'utente.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Se l'email può essere aggiornata dall'utente.",
     "Details": "Dettagli",
@@ -126,6 +126,8 @@
     "ModificationTime": "Tempo di modifica",
     "PasswordUpdateTime": "Orario di aggiornamento della password",
     "LockoutEndTime": "Ora di fine del blocco",
-    "FailedAccessCount": "Conteggio accessi non riusciti"
+    "FailedAccessCount": "Conteggio accessi non riusciti",
+    "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Richiedi verifica email per la registrazione",
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Gli account utente non verranno creati a meno che non verifichino i loro indirizzi email."
   }
 }

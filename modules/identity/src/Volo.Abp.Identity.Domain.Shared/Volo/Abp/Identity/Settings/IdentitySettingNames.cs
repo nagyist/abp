@@ -32,6 +32,7 @@ public static class IdentitySettingNames
         private const string SignInPrefix = Prefix + ".SignIn";
 
         public const string RequireConfirmedEmail = SignInPrefix + ".RequireConfirmedEmail";
+        public const string RequireEmailVerificationToRegister = SignInPrefix + ".RequireEmailVerificationToRegister";
         public const string EnablePhoneNumberConfirmation = SignInPrefix + ".EnablePhoneNumberConfirmation";
         public const string RequireConfirmedPhoneNumber = SignInPrefix + ".RequireConfirmedPhoneNumber";
     }

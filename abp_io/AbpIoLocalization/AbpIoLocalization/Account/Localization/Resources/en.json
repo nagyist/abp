@@ -16,6 +16,7 @@
     "IdentityUserNotAvailable:Deleted": "This email address is not available. Reason: Already deleted.",
     "SelectYourOrganization": "Select your organization",
     "PleaseSelectOrganization": "Please select an organization to continue",
-    "Continue": "Continue"
+    "Continue": "Continue",
+    "CaptchaExplanation": "Calculate the given mathematical expression and enter the correct answer."
   }
 }
