@@ -153,6 +153,17 @@ AddAbpOpenIdConnect("oidc", options =>
 });
 ```
 
+The `UseIfAvailable` value is the default behavior, and ABP has enabled the `PAR` endpoint globally. Make sure all your web applications have been granted the `OpenIddictConstants.Permissions.Endpoints.PushedAuthorization` permission to use the PAR endpoint. If not, you should disable the `PushedAuthorizationBehavior` in the `OpenIdConnectOptions`.
+
+```csharp
+AddAbpOpenIdConnect("oidc", options =>
+{
+    //...
+    options.PushedAuthorizationBehavior = PushedAuthorizationBehavior.Disable;
+    //...
+});
+```
+
 > Not all authentication clients support PAR. For example, Blazor WASM does not yet support it.
 
 ## Summary
