@@ -33,7 +33,6 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
   const reduceImportRefsToInterfaces = createImportRefToInterfaceReducerCreator(params);
   const createRefToImportReducer = createRefToImportReducerCreator(params);
   const { solution, types } = params;
-  console.log("import refs --->>>>");
   return (models: Model[], importRefs: string[]) => {
     const enums: string[] = [];
     const interfaces = importRefs.reduce(reduceImportRefsToInterfaces, []);
@@ -232,7 +231,6 @@ function renamePropForTenant(interfaces: Interface[]) {
 
       if (isTenant && isSaasDto) {
         prop.type = 'Saas' + prop.type;
-        console.log(prop.type);
       }
     }
   }
