@@ -39,6 +39,7 @@
     "ExtraProperties": "額外屬性",
     "MaxDuration": "最大持續時間",
     "MinDuration": "最小持續時間",
+    "MinMaxDuration": "持續時間（最短-最長）",
     "{0}Milliseconds": "{0} 毫秒",
     "ExecutionTime": "時間",
     "Parameters": "參數",
@@ -77,6 +78,7 @@
     "EndDate": "結束時間",
     "Feature:AuditLoggingGroup": "審計日誌",
     "Feature:AuditLoggingEnable": "啟用審計日誌頁面",
-    "Feature:AuditLoggingEnableDescription": "在應用程序中啟用審計日誌頁面."
+    "Feature:AuditLoggingEnableDescription": "在應用程序中啟用審計日誌頁面.",
+    "TenantId": "租戶 ID"
   }
 }

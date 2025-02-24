@@ -16,10 +16,8 @@ public class EntityCacheWithoutCacheItem<TEntity, TKey> :
     {
     }
 
-    protected override TEntity MapToCacheItem(TEntity entity)
+    protected override TEntity? MapToCacheItem(TEntity? entity)
     {
         return entity;
     }
-
-
 }

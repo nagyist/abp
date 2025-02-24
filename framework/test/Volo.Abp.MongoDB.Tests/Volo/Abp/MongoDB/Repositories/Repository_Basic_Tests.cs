@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver.Linq;
 using Shouldly;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.Testing;
@@ -17,9 +18,9 @@ public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModul
     public async Task ToMongoQueryable_Test()
     {
         (await PersonRepository.GetQueryableAsync()).ShouldNotBeNull();
-        (await PersonRepository.GetQueryableAsync()).As<IMongoQueryable<Person>>().ShouldNotBeNull();
-        ((IMongoQueryable<Person>)(await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas")).ShouldNotBeNull();
-        (await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas").As<IMongoQueryable<Person>>().ShouldNotBeNull();
+        (await PersonRepository.GetQueryableAsync()).ShouldNotBeNull();
+        ((IQueryable<Person>)(await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas")).ShouldNotBeNull();
+        (await PersonRepository.GetQueryableAsync()).Where(p => p.Name == "Douglas").ShouldNotBeNull();
     }
 
     [Fact]
@@ -63,5 +64,17 @@ public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModul
         person.Name.ShouldBe("New Person");
         person.Phones.Count.ShouldBe(1);
         person.Phones.Any(p => p.PersonId == person.Id && p.Number == "1234567890").ShouldBeTrue();
+    }
+    
+    [Fact]
+    public async Task Filter_Case_Insensitive()
+    {
+        (await CityRepository.GetQueryableAsync()).FirstOrDefault(c => c.Name == "ISTANBUL").ShouldBeNull();
+        (await CityRepository.GetQueryableAsync()).FirstOrDefault(c => c.Name == "istanbul").ShouldBeNull();
+        (await CityRepository.GetQueryableAsync()).FirstOrDefault(c => c.Name == "Istanbul").ShouldNotBeNull();
+        
+        (await PersonRepository.GetQueryableAsync()).FirstOrDefault(p => p.Name == "douglas").ShouldNotBeNull();
+        (await PersonRepository.GetQueryableAsync()).FirstOrDefault(p => p.Name == "DOUGLAS").ShouldNotBeNull();
+        (await PersonRepository.GetQueryableAsync()).FirstOrDefault(p => p.Name == "Douglas").ShouldNotBeNull();
     }
 }

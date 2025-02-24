@@ -1,7 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions;
 
@@ -25,19 +24,17 @@ public interface IPermissionDefinitionContext
     /// </summary>
     /// <param name="name">Name of the group</param>
     /// <returns></returns>
-    [CanBeNull]
-    PermissionGroupDefinition GetGroupOrNull(string name);
+    PermissionGroupDefinition? GetGroupOrNull(string name);
 
     /// <summary>
     /// Tries to add a new permission group.
     /// Throws <see cref="AbpException"/> if there is a group with the name.
     /// <param name="name">Name of the group</param>
     /// <param name="displayName">Localized display name of the group</param>
-    /// <param name="multiTenancySide">Select a multi-tenancy side</param>
     /// </summary>
     PermissionGroupDefinition AddGroup(
         [NotNull] string name,
-        ILocalizableString displayName = null);
+        ILocalizableString? displayName = null);
 
     /// <summary>
     /// Tries to remove a permission group.
@@ -51,6 +48,5 @@ public interface IPermissionDefinitionContext
     /// Returns null if can not find the given group.
     /// <param name="name">Name of the group</param>
     /// </summary>
-    [CanBeNull]
-    PermissionDefinition GetPermissionOrNull([NotNull] string name);
+    PermissionDefinition? GetPermissionOrNull([NotNull] string name);
 }

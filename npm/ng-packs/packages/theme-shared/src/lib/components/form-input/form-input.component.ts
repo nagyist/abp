@@ -1,14 +1,17 @@
 import { AbstractNgModelComponent } from '@abp/ng.core';
-import { Component, EventEmitter, forwardRef, Injector, Input, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
+  standalone: false,
   selector: 'abp-form-input',
   template: `
     <div class="mb-3">
-      <label *ngIf="label" [ngClass]="labelClass" [for]="inputId">
-        {{ label | abpLocalization }}
-      </label>
+      @if (label) {
+        <label [ngClass]="labelClass" [for]="inputId">
+          {{ label | abpLocalization }}
+        </label>
+      }
       <input
         type="text"
         [id]="inputId"
@@ -36,7 +39,6 @@ export class FormInputComponent extends AbstractNgModelComponent {
   @Input() label = '';
   @Input() labelClass = 'form-label';
   @Input() inputPlaceholder = '';
-  @Input() inputType = 'text';
   @Input() inputStyle:
     | {
         [klass: string]: any;
@@ -46,8 +48,4 @@ export class FormInputComponent extends AbstractNgModelComponent {
   @Input() inputClass = 'form-control';
   @Output() formBlur = new EventEmitter<void>();
   @Output() formFocus = new EventEmitter<void>();
-
-  constructor(injector: Injector) {
-    super(injector);
-  }
 }

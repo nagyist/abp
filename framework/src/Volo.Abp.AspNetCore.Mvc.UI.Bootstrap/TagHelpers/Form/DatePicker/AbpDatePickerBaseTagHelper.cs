@@ -9,11 +9,11 @@ public abstract class
     where TTagHelper : AbpDatePickerBaseTagHelper<TTagHelper>
 
 {
-    private readonly IAbpDatePickerOptions _abpDatePickerOptionsImplementation;
+    private IAbpDatePickerOptions _abpDatePickerOptionsImplementation;
 
-    public string Label { get; set; }
+    public string? Label { get; set; }
 
-    public string LabelTooltip { get; set; }
+    public string? LabelTooltip { get; set; }
 
     public string LabelTooltipIcon { get; set; } = "bi-info-circle";
 
@@ -21,34 +21,41 @@ public abstract class
 
     public bool LabelTooltipHtml { get; set; } = false;
 
-    [HtmlAttributeName("info")] 
-    public string InfoText { get; set; }
+    [HtmlAttributeName("info")]
+    public string? InfoText { get; set; }
 
-    [HtmlAttributeName("disabled")] 
+    [HtmlAttributeName("disabled")]
     public bool IsDisabled { get; set; } = false;
 
-    [HtmlAttributeName("readonly")] 
+    [HtmlAttributeName("readonly")]
     public bool? IsReadonly { get; set; } = false;
 
     public bool AutoFocus { get; set; }
 
     public AbpFormControlSize Size { get; set; } = AbpFormControlSize.Default;
 
-    [HtmlAttributeName("required-symbol")] 
+    [HtmlAttributeName("required-symbol")]
     public bool DisplayRequiredSymbol { get; set; } = true;
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
-    public string Value { get; set; }
+    public string? Value { get; set; }
 
     public bool SuppressLabel { get; set; }
+
+    public bool AddMarginBottomClass  { get; set; } = true;
 
     protected AbpDatePickerBaseTagHelper(AbpDatePickerBaseTagHelperService<TTagHelper> service) : base(service)
     {
         _abpDatePickerOptionsImplementation = new AbpDatePickerOptions();
     }
 
-    public string PickerId {
+    public void SetDatePickerOptions(IAbpDatePickerOptions options)
+    {
+        _abpDatePickerOptionsImplementation = options;
+    }
+
+    public string? PickerId {
         get => _abpDatePickerOptionsImplementation.PickerId;
         set => _abpDatePickerOptionsImplementation.PickerId = value;
     }
@@ -63,7 +70,7 @@ public abstract class
         set => _abpDatePickerOptionsImplementation.MaxDate = value;
     }
 
-    public object MaxSpan {
+    public object? MaxSpan {
         get => _abpDatePickerOptionsImplementation.MaxSpan;
         set => _abpDatePickerOptionsImplementation.MaxSpan = value;
     }
@@ -108,7 +115,7 @@ public abstract class
         set => _abpDatePickerOptionsImplementation.TimePickerSeconds = value;
     }
 
-    public List<AbpDatePickerRange> Ranges {
+    public List<AbpDatePickerRange>? Ranges {
         get => _abpDatePickerOptionsImplementation.Ranges;
         set => _abpDatePickerOptionsImplementation.Ranges = value;
     }
@@ -133,27 +140,27 @@ public abstract class
         set => _abpDatePickerOptionsImplementation.Drops = value;
     }
 
-    public string ButtonClasses {
+    public string? ButtonClasses {
         get => _abpDatePickerOptionsImplementation.ButtonClasses;
         set => _abpDatePickerOptionsImplementation.ButtonClasses = value;
     }
 
-    public string TodayButtonClasses {
+    public string? TodayButtonClasses {
         get => _abpDatePickerOptionsImplementation.TodayButtonClasses;
         set => _abpDatePickerOptionsImplementation.TodayButtonClasses = value;
     }
 
-    public string ApplyButtonClasses {
+    public string? ApplyButtonClasses {
         get => _abpDatePickerOptionsImplementation.ApplyButtonClasses;
         set => _abpDatePickerOptionsImplementation.ApplyButtonClasses = value;
     }
 
-    public string ClearButtonClasses {
+    public string? ClearButtonClasses {
         get => _abpDatePickerOptionsImplementation.ClearButtonClasses;
         set => _abpDatePickerOptionsImplementation.ClearButtonClasses = value;
     }
 
-    public object Locale {
+    public object? Locale {
         get => _abpDatePickerOptionsImplementation.Locale;
         set => _abpDatePickerOptionsImplementation.Locale = value;
     }
@@ -173,14 +180,25 @@ public abstract class
         set => _abpDatePickerOptionsImplementation.AutoUpdateInput = value;
     }
 
-    public string ParentEl {
+    public string? ParentEl {
         get => _abpDatePickerOptionsImplementation.ParentEl;
         set => _abpDatePickerOptionsImplementation.ParentEl = value;
     }
 
-    public string DateFormat {
+    [Obsolete("Use VisibleDateFormat instead.")]
+    public string? DateFormat {
         get => _abpDatePickerOptionsImplementation.DateFormat;
         set => _abpDatePickerOptionsImplementation.DateFormat = value;
+    }
+    
+    public string? VisibleDateFormat {
+        get => _abpDatePickerOptionsImplementation.VisibleDateFormat;
+        set => _abpDatePickerOptionsImplementation.VisibleDateFormat = value;
+    }
+    
+    public string? InputDateFormat {
+        get => _abpDatePickerOptionsImplementation.InputDateFormat;
+        set => _abpDatePickerOptionsImplementation.InputDateFormat = value;
     }
 
     public bool OpenButton {
@@ -188,7 +206,7 @@ public abstract class
         set => _abpDatePickerOptionsImplementation.OpenButton = value;
     }
 
-    public bool ClearButton {
+    public bool? ClearButton {
         get => _abpDatePickerOptionsImplementation.ClearButton;
         set => _abpDatePickerOptionsImplementation.ClearButton = value;
     }
@@ -208,7 +226,7 @@ public abstract class
         set => _abpDatePickerOptionsImplementation.IsIso = value;
     }
 
-    public object Options {
+    public object? Options {
         get => _abpDatePickerOptionsImplementation.Options;
         set => _abpDatePickerOptionsImplementation.Options = value;
     }

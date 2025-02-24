@@ -4,6 +4,7 @@ import { Confirmation } from '../../models/confirmation';
 import { CONFIRMATION_ICONS, ConfirmationIcons } from '../../tokens/confirmation-icons.token';
 
 @Component({
+  standalone: false,
   selector: 'abp-confirmation',
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.scss'],

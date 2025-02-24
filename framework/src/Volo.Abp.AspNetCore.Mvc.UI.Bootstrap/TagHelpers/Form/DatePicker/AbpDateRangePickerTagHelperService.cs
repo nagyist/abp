@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -25,7 +24,7 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
 
     protected override string TagName { get; set; } = "abp-date-range-picker";
 
-    protected override T GetAttributeAndModelExpression<T>(out ModelExpression modelExpression)
+    protected override T? GetAttributeAndModelExpression<T>(out ModelExpression? modelExpression) where T : class
     {
         modelExpression = new[] { TagHelper.AspForStart, TagHelper.AspForEnd }.FirstOrDefault(x => x?.ModelExplorer?.GetAttribute<T>() != null);
         return modelExpression?.ModelExplorer.GetAttribute<T>();
@@ -62,19 +61,15 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
         await base.ProcessAsync(context, output);
     }
 
-    protected override TagHelperOutput TagHelperOutput { get; set; }
+    protected override TagHelperOutput TagHelperOutput { get; set; } = default!;
 
-    [CanBeNull]
-    protected virtual InputTagHelper StartDateTagHelper { get; set; }
+    protected virtual InputTagHelper? StartDateTagHelper { get; set; }
 
-    [CanBeNull]
-    protected virtual TagHelperOutput StartDateTagHelperOutput { get; set; }
+    protected virtual TagHelperOutput? StartDateTagHelperOutput { get; set; }
 
-    [CanBeNull]
-    protected virtual InputTagHelper EndDateTagHelper { get; set; }
+    protected virtual InputTagHelper? EndDateTagHelper { get; set; }
 
-    [CanBeNull]
-    protected virtual TagHelperOutput EndDateTagHelperOutput { get; set; }
+    protected virtual TagHelperOutput? EndDateTagHelperOutput { get; set; }
 
     protected override string GetPropertyName()
     {
@@ -88,18 +83,24 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
 
     protected override void AddBaseTagAttributes(TagHelperAttributeList attributes)
     {
-        if (TagHelper.AspForStart != null && 
-            TagHelper.AspForStart.Model != null &&
+        if (TagHelper.AspForStart?.Model != null &&
             SupportedInputTypes.TryGetValue(TagHelper.AspForStart.Metadata.ModelType, out var convertFuncStart))
         {
-            attributes.Add("data-start-date", convertFuncStart(TagHelper.AspForStart.Model));
+            var convert = convertFuncStart(TagHelper.AspForStart.Model);
+            if(!convert.IsNullOrWhiteSpace())
+            {
+                attributes.Add("data-start-date", convert);
+            }
         }
-
-        if (TagHelper.AspForEnd != null && 
-            TagHelper.AspForEnd.Model != null &&
+        
+        if (TagHelper.AspForEnd?.Model != null &&
             SupportedInputTypes.TryGetValue(TagHelper.AspForEnd.Metadata.ModelType, out var convertFuncEnd))
         {
-            attributes.Add("data-end-date", convertFuncEnd(TagHelper.AspForEnd.Model));
+            var convert = convertFuncEnd(TagHelper.AspForEnd.Model);
+            if(!convert.IsNullOrWhiteSpace())
+            {
+                attributes.Add("data-end-date", convert);
+            }
         }
     }
 
@@ -108,25 +109,8 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
         return StartDateTagHelperOutput?.Render(Encoder) + EndDateTagHelperOutput?.Render(Encoder);
     }
 
-    protected override ModelExpression GetModelExpression()
+    protected override ModelExpression? GetModelExpression()
     {
-        return TagHelper.AspForStart;
-    }
-
-    protected async override Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        var validationHtml = string.Empty;
-
-        if (StartDateTagHelper != null)
-        {
-            validationHtml += await GetValidationAsHtmlByInputAsync(context, output, StartDateTagHelper);
-        }
-
-        if (EndDateTagHelper != null)
-        {
-            validationHtml += await GetValidationAsHtmlByInputAsync(context, output, EndDateTagHelper);
-        }
-
-        return validationHtml;
+        return TagHelper.AspForStart ?? TagHelper.AspForEnd;
     }
 }

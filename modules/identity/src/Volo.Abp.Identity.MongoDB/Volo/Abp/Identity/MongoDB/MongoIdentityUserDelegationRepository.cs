@@ -21,28 +21,26 @@ public class MongoIdentityUserDelegationRepository : MongoDbRepository<IAbpIdent
         Clock = clock;
     }
 
-    public async Task<List<IdentityUserDelegation>> GetListAsync(Guid? sourceUserId, Guid? targetUserId,
+    public virtual async Task<List<IdentityUserDelegation>> GetListAsync(Guid? sourceUserId, Guid? targetUserId,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .WhereIf(sourceUserId.HasValue, x => x.SourceUserId == sourceUserId)
             .WhereIf(targetUserId.HasValue, x => x.TargetUserId == targetUserId)
-            .As<IMongoQueryable<IdentityUserDelegation>>()
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid targetUserId, CancellationToken cancellationToken = default)
+    public virtual async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid targetUserId, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x => x.TargetUserId == targetUserId)
             .Where(x => x.StartTime <= Clock.Now && x.EndTime >= Clock.Now)
-            .As<IMongoQueryable<IdentityUserDelegation>>()
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public virtual async Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .FirstOrDefaultAsync(x =>
                     x.Id == id &&
                     x.StartTime <= Clock.Now &&

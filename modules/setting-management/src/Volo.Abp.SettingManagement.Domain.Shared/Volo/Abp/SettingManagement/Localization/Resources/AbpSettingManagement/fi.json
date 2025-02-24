@@ -2,10 +2,11 @@
   "culture": "fi",
   "texts": {
     "Settings": "Asetukset",
-    "SuccessfullySaved": "Tallennettu onnistuneesti",
+    "SavedSuccessfully": "Tallennettu onnistuneesti",
     "Permission:SettingManagement": "Asetusten hallinta",
     "Permission:Emailing": "Sähköpostiviestit",
     "Permission:EmailingTest": "Sähköpostitesti",
+    "Permission:TimeZone": "Aikavyöhyke",
     "SendTestEmail": "Lähetä testisähköposti",
     "SenderEmailAddress": "Lähettäjän sähköpostiosoite",
     "TargetEmailAddress": "Kohdesähköpostiosoite",
@@ -14,8 +15,12 @@
     "TestEmailSubject": "Testisähköposti {0}",
     "TestEmailBody": "Testaa sähköpostiviestiä täällä",
     "SuccessfullySent": "Lähetetty onnistuneesti",
+    "MailSendingFailed": "Sähköpostin lähetys epäonnistui. Tarkista sähköpostiasetuksesi ja yritä uudelleen.",
     "Send": "Lähetä",
     "Menu:Emailing": "Sähköpostiviestit",
+    "Menu:TimeZone": "Aikavyöhyke",
+    "DisplayName:Timezone": "Aikavyöhyke",
+    "TimezoneHelpText": "Tätä asetusta käytetään sovelluksenlaajuisesti tai vuokraajakohtaisesti.",
     "SmtpHost": "Isäntä",
     "SmtpPort": "Portti",
     "SmtpUserName": "Käyttäjänimi",
@@ -29,6 +34,7 @@
     "Feature:SettingManagementEnable": "Ota asetusten hallinta käyttöön",
     "Feature:SettingManagementEnableDescription": "Ota asetustenhallintajärjestelmä käyttöön sovelluksessa.",
     "Feature:AllowChangingEmailSettings": "Salli sähköpostiasetusten muuttaminen.",
-    "Feature:AllowChangingEmailSettingsDescription": "Salli sähköpostiasetusten muuttaminen."
+    "Feature:AllowChangingEmailSettingsDescription": "Salli sähköpostiasetusten muuttaminen.",
+    "SmtpPasswordPlaceholder": "Syötä arvo päivittääksesi salasana"
   }
 }

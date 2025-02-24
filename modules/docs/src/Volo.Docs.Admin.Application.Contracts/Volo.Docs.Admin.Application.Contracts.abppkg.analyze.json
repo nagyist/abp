@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Admin.Application.Contracts",
-  "hash": "100fbf697289f27c22d70a1f4eb45b5a",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Docs.Admin",
@@ -67,41 +67,6 @@
       ],
       "contentType": "abpModule",
       "name": "DocsAdminApplicationContractsModule",
-      "summary": null
-    },
-    {
-      "displayName": "Projects",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "Docs.Admin.Projects",
-      "summary": null
-    },
-    {
-      "displayName": "Edit",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "Docs.Admin.Projects.Update",
-      "summary": null
-    },
-    {
-      "displayName": "Delete",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "Docs.Admin.Projects.Delete",
-      "summary": null
-    },
-    {
-      "displayName": "Create",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "Docs.Admin.Projects.Create",
-      "summary": null
-    },
-    {
-      "displayName": "Documents",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "Docs.Admin.Documents",
       "summary": null
     }
   ]

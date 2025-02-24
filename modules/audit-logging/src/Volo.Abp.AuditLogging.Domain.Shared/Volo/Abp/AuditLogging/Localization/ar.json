@@ -39,6 +39,7 @@
     "ExtraProperties": "خصائص اضافية",
     "MaxDuration": "الأعلى. مدة",
     "MinDuration": "دقيقة. مدة",
+    "MinMaxDuration": "المدة (الحد الأدنى - الحد الأقصى)",
     "{0}Milliseconds": "{0} مللي ثانية",
     "ExecutionTime": "زمن",
     "Parameters": "المعلمات",
@@ -77,6 +78,7 @@
     "EndDate": "تاريخ الانتهاء",
     "Feature:AuditLoggingGroup": "تدوين التسجيل",
     "Feature:AuditLoggingEnable": "تمكين صفحة تسجيل التدقيق",
-    "Feature:AuditLoggingEnableDescription": "تفعيل صفحة تسجيل التدقيق في التطبيق."
+    "Feature:AuditLoggingEnableDescription": "تفعيل صفحة تسجيل التدقيق في التطبيق.",
+    "TenantId": "معرف المستأجر"
   }
 }

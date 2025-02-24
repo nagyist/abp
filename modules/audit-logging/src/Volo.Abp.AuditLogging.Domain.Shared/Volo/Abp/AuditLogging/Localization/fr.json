@@ -39,6 +39,7 @@
     "ExtraProperties": "Propriétés supplémentaires",
     "MaxDuration": "Max. Durée",
     "MinDuration": "Min. Durée",
+    "MinMaxDuration": "Durée (Min. - Max.)",
     "{0}Milliseconds": "{0} millisecondes",
     "ExecutionTime": "Temps",
     "Parameters": "Paramètres",
@@ -77,6 +78,7 @@
     "EndDate": "Date de fin",
     "Feature:AuditLoggingGroup": "Journalisation d'audit",
     "Feature:AuditLoggingEnable": "Page de journalisation d'audit activée",
-    "Feature:AuditLoggingEnableDescription": "Activez la page de journalisation d'audit dans l'application."
+    "Feature:AuditLoggingEnableDescription": "Activez la page de journalisation d'audit dans l'application.",
+    "TenantId": "ID du locataire"
   }
 }

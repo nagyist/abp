@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
@@ -103,7 +104,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
                 factories.RemoveAll(
                     factory =>
                         factory is SingleInstanceHandlerFactory &&
-                        (factory as SingleInstanceHandlerFactory).HandlerInstance == handler
+                        ((factory as SingleInstanceHandlerFactory)!).HandlerInstance == handler
                 );
             });
     }
@@ -135,16 +136,26 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         await TriggerHandlersAsync(localEventMessage.EventType, localEventMessage.EventData);
     }
 
+    public virtual List<EventTypeWithEventHandlerFactories> GetEventHandlerFactories(Type eventType)
+    {
+        return GetHandlerFactories(eventType).ToList();
+    }
+
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
-        var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
-
+        var handlerFactoryList = new List<Tuple<IEventHandlerFactory, Type, int>>();
         foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+            foreach (var factory in handlerFactory.Value)
+            {
+                handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
+                    factory,
+                    handlerFactory.Key,
+                    ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(factory.GetHandler().EventHandler.GetType()).FirstOrDefault()?.Order ?? 0));
+            }
         }
 
-        return handlerFactoryList.ToArray();
+        return handlerFactoryList.OrderBy(x => x.Item3).Select(x => new EventTypeWithEventHandlerFactories(x.Item2, new List<IEventHandlerFactory> {x.Item1})).ToArray();
     }
 
     private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)

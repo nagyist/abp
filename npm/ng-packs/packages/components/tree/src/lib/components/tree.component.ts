@@ -4,25 +4,25 @@ import {
   Component,
   ContentChild,
   EventEmitter,
-  Inject,
+  inject,
   Input,
   OnInit,
-  Optional,
   Output,
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { NzFormatBeforeDropEvent, NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
+import { LazyLoadService, LOADING_STRATEGY, SubscriptionService } from '@abp/ng.core';
 import { of } from 'rxjs';
+import { DISABLE_TREE_STYLE_LOADING_TOKEN } from '../disable-tree-style-loading.token';
 import { TreeNodeTemplateDirective } from '../templates/tree-node-template.directive';
 import { ExpandedIconTemplateDirective } from '../templates/expanded-icon-template.directive';
-import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
-import { LazyLoadService, LOADING_STRATEGY, SubscriptionService } from '@abp/ng.core';
-import { DISABLE_TREE_STYLE_LOADING_TOKEN } from '../disable-tree-style-loading.token';
 
 export type DropEvent = NzFormatEmitEvent & { pos: number };
 
 @Component({
+  standalone: false,
   selector: 'abp-tree',
   templateUrl: 'tree.component.html',
   styleUrls: ['tree.component.scss'],
@@ -31,18 +31,14 @@ export type DropEvent = NzFormatEmitEvent & { pos: number };
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeComponent implements OnInit {
+  private lazyLoadService = inject(LazyLoadService);
+  private subscriptionService = inject(SubscriptionService);
+  private cdr = inject(ChangeDetectorRef);
+  private disableTreeStyleLoading = inject(DISABLE_TREE_STYLE_LOADING_TOKEN, { optional: true });
+
   dropPosition: number;
 
   dropdowns = {} as { [key: string]: NgbDropdown };
-
-  constructor(
-    private lazyLoadService: LazyLoadService,
-    private subscriptionService: SubscriptionService,
-    @Optional()
-    @Inject(DISABLE_TREE_STYLE_LOADING_TOKEN)
-    private disableTreeStyleLoading: boolean | undefined,
-    private cdr: ChangeDetectorRef,
-  ) {}
 
   @ContentChild('menu') menu: TemplateRef<any>;
   @ContentChild(TreeNodeTemplateDirective) customNodeTemplate: TreeNodeTemplateDirective;
@@ -87,7 +83,7 @@ export class TreeComponent implements OnInit {
         return node;
       }
       if (node.children) {
-        let res = this.findNode(target, node.children);
+        const res = this.findNode(target, node.children);
         if (res) {
           return res;
         }
@@ -137,7 +133,7 @@ export class TreeComponent implements OnInit {
   }
 
   setSelectedNode(node: any) {
-    let newSelectedNode = this.findNode(node, this.nodes);
+    const newSelectedNode = this.findNode(node, this.nodes);
     this.selectedNode = { ...newSelectedNode };
     this.cdr.markForCheck();
   }

@@ -100,6 +100,12 @@ public class AbpIdentitySettingDefinitionProvider : SettingDefinitionProvider
                 L("Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation"),
                 true),
             new SettingDefinition(
+                IdentitySettingNames.SignIn.RequireEmailVerificationToRegister,
+                false.ToString(),
+                L("DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister"),
+                L("Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister"),
+                false),
+            new SettingDefinition(
                 IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber,
                 false.ToString(),
                 L("DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber"),

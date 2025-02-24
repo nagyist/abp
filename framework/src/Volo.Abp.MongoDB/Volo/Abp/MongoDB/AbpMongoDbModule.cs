@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.Modularity;
@@ -19,6 +22,8 @@ public class AbpMongoDbModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        BsonSerializer.TryRegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
+
         context.Services.TryAddTransient(
             typeof(IMongoDbContextProvider<>),
             typeof(UnitOfWorkMongoDbContextProvider<>)

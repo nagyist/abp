@@ -7,7 +7,10 @@ import { RoutesService } from '../services/routes.service';
   providedIn: 'root',
 })
 export class RoutesHandler {
-  constructor(private routes: RoutesService, @Optional() private router: Router) {
+  constructor(
+    private routes: RoutesService,
+    @Optional() private router: Router,
+  ) {
     this.addRoutes();
   }
 

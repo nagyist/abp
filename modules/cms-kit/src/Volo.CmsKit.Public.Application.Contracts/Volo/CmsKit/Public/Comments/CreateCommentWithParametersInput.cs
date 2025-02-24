@@ -23,4 +23,9 @@ public class CreateCommentWithParametersInput
     public Guid? CaptchaToken { get; set; }
     
     public int CaptchaAnswer { get; set; }
+
+    public string Url { get; set; }
+
+    [Required]
+    public string IdempotencyToken { get; set; }
 }

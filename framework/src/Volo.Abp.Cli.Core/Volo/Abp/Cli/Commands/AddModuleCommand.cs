@@ -75,7 +75,19 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
         if (version == null)
         {
-            version = SolutionPackageVersionFinder.Find(solutionFile);
+            if (commandLineArgs.Target.Contains("LeptonX"))
+            {
+                version = SolutionPackageVersionFinder.FindByCsprojVersion(solutionFile, excludedKeywords: null, includedKeyword: "LeptonX");
+
+                if (version.Contains("*"))
+                {
+                    version = SolutionPackageVersionFinder.FindByDllVersion(solutionFile, "Volo.Abp.*LeptonX*");
+                }
+            }
+            else
+            {
+                version = SolutionPackageVersionFinder.FindByCsprojVersion(solutionFile);
+            }
         }
 
         var moduleInfo = await SolutionModuleAdder.AddAsync(
@@ -127,12 +139,12 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine(@"  abp add-module ProductManagement --new -sp ..\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Crates a new module named `ProductManagement` and adds it to your solution.");
         sb.AppendLine(@"  abp add-module ProductManagement --new --add-to-solution-file -sp ..\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Crates a new module named `ProductManagement`, adds it to your solution & solution file.");
         sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Add a multi-package module to a solution by finding all packages of the module, " +
                "finding related projects in the solution and adding each package to the corresponding project in the solution.";

@@ -5,6 +5,7 @@ import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-co
 import { AbpApplicationLocalizationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-localization.service';
 import {
   ApplicationConfigurationDto,
+  ApplicationFeatureConfigurationDto,
   ApplicationGlobalFeatureConfigurationDto,
 } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { INCUDE_LOCALIZATION_RESOURCES_TOKEN } from '../tokens/include-localization-resources.token';
@@ -14,18 +15,18 @@ import { InternalStore } from '../utils/internal-store-utils';
   providedIn: 'root',
 })
 export class ConfigStateService {
+  private updateSubject = new Subject<void>();
   private readonly store = new InternalStore({} as ApplicationConfigurationDto);
-  
-  setState(config: ApplicationConfigurationDto){
-    this.store.set(config)
+
+  public uiCultureFromAuthCodeFlow: string;
+
+  setState(config: ApplicationConfigurationDto) {
+    this.store.set(config);
   }
 
   get createOnUpdateStream() {
     return this.store.sliceUpdate;
   }
-
-  private updateSubject = new Subject<void>();
-
   constructor(
     private abpConfigService: AbpApplicationConfigurationService,
     private abpApplicationLocalizationService: AbpApplicationLocalizationService,
@@ -55,8 +56,13 @@ export class ConfigStateService {
     if (!appState.localization.currentCulture.cultureName) {
       throw new Error('culture name should defined');
     }
-    return this.getlocalizationResource(appState.localization.currentCulture.cultureName).pipe(
+
+    const cultureName =
+      this.uiCultureFromAuthCodeFlow ?? appState.localization.currentCulture.cultureName;
+
+    return this.getlocalizationResource(cultureName).pipe(
       map(result => ({ ...appState, localization: { ...appState.localization, ...result } })),
+      tap(() => (this.uiCultureFromAuthCodeFlow = undefined)),
     );
   }
 
@@ -75,15 +81,15 @@ export class ConfigStateService {
   refreshLocalization(lang: string): Observable<null> {
     if (this.includeLocalizationResources) {
       return this.refreshAppState().pipe(map(() => null));
-    } else {
-      return this.getlocalizationResource(lang)
-        .pipe(
-          tap(result =>
-            this.store.patch({ localization: { ...this.store.state.localization, ...result } }),
-          ),
-        )
-        .pipe(map(() => null));
     }
+
+    return this.getlocalizationResource(lang)
+      .pipe(
+        tap(result =>
+          this.store.patch({ localization: { ...this.store.state.localization, ...result } }),
+        ),
+      )
+      .pipe(map(() => null));
   }
 
   getOne$<K extends keyof ApplicationConfigurationDto>(key: K) {
@@ -155,6 +161,18 @@ export class ConfigStateService {
     });
   }
 
+  private isFeatureEnabled(key: string, features: ApplicationFeatureConfigurationDto) {
+    return features.values[key] === 'true';
+  }
+
+  getFeatureIsEnabled(key: string) {
+    return this.isFeatureEnabled(key, this.store.state.features);
+  }
+
+  getFeatureIsEnabled$(key: string) {
+    return this.store.sliceState(state => this.isFeatureEnabled(key, state.features));
+  }
+
   getSetting(key: string) {
     return this.store.state.setting?.values?.[key];
   }
@@ -170,10 +188,13 @@ export class ConfigStateService {
 
     const keysFound = Object.keys(settings).filter(key => key.indexOf(keyword) > -1);
 
-    return keysFound.reduce((acc, key) => {
-      acc[key] = settings[key];
-      return acc;
-    }, {} as Record<string, string>);
+    return keysFound.reduce(
+      (acc, key) => {
+        acc[key] = settings[key];
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
   }
 
   getSettings$(keyword?: string) {
@@ -185,10 +206,13 @@ export class ConfigStateService {
 
           const keysFound = Object.keys(settings).filter(key => key.indexOf(keyword) > -1);
 
-          return keysFound.reduce((acc, key) => {
-            acc[key] = settings[key];
-            return acc;
-          }, {} as Record<string, string>);
+          return keysFound.reduce(
+            (acc, key) => {
+              acc[key] = settings[key];
+              return acc;
+            },
+            {} as Record<string, string>,
+          );
         }),
       );
   }

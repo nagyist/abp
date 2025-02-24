@@ -22,7 +22,7 @@ public class LocalAbpDistributedLock : IAbpDistributedLock, ISingletonDependency
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
+    public async Task<IAbpDistributedLockHandle?> TryAcquireAsync(
         string name,
         TimeSpan timeout = default,
         CancellationToken cancellationToken = default)
@@ -30,12 +30,11 @@ public class LocalAbpDistributedLock : IAbpDistributedLock, ISingletonDependency
         Check.NotNullOrWhiteSpace(name, nameof(name));
         var key = DistributedLockKeyNormalizer.NormalizeKey(name);
 
-        var timeoutReleaser = await _localSyncObjects.LockAsync(key, timeout, cancellationToken);
-        if (!timeoutReleaser.EnteredSemaphore)
+        var timeoutReleaser = await _localSyncObjects.LockOrNullAsync(key, timeout, cancellationToken);
+        if (timeoutReleaser is not null)
         {
-            timeoutReleaser.Dispose();
-            return null;
+            return new LocalAbpDistributedLockHandle(timeoutReleaser);
         }
-        return new LocalAbpDistributedLockHandle(timeoutReleaser);
+        return null;
     }
 }

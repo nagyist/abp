@@ -6,6 +6,7 @@ import { eAccountComponents } from '../../enums/components';
 import { ManageProfileStateService } from '../../services/manage-profile.state.service';
 
 @Component({
+  standalone: false,
   selector: 'abp-manage-profile',
   templateUrl: './manage-profile.component.html',
   animations: [trigger('fadeIn', [transition(':enter', useAnimation(fadeIn))])],

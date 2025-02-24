@@ -1,4 +1,6 @@
- 
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 #main-navbar-tools a.dropdown-toggle {
     text-decoration: none;
     color: #fff;
@@ -97,4 +99,24 @@ div.dataTables_wrapper div.dataTables_length label {
 }
 .rtl table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, table.dataTable tfoot td {
     text-align: right;
+}
+
+.brand-container{
+    text-align: center;
+    margin-top: 8rem;
+}
+
+.brand-logo {
+    height: 50px;
+}
+
+.brand-text {
+    color:  #292D33;
+    font-family: Lexend;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 34px;
+    margin-top: 5px;
+    margin-bottom: 15px;
 }
