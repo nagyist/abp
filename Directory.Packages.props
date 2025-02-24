@@ -129,7 +129,7 @@
     <PackageVersion Include="Oracle.EntityFrameworkCore" Version="9.23.60" />
     <PackageVersion Include="Polly" Version="8.4.2" />
     <PackageVersion Include="Polly.Extensions.Http" Version="3.0.0" />
-    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.2.efcore.9.0.0" />
+    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.3.efcore.9.0.0" />
     <PackageVersion Include="Quartz" Version="3.13.0" />
     <PackageVersion Include="Quartz.Extensions.DependencyInjection" Version="3.13.0" />
     <PackageVersion Include="Quartz.Plugins.TimeZoneConverter" Version="3.13.0" />
