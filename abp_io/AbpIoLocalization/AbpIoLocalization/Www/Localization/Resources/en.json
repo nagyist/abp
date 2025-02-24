@@ -1874,7 +1874,7 @@
     "RcStableDifferenceExplanation2": "The Stable version is tested and officially supported for production use. It ensures reliability and compatibility.",
     "RcStableDifferenceExplanation3": "Use the RC version for testing and early adoption but use the Stable version for production deployment.",
     "AddToCalendar": "Add To Calendar",
-    "AddToGoogleCalendar": "Add To Google Calender",
+    "AddToGoogleCalendar": "Add To Google Calendar",
     "DownloadICSFile": "Download ICS File"
   }
 }
