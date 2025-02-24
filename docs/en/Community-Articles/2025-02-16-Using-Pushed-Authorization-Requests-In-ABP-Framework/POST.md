@@ -11,7 +11,7 @@ Let's examine the current `Code Flow` in the ABP Framework project.
 A typical ABP layered architecture usually includes the following projects:
 
 - `Acme.AuthServer`: OAuth 2.0 authorization server integrated with `OpenIddict`.
-- `Acme.AuthServer.Api.Host`: API project that uses `JWT Bearer` authentication scheme and authenticates through the `Acme.AuthServer` project.
+- `Acme.HttpApi.Host`: API project that uses the `JWT Bearer` authentication scheme and authenticates through the `Acme.AuthServer` project.
 - `Acme.Web`: An UI project configured with an `OpenID Connect` authentication scheme to authenticate through the `Acme.AuthServer` project.
 
 When we attempt to use `OpenID Connect` authentication in the `Acme.Web` project, it constructs an authorization request and redirects the browser to the `Acme.AuthServer` project.
@@ -64,7 +64,7 @@ code: LPjZ6C...
 grant_type: authorization_code
 ```
 
-At this point, the `Code Flow` authentication process is complete, and we can use the `access token` to access APIs on the `Acme.AuthServer.Api.Host` project.
+At this point, the `Code Flow` authentication process is complete, and we can use the `access token` to access APIs on the `Acme.HttpApi.Host` project.
 
 > The `Hybrid Flow` and `Implicit Flow` are similar to `Code Flow`. We'll focus on `Code Flow` in this discussion.
 
