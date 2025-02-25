@@ -48,7 +48,7 @@
     "ChangeType": "Change type",
     "ChangeTime": "Time",
     "NewValue": "New value",
-    "OriginalValue": "Original value",
+    "OriginalValue": "Old value",
     "PropertyName": "Property name",
     "PropertyTypeFullName": "Property Type Full Name",
     "Yes": "Yes",

@@ -1,8 +1,6 @@
 Built-in OpenAPI Document Generation with .NET 9 — No more SwaggerUI! 👋
 ========================================================================
 
-![Cover](cover.png)
-
 What’s Swagger UI?
 ------------------
 

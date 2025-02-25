@@ -89,7 +89,7 @@ public class AbpTabTagHelperService : AbpTagHelperService<AbpTabTagHelper>
         var id = TagHelper.Name;
         var attributes = GetTabContentAttributes(context, output);
 
-        var classAttributesAsString = attributes.Where(a => a.Name == "class").ToList().Select(a => a.Name).JoinAsString(" ");
+        var classAttributesAsString = attributes.Where(a => a.Name == "class").ToList().Select(a => a.Value).JoinAsString(" ");
         var otherAttributes = attributes.Where(a => a.Name != "class").ToList();
 
         var wrapper = new TagBuilder("div");

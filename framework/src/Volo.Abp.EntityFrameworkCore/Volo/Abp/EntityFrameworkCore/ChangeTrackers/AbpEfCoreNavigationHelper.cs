@@ -31,6 +31,14 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
 
     protected virtual void EntityEntryTrackedOrStateChanged(EntityEntry entityEntry)
     {
+        if (entityEntry.State is EntityState.Unchanged or EntityState.Modified)
+        {
+            foreach (var entry in EntityEntries.Values.Where(x => x.NavigationEntries.Any()))
+            {
+                entry.UpdateNavigationEntries();
+            }
+        }
+
         if (entityEntry.State != EntityState.Unchanged)
         {
             return;
@@ -187,6 +195,22 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
 
         var navigationEntryProperty = abpEntityEntry.NavigationEntries.ElementAtOrDefault(navigationEntryIndex.Value);
         return navigationEntryProperty != null && navigationEntryProperty.IsModified;
+    }
+
+    public virtual AbpNavigationEntry? GetNavigationEntry(EntityEntry entityEntry, int navigationEntryIndex)
+    {
+        var entryId = GetEntityEntryIdentity(entityEntry);
+        if (entryId == null)
+        {
+            return null;
+        }
+
+        if (!EntityEntries.TryGetValue(entryId, out var abpEntityEntry))
+        {
+            return null;
+        }
+
+        return abpEntityEntry.NavigationEntries.ElementAtOrDefault(navigationEntryIndex);
     }
 
     protected virtual string? GetEntityEntryIdentity(EntityEntry entityEntry)

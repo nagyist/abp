@@ -56,7 +56,6 @@ public class MongoDbContextEventOutbox<TMongoDbContext> : IMongoDbContextEventOu
             .WhereIf(transformedFilter != null, transformedFilter!)
             .OrderBy(x => x.CreationTime)
             .Take(maxCount)
-            .As<IMongoQueryable<OutgoingEventRecord>>()
             .ToListAsync(cancellationToken: cancellationToken);
 
         return outgoingEventRecords

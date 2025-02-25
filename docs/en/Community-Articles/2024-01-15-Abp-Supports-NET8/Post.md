@@ -1,5 +1,3 @@
-![cover](cover.png)
-
 # ABP Now Supports .NET 8
 
 Recently we have published ABP v8.0. With this version [the ABP Framework](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyCompanyName.MyProjectName.Web.csproj#L6) and ABP Commercial both supports for .NET 8, aligning itself with the latest enhancements and new features of the ASP.NET's new version 8. 

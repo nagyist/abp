@@ -1,5 +1,32 @@
 [
   {
+    "version": "9.0.5",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.0.6"
+    }
+  },
+  {
+    "version": "9.0.4",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.0.5"
+    }
+  },
+  {
+    "version": "9.0.3",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.0.4"
+    }
+  },
+  {
     "version": "9.0.2",
     "releaseDate": "",
     "type": "stable",

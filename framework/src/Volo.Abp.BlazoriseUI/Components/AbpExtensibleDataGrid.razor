@@ -22,7 +22,7 @@
     <EmptyTemplate>
         <Row Class="w-100 align-items-center" Style="height: 150px;">
             <Column>
-                <Heading Size="HeadingSize.Is4" TextAlignment="TextAlignment.Center">No data available</Heading>
+                <Heading Size="HeadingSize.Is4" TextAlignment="TextAlignment.Center">@UiLocalizer["NoDataAvailableInDatatable"]</Heading>
             </Column>
         </Row>
     </EmptyTemplate>
@@ -119,7 +119,7 @@
                         }
                         else
                         {
-                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" SortField="@column.PropertyName" Width="@column.Width" Caption="@column.Title" Displayable="column.Visible">
+                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" SortField="@column.PropertyName" Width="@column.Width" Caption="@column.Title" Displayable="column.Visible" Sortable="@column.Sortable">
                                 <DisplayTemplate>
                                     @{
                                         var entity = context as IHasExtraProperties;

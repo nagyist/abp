@@ -155,6 +155,7 @@ $projects = (
     "framework/src/Volo.Abp.BlobStoring.Minio",
     "framework/src/Volo.Abp.BlobStoring.Aws",
     "framework/src/Volo.Abp.BlobStoring.Google",
+    "framework/src/Volo.Abp.BlobStoring.Bunny",
     "framework/src/Volo.Abp.Caching",
     "framework/src/Volo.Abp.Caching.StackExchangeRedis",
     "framework/src/Volo.Abp.Castle.Core",

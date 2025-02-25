@@ -65,6 +65,7 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                     .SetDeviceAuthorizationEndpointUris("device")
                     .SetIntrospectionEndpointUris("connect/introspect")
                     .SetEndSessionEndpointUris("connect/endsession")
+                    .SetPushedAuthorizationEndpointUris("connect/par")
                     .SetRevocationEndpointUris("connect/revocat")
                     .SetTokenEndpointUris("connect/token")
                     .SetUserInfoEndpointUris("connect/userinfo")
