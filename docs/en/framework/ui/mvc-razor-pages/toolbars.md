@@ -8,11 +8,25 @@ There is only one **standard toolbar** named "Main" (defined as a constant: `Sta
 
 In the screenshot above, there are two items added to the main toolbar: Language switch component & user menu. You can add your own items here.
 
-Also, [LeptonX Lite Theme](../../../ui-themes/lepton-x-lite/asp-net-core.md) has 2 different toolbars for desktop and mobile views which defined as constants: `LeptonXLiteToolbars.Main`, `LeptonXLiteToolbars.MainMobile`.
+Also, [LeptonX Lite Theme](../../../ui-themes/lepton-x-lite/asp-net-core.md) and [LeptonX Theme](../../../ui-themes/lepton-x/mvc.md) has 2 different toolbars for desktop and mobile views which defined as constants.
+
+**LeptonX Lite Theme**
+
+- `LeptonXLiteToolbars.Main`
+- `LeptonXLiteToolbars.MainMobile`
 
 | LeptonXLiteToolbars.Main | LeptonXLiteToolbars.MainMobile |
 | :---: | :---: |
 | ![leptonx](../../../images/leptonxlite-toolbar-main-example.png) | ![leptonx](../../../images/leptonxlite-toolbar-mainmobile-example.png) |
+
+**LeptonX Theme**
+
+- `LeptonXToolbars.Main`
+- `LeptonXToolbars.MainMobile`
+
+| LeptonXToolbars.Main | LeptonXToolbars.MainMobile |
+| :---: | :---: |
+| ![leptonx](../../../images/leptonx-toolbar-main-example.png) | ![leptonx](../../../images/leptonx-toolbar-mainmobile-example.png) |
 
 ## Example: Add a Notification Icon
 
