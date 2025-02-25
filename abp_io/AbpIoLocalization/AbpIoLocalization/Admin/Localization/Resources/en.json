@@ -689,7 +689,7 @@
     "AllowPrivateQuestion": "Allow Private Question",
     "Permission:Campaigns": "Campaigns",
     "Permission:Licenses": "License Settings",
-    "BlockUserPolicy": "Block User Policy",
-    "Permission:BlockUserPolicy": "Block User Policy"
+    "BlockUserPolicy": "User Block Policies",
+    "Permission:BlockUserPolicy": "User Block Policy"
   }
 }
