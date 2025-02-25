@@ -79,7 +79,7 @@ OAuth 2.0 defined `Pushed Authorization Requests (PAR)` to address these issues.
 
 ## Pushed Authorization Requests (PAR)
 
-[OpenIdDict 6.1.0](https://documentation.openiddict.com/configuration/pushed-authorization-requests) started supporting `Pushed Authorization Requests (PAR)`. The ABP Framework promptly upgraded its `OpenIdDict` version and added PAR configuration in the [Volo.OpenIddict.Pro module](https://abp.io/modules/Volo.OpenIddict.Pro).
+[OpenIdDict 6.1.0](https://documentation.openiddict.com/configuration/pushed-authorization-requests) started supporting `Pushed Authorization Requests (PAR)`. The ABP Framework(`>=9.2.0`) promptly upgraded its `OpenIddict` version and added PAR configuration in the [Volo.OpenIddict.Pro module](https://abp.io/modules/Volo.OpenIddict.Pro).
 
 You can configure `Pushed Authorization Requests (PAR)` when `creating/updating` an `Application`.
 
