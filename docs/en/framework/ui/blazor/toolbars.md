@@ -14,6 +14,8 @@ Also, [LeptonX Lite Theme](../../../ui-themes/lepton-x-lite/blazor.md) has 2 dif
 | :---: | :---: |
 | ![leptonx](../../../images/leptonxlite-toolbar-main-example.png) | ![leptonx](../../../images/leptonxlite-toolbar-mainmobile-example.png) |
 
+Also, [LeptonX Theme](../../../ui-themes/lepton-x/blazor.md) has 2 different toolbars for desktop and mobile views which defined as constants: `LeptonXToolbars.Main`,  `LeptonXToolbars.MainMobile`.
+
 ## Example: Add a Notification Icon
 
 In this example, we will add a **notification (bell) icon** to the left of the language switch item. A item in the toolbar should be a **Razor Component**. So, first, create a new razor component in your project (the location of the component doesn't matter):
