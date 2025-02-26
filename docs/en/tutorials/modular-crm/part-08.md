@@ -37,7 +37,7 @@ In this section, we will create an application service in the main application's
 
 ### Defining the Reporting Service Interface
 
-We will define the `IOrderReportingAppService` interface in the `ModularCrm.Application.Contracts` project of the main application's .NET solution.
+We will define the `IOrderReportingAppService` interface in the main application's .NET solution.
 
 #### Adding `ModularCrm.Ordering.Contracts` Package Reference
 
