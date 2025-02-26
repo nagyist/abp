@@ -784,9 +784,13 @@ var abp = abp || {};
     };
 
     abp.clock.normalize = function (date) {
+        if (!date || Object.prototype.toString.call(date) !== '[object Date]' || isNaN(date)) {
+            return date;
+        }
+
         var kind = abp.clock.kind;
 
-        if (kind === 'Unspecified') {
+        if (!kind || kind === 'Unspecified') {
             return date;
         }
 
