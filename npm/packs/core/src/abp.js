@@ -752,8 +752,8 @@ var abp = abp || {};
         return abp.clock.kind === 'Utc';
     };
 
-    // Normalize Date object or date string that will be sent to server
-    abp.clock.normalize = function (date) {
+    // Normalize Date object or date string to standard string format that will be sent to server
+    abp.clock.normalizeToString = function (date) {
         if (!date) {
             return date;
         }
@@ -787,8 +787,8 @@ var abp = abp || {};
                 padMilliseconds(dateObj.getMilliseconds());
     };
 
-    // Normalize date string getting from server to Local
-    abp.clock.normalizeToLocaleDate = function (dateString) {
+    // Normalize date string to locale date string that will be displayed to user
+    abp.clock.normalizeToLocaleString = function (dateString) {
         if (!dateString) {
             return dateString;
         }
