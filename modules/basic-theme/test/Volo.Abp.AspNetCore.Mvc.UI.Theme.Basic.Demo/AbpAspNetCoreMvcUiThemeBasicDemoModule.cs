@@ -55,7 +55,7 @@ public class AbpAspNetCoreMvcUiThemeBasicDemoModule : AbpModule
             app.UseDeveloperExceptionPage();
         }
 
-        app.MapAbpStaticAssets();
+        app.UseStatic();
         app.UseRouting();
         app.UseConfiguredEndpoints();
     }
