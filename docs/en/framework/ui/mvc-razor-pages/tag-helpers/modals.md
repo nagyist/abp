@@ -9,7 +9,7 @@
 Basic usage:
 
 ````xml
-<abp-button button-type="Primary" data-toggle="modal" data-target="#myModal">Launch modal</abp-button>
+<abp-button button-type="Primary" data-bs-toggle="modal" data-bs-target="#myModal">Launch modal</abp-button>
 
 <abp-modal centered="true" scrollable="true" size="Large" id="myModal">
    <abp-modal-header title="Modal title"></abp-modal-header>

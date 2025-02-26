@@ -2,8 +2,6 @@
 
 In this article, I will show you how to integrate and use the [OpenAI API](https://github.com/openai/openai-dotnet?tab=readme-ov-file#getting-started) with the [ABP Framework](https://abp.io/). We will explore step-by-step how these technologies can work together to enhance your application with powerful AI capabilities, such as natural language processing, image generation, and more.
 
-![cover-image](cover-image.png)
-
 ## Creating an ABP Project
 
 To begin integrating OpenAI API with ABP Framework, you first need to create an ABP project. Follow these steps to create and set up your ABP project:
@@ -61,6 +59,8 @@ dotnet add package Microsoft.Extensions.AI.OpenAI --prerelease
 ```
 
 > Replace the value of the `Key` with your OpenAI API key.
+
+> **Important Security Note**: Storing sensitive information like API keys in `appsettings.json` is not recommended due to security concerns. Please refer to the [official Microsoft documentation](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) for secure secret management best practices.
 
 Next, add the following code to the `ConfigureServices` method in `OpenAIIntegrationBlazorModule`:
 

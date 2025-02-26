@@ -12,6 +12,11 @@ ABP provides an entity caching system that works on top of the [distributed cach
 ```csharp
 public class Product : AggregateRoot<Guid>
 {
+    public Product(Guid id)
+    {
+        Id = id;
+    }
+
     public string Name { get; set; }
     public string Description { get; set; }
     public float Price { get; set; }

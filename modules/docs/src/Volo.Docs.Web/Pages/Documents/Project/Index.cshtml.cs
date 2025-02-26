@@ -131,6 +131,12 @@ namespace Volo.Docs.Pages.Documents.Project
                 return Redirect(decodedUrl);
             }
 
+            var redirectUrl = _uiOptions.GetRedirectUrlIfNeeded(displayUrl);
+            if (redirectUrl != null)
+            {
+                return RedirectPermanent(redirectUrl);
+            }
+
             return await SetPageAsync();
         }
 
