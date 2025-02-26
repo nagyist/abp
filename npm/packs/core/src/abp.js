@@ -765,7 +765,7 @@ var abp = abp || {};
     };
 
     var toUtc = function (date) {
-        return Date.UTC(
+        return new Date(Date.UTC(
             date.getUTCFullYear(),
             date.getUTCMonth(),
             date.getUTCDate(),
@@ -773,7 +773,7 @@ var abp = abp || {};
             date.getUTCMinutes(),
             date.getUTCSeconds(),
             date.getUTCMilliseconds()
-        );
+        ));
     };
 
     abp.clock.now = function () {
@@ -798,6 +798,25 @@ var abp = abp || {};
             return toUtc(date);
         }
     };
+
+    abp.clock.normalizeString = function (dateString) {
+        var date = abp.clock.normalize(new Date(dateString));
+
+        var kind = abp.clock.kind;
+
+        if(kind === 'Local' || kind === 'Unspecified'){
+            return date.getFullYear() + "-" + 
+            String(date.getMonth() + 1).padStart(2, "0") + "-" + 
+            String(date.getDate()).padStart(2, "0") + "T" + 
+            String(date.getHours()).padStart(2, "0") + ":" + 
+            String(date.getMinutes()).padStart(2, "0") + ":" + 
+            String(date.getSeconds()).padStart(2, "0") + ".000";
+        }
+
+        if(kind === 'Utc'){
+            return date.toISOString();
+        }
+    }
 
     /* FEATURES *************************************************/
 
