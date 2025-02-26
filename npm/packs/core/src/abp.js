@@ -797,25 +797,44 @@ var abp = abp || {};
         if (kind === 'Utc') {
             return toUtc(date);
         }
+
+        return date;
     };
 
     abp.clock.normalizeString = function (dateString) {
-        var date = abp.clock.normalize(new Date(dateString));
-
-        var kind = abp.clock.kind;
-
-        if(kind === 'Local' || kind === 'Unspecified'){
-            return date.getFullYear() + "-" + 
-            String(date.getMonth() + 1).padStart(2, "0") + "-" + 
-            String(date.getDate()).padStart(2, "0") + "T" + 
-            String(date.getHours()).padStart(2, "0") + ":" + 
-            String(date.getMinutes()).padStart(2, "0") + ":" + 
-            String(date.getSeconds()).padStart(2, "0") + ".000";
+        if (!dateString) {
+            return dateString;
         }
 
-        if(kind === 'Utc'){
+        var date = new Date(dateString);
+        if (isNaN(date)) {
+            return dateString;
+        }
+
+        date = abp.clock.normalize(date);
+
+        if(abp.clock.kind === 'Utc'){
             return date.toISOString();
         }
+
+        function padZero(num) {
+            return num < 10 ? '0' + num : num;
+        }
+
+        function padMilliseconds(num) {
+            if (num < 10) return '00' + num;
+            if (num < 100) return '0' + num;
+            return num;
+        }
+        
+        // yyyy-MM-ddTHH:mm:ss.SSS
+        return date.getFullYear() + '-' +
+                padZero(date.getMonth() + 1) + '-' +
+                padZero(date.getDate()) + 'T' +
+                padZero(date.getHours()) + ':' +
+                padZero(date.getMinutes()) + ':' +
+                padZero(date.getSeconds()) + '.' +
+                padMilliseconds(date.getMilliseconds());
     }
 
     /* FEATURES *************************************************/
