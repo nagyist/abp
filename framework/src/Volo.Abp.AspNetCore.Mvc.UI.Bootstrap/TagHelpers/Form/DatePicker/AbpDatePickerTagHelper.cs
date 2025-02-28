@@ -9,7 +9,10 @@ public class AbpDatePickerTagHelper : AbpDatePickerBaseTagHelper<AbpDatePickerTa
 {
     public ModelExpression? AspFor { get; set; }
     
-    public AbpDatePickerTagHelper(AbpDatePickerTagHelperService service, IOptions<AbpDatePickerOptions> options) : base(service, options)
+    public AbpDatePickerTagHelper(
+        AbpDatePickerTagHelperService service,
+        IOptionsFactory<AbpDatePickerOptions> optionsFactory)
+        : base(service, optionsFactory)
     {
     }
 }

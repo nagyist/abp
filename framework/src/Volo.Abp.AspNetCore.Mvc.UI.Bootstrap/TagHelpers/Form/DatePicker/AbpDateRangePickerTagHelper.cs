@@ -11,8 +11,10 @@ public class AbpDateRangePickerTagHelper : AbpDatePickerBaseTagHelper<AbpDateRan
 
     public ModelExpression? AspForEnd { get; set; }
 
-    public AbpDateRangePickerTagHelper(AbpDateRangePickerTagHelperService tagHelperService, IOptions<AbpDatePickerOptions> options) :
-        base(tagHelperService, options)
+    public AbpDateRangePickerTagHelper(
+        AbpDateRangePickerTagHelperService service,
+        IOptionsFactory<AbpDatePickerOptions> optionsFactory)
+        : base(service, optionsFactory)
     {
     }
 }

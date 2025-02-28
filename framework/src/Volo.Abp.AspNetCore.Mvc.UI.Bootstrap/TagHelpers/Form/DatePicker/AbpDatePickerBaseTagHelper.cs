@@ -46,9 +46,9 @@ public abstract class
 
     public bool AddMarginBottomClass  { get; set; } = true;
 
-    protected AbpDatePickerBaseTagHelper(AbpDatePickerBaseTagHelperService<TTagHelper> service, IOptions<AbpDatePickerOptions> options) : base(service)
+    protected AbpDatePickerBaseTagHelper(AbpDatePickerBaseTagHelperService<TTagHelper> service, IOptionsFactory<AbpDatePickerOptions> optionsFactory) : base(service)
     {
-        _abpDatePickerOptionsImplementation = options.Value;
+        _abpDatePickerOptionsImplementation = optionsFactory.Create(string.Empty);
     }
 
     public void SetDatePickerOptions(IAbpDatePickerOptions options)
