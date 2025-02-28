@@ -17,6 +17,6 @@
     "SelectYourOrganization": "Select your organization",
     "PleaseSelectOrganization": "Please select an organization to continue",
     "Continue": "Continue",
-    "CaptchaExplanation": "Calculate the given mathematical expression and enter the correct answer."
+    "CaptchaExplanation": "Calculate the below mathematical expression and enter the answer."
   }
 }
