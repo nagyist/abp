@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
@@ -23,15 +25,18 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
     protected MenuItemManager MenuManager { get; }
     protected IMenuItemRepository MenuItemRepository { get; }
     protected IPageRepository PageRepository { get; }
+    protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
 
     public MenuItemAdminAppService(
         MenuItemManager menuManager,
         IMenuItemRepository menuRepository,
-        IPageRepository pageRepository)
+        IPageRepository pageRepository, 
+        IPermissionDefinitionManager permissionDefinitionManager)
     {
         MenuManager = menuManager;
         MenuItemRepository = menuRepository;
         PageRepository = pageRepository;
+        PermissionDefinitionManager = permissionDefinitionManager;
     }
 
     public virtual async Task<ListResultDto<MenuItemDto>> GetListAsync()
@@ -70,7 +75,8 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
                 input.Target,
                 input.ElementId,
                 input.CssClass,
-                CurrentTenant.Id
+                CurrentTenant.Id,
+                input.RequiredPermissionName
             );
 
         if (input.PageId.HasValue)
@@ -103,6 +109,7 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
         menuItem.Target = input.Target;
         menuItem.ElementId = input.ElementId;
         menuItem.CssClass = input.CssClass;
+        menuItem.RequiredPermissionName = input.RequiredPermissionName;
         menuItem.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         input.MapExtraPropertiesTo(menuItem);
         await MenuItemRepository.UpdateAsync(menuItem);
@@ -136,6 +143,23 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
         return new PagedResultDto<PageLookupDto>(
             count,
             ObjectMapper.Map<List<Page>, List<PageLookupDto>>(pages)
+        );
+    }
+    
+    public virtual async Task<ListResultDto<PermissionLookupDto>> GetPermissionLookupAsync(PermissionLookupInputDto inputDto)
+    {
+        var permissions = await PermissionDefinitionManager.GetPermissionsAsync();
+
+        var permissionLookupDtos= permissions
+            .WhereIf(!inputDto.Filter.IsNullOrWhiteSpace(), p => p.Name.Contains(inputDto.Filter, StringComparison.OrdinalIgnoreCase))
+            .Select(x => new PermissionLookupDto
+        {
+            Name = x.Name,
+            DisplayName = x.DisplayName.Localize(StringLocalizerFactory)
+        }).ToList();
+        
+        return new ListResultDto<PermissionLookupDto>(
+            permissionLookupDtos
         );
     }
 }

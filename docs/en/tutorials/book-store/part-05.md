@@ -420,6 +420,8 @@ Add the following code block to the end of the `Books.razor` file:
 {
     public Books() // Constructor
     {
+        LocalizationResource = typeof(BookStoreResource);
+        
         CreatePolicyName = BookStorePermissions.Books.Create;
         UpdatePolicyName = BookStorePermissions.Books.Edit;
         DeletePolicyName = BookStorePermissions.Books.Delete;
@@ -509,14 +511,11 @@ var bookStoreMenu = new ApplicationMenuItem(
 context.Menu.AddItem(bookStoreMenu);
 
 //CHECK the PERMISSION
-if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
-{
-    bookStoreMenu.AddItem(new ApplicationMenuItem(
-        "BooksStore.Books",
-        l["Menu:Books"],
-        url: "/books"
-    ));
-}
+bookStoreMenu.AddItem(new ApplicationMenuItem(
+    "BooksStore.Books",
+    l["Menu:Books"],
+    url: "/books"
+).RequirePermissions(BookStorePermissions.Books.Default));
 ````
 
 You also need to add `async` keyword to the `ConfigureMenuAsync` method and re-arrange the return value. The final `ConfigureMainMenuAsync` method should be the following:
@@ -545,14 +544,11 @@ private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
     context.Menu.AddItem(bookStoreMenu);
 
     //CHECK the PERMISSION
-    if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
-    {
-        bookStoreMenu.AddItem(new ApplicationMenuItem(
-            "BooksStore.Books",
-            l["Menu:Books"],
-            url: "/books"
-        ));
-    }
+    bookStoreMenu.AddItem(new ApplicationMenuItem(
+        "BooksStore.Books",
+        l["Menu:Books"],
+        url: "/books"
+    ).RequirePermissions(BookStorePermissions.Books.Default));
 }
 ````
 

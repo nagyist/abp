@@ -9,18 +9,18 @@
   [nzExpandedKeys]="expandedKeys"
   [nzExpandedIcon]="expandedIconTemplate?.template || defaultIconTemplate"
   (nzExpandChange)="onExpandedKeysChange($event)"
-  (nzCheckBoxChange)="onCheckboxChange($event)"
+  (nzCheckboxChange)="onCheckboxChange($event)"
   (nzOnDrop)="onDrop($event)"
   [nzNoAnimation]="noAnimation"
   (nzContextMenu)="dropdowns[$event.node?.key]?.toggle()"
-></nz-tree>
+/>
 <ng-template #treeTemplate let-node>
   <div
     [class.selected]="isNodeSelected(node)"
     [title]="node.title"
     (click)="onSelectedNodeChange(node)"
   >
-    <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: node }"></ng-container>
+    <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: node }" />
 
     <ng-template #nodeTemplate let-node>
       <div class="d-inline-flex align-items-center abp-ellipsis-inline">
@@ -29,7 +29,7 @@
             customNodeTemplate ? customNodeTemplate?.template : defaultNodeTemplate;
             context: { $implicit: node }
           "
-        ></ng-container>
+        />
       </div>
 
       @if (menu) {
@@ -48,7 +48,7 @@
             aria-hidden="true"
           ></i>
           <div ngbDropdownMenu>
-            <ng-template *ngTemplateOutlet="menu; context: { $implicit: node }"></ng-template>
+            <ng-template *ngTemplateOutlet="menu; context: { $implicit: node }" />
           </div>
         </div>
       }
@@ -62,8 +62,8 @@
 
 <ng-template #defaultIconTemplate let-node let-origin="origin">
   <i aria-hidden="true">
-    <ng-container *ngTemplateOutlet="node.isExpanded ? minusIcon : plusIcon"></ng-container
-  ></i>
+    <ng-container *ngTemplateOutlet="node.isExpanded ? minusIcon : plusIcon"
+  /></i>
 </ng-template>
 
 <ng-template #minusIcon>

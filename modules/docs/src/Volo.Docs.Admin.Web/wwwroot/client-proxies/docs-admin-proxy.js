@@ -68,6 +68,13 @@
       }, ajaxParams));
     };
 
+    volo.docs.admin.documentsAdmin.getProjects = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/docs/admin/documents/GetProjects',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
   })();
 
   // controller volo.docs.admin.projectsAdmin

@@ -72,11 +72,14 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
             var isAnyNodeOpenedInThisLevel = IsAnyNodeOpenedInThisLevel(node);
 
-            node.Items?.ForEach(innerNode =>
+            if (!node.IsLazyExpandable || isAnyNodeOpenedInThisLevel)
             {
-                content += GetParentNode(innerNode, isAnyNodeOpenedInThisLevel);
-            });
-
+                node.Items?.ForEach(innerNode =>
+                {
+                    content += GetParentNode(innerNode, isAnyNodeOpenedInThisLevel);
+                });
+            }
+            
             var result = node.IsEmpty ? content : GetLeafNode(node, content);
 
             return result;
@@ -119,6 +122,11 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             if (isNodeSelected)
             {
                 listItemCss += " selected-tree";
+            }
+
+            if (node.IsLazyExpandable)
+            {
+                listItemCss += " lazy-expand";
             }
 
             string listInnerItem;

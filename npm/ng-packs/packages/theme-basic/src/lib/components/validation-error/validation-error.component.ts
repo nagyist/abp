@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 import { Validation, ValidationErrorComponent as ErrorComponent } from '@ngx-validate/core';
 
 @Component({
+  standalone: false,
   selector: 'abp-validation-error',
   template: `
     @for (error of abpErrors; track $index) {
-      <div class="invalid-feedback" >
+      <div class="invalid-feedback">
         {{ error.message | abpLocalization: error.interpoliteParams }}
       </div>
     }

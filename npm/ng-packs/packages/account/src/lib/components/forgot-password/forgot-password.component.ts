@@ -4,6 +4,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { finalize } from 'rxjs/operators';
 
 @Component({
+  standalone: false,
   selector: 'abp-forgot-password',
   templateUrl: 'forgot-password.component.html',
 })
@@ -14,7 +15,10 @@ export class ForgotPasswordComponent {
 
   isEmailSent = false;
 
-  constructor(private fb: UntypedFormBuilder, private accountService: AccountService) {
+  constructor(
+    private fb: UntypedFormBuilder,
+    private accountService: AccountService,
+  ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
