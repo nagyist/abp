@@ -15,6 +15,7 @@ import {
 import { eAccountComponents } from '../../enums';
 
 @Component({
+  standalone: false,
   selector: 'abp-personal-settings-form',
   templateUrl: './personal-settings.component.html',
   exportAs: 'abpPersonalSettingsForm',

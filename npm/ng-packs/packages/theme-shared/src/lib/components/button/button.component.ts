@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'abp-button',
   template: `
     <button

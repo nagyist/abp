@@ -49,7 +49,7 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
                 u =>
                     u.Name.Contains(filter)
             )
-            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.Name) : sorting)
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.CreationTime) + " desc" : sorting)
             .As<IMongoQueryable<IdentityClaimType>>()
             .PageBy<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));

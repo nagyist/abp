@@ -1351,7 +1351,6 @@ Here's the complete code to create the book management CRUD page, that has been 
 @using Acme.BookStore.Localization
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Components.Web
-@inject IStringLocalizer<BookStoreResource> L
 @inject AbpBlazorMessageLocalizerHelper<BookStoreResource> LH
 @inherits AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
 
@@ -1396,7 +1395,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                                 Field="@nameof(BookDto.Type)"
                                 Caption="@L["Type"]">
                     <DisplayTemplate>
-                        @L[$"Enum:BookType.{context.Type}"]
+                        @L[$"Enum:BookType.{context.Type:D}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
@@ -1527,6 +1526,14 @@ Here's the complete code to create the book management CRUD page, that has been 
         </Form>
     </ModalContent>
 </Modal>
+
+@code
+{
+    public Books() // Constructor
+    {
+        LocalizationResource = typeof(BookStoreResource);
+    }
+}
 ````
 
 {{end}}

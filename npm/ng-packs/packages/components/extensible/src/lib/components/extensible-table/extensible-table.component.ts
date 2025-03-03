@@ -55,7 +55,6 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 @Component({
   exportAs: 'abpExtensibleTable',
   selector: 'abp-extensible-table',
-  standalone: true,
   imports: [
     AbpVisibleDirective,
     NgxDatatableModule,

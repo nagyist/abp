@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using OpenIddict.Abstractions;
@@ -26,24 +27,14 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
         TokenDbRepositoryFilterer = tokenDbRepositoryFilterer;
     }
 
-    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, CancellationToken cancellationToken = default)
+    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid? client, string status, string type, CancellationToken cancellationToken = default)
     {
         return await (await GetMongoQueryableAsync(cancellationToken))
-            .Where(x => x.Subject == subject && x.ApplicationId == client)
-            .ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
-    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, string status, CancellationToken cancellationToken = default)
-    {
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .Where(x => x.Subject == subject && x.Status == status && x.ApplicationId == client)
-            .ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
-    public virtual async Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, string status, string type, CancellationToken cancellationToken = default)
-    {
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .Where(x => x.Subject == subject && x.Status == status && x.Type == type && x.ApplicationId == client)
+            .WhereIf(!subject.IsNullOrWhiteSpace(), x => x.Subject == subject)
+            .WhereIf(client.HasValue, x => x.ApplicationId == client)
+            .WhereIf(!status.IsNullOrWhiteSpace(), x => x.Status == status)
+            .WhereIf(!type.IsNullOrWhiteSpace(), x => x.Type == type)
+            .As<IMongoQueryable<OpenIddictAuthorization>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -108,5 +99,54 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
 
         await DeleteManyAsync(authorizations, cancellationToken: cancellationToken);
         return authorizations.Count;
+    }
+
+    public async ValueTask<long> RevokeAsync(string subject, Guid? applicationId, string status, string type, CancellationToken cancellationToken = default)
+    {
+        var filter = Builders<OpenIddictAuthorization>.Filter.Empty;
+
+        if (!string.IsNullOrEmpty(subject))
+        {
+            filter &= Builders<OpenIddictAuthorization>.Filter.Where(authorization => authorization.Subject == subject);
+        }
+
+        if (applicationId.HasValue)
+        {
+            filter &= Builders<OpenIddictAuthorization>.Filter.Where(authorization => authorization.ApplicationId == applicationId);
+        }
+
+        if (!string.IsNullOrEmpty(status))
+        {
+            filter &= Builders<OpenIddictAuthorization>.Filter.Where(authorization => authorization.Status == status);
+        }
+
+        if (!string.IsNullOrEmpty(type))
+        {
+            filter &= Builders<OpenIddictAuthorization>.Filter.Where(authorization => authorization.Type == type);
+        }
+
+        return (await (await GetCollectionAsync(cancellationToken)).UpdateManyAsync(
+            filter           : filter,
+            update           : Builders<OpenIddictAuthorization>.Update.Set(authorization => authorization.Status, OpenIddictConstants.Statuses.Revoked),
+            options          : null,
+            cancellationToken: cancellationToken)).MatchedCount;
+    }
+
+    public virtual async ValueTask<long> RevokeByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken = default)
+    {
+        return (await (await GetCollectionAsync(cancellationToken)).UpdateManyAsync(
+            filter           : authorization => authorization.ApplicationId == applicationId,
+            update           : Builders<OpenIddictAuthorization>.Update.Set(authorization => authorization.Status, OpenIddictConstants.Statuses.Revoked),
+            options          : null,
+            cancellationToken: cancellationToken)).MatchedCount;
+    }
+
+    public virtual async ValueTask<long> RevokeBySubjectAsync(string subject, CancellationToken cancellationToken = default)
+    {
+        return (await (await GetCollectionAsync(cancellationToken)).UpdateManyAsync(
+            filter           : authorization => authorization.Subject == subject,
+            update           : Builders<OpenIddictAuthorization>.Update.Set(authorization => authorization.Status, OpenIddictConstants.Statuses.Revoked),
+            options          : null,
+            cancellationToken: cancellationToken)).MatchedCount;
     }
 }

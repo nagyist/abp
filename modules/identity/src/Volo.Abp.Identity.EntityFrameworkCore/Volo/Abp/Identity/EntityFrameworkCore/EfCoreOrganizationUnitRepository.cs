@@ -53,7 +53,7 @@ public class EfCoreOrganizationUnitRepository
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
-            .OrderBy(sorting.IsNullOrEmpty() ? nameof(OrganizationUnit.DisplayName) : sorting)
+            .OrderBy(sorting.IsNullOrEmpty() ? nameof(OrganizationUnit.CreationTime) + " desc" : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -82,6 +82,17 @@ public class EfCoreOrganizationUnitRepository
             select organizationUnit;
 
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<List<OrganizationUnit>> GetListByDisplayNamesAsync(
+        string[] displayNames,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .Where(ou => displayNames.Contains(ou.DisplayName))
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<OrganizationUnit> GetAsync(
