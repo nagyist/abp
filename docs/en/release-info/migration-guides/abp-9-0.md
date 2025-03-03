@@ -2,7 +2,7 @@
 
 This document is a guide for upgrading ABP v8.x solutions to ABP v9.0. There are some changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.
 
-> ABP has upgraded to .NET 9.0, so if you plan to use ABP 9.0, you’ll need to migrate your solutions to .NET 9.0. You can refer to the [Migrate from ASP.NET Core 8.0 to 9.0](https://learn.microsoft.com/en-us/aspnet/core/migration/80-90) documentation for guidance. However, ABP’s NuGet packages are compatible with both .NET 8 and .NET 9, allowing developers to continue using .NET 8 while still enjoying the latest features and improvements of the ABP Framework without upgrading their SDK.
+> ABP has upgraded to .NET 9.0, so if you plan to use ABP 9.0, you’ll need to migrate your solutions to .NET 9.0. You can refer to the [Migrate from ASP.NET Core 8.0 to 9.0](https://learn.microsoft.com/en-us/aspnet/core/migration/80-90) documentation for guidance.
 
 ## Open-Source (Framework)
 
