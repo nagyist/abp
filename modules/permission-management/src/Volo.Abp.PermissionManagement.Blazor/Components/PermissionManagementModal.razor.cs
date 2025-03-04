@@ -38,43 +38,7 @@ public partial class PermissionManagementModal
     
     protected string _permissionGroupSearchText;
 
-    protected bool GrantAll {
-        get {
-            if (_notGrantedPermissionCount == 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-        set {
-            if (_groups == null)
-            {
-                return;
-            }
-
-            _grantedPermissionCount = 0;
-            _notGrantedPermissionCount = 0;
-            Task.Run(()=>OnPermissionGroupSearchTextChangedAsync(null));
-
-            foreach (var permission in _allGroups.SelectMany(x => x.Permissions))
-            {
-                if (!IsDisabledPermission(permission))
-                {
-                    permission.IsGranted = value;
-
-                    if (value)
-                    {
-                        _grantedPermissionCount++;
-                    }
-                    else
-                    {
-                        _notGrantedPermissionCount++;
-                    }
-                }
-            }
-        }
-    }
+    protected bool GrantAll { get; set; }
 
     protected Dictionary<string, int> _permissionDepths = new Dictionary<string, int>();
 
@@ -98,6 +62,8 @@ public partial class PermissionManagementModal
             _groups = _allGroups.ToList();
 
             NormalizePermissionGroup();
+            
+            GrantAll = _notGrantedPermissionCount == 0;
 
             await InvokeAsync(_modal.Show);
         }
@@ -106,17 +72,57 @@ public partial class PermissionManagementModal
             await HandleErrorAsync(ex);
         }
     }
+
+    protected virtual async Task GrantAllAsync(bool grantAll)
+    {
+        GrantAll = grantAll;
+        
+        if (_allGroups == null)
+        {
+            return;
+        }
+        
+        _grantedPermissionCount = 0;
+        _notGrantedPermissionCount = 0;
+
+        await OnPermissionGroupSearchTextChangedAsync(string.Empty);
+        
+        foreach (var permission in _allGroups.SelectMany(x => x.Permissions))
+        {
+            if (IsDisabledPermission(permission))
+            {
+                continue;
+            }
+
+            permission.IsGranted = grantAll;
+
+            if (grantAll)
+            {
+                _grantedPermissionCount++;
+            }
+            else
+            {
+                _notGrantedPermissionCount++;
+            }
+        }
+        
+        await InvokeAsync(StateHasChanged);
+    }
     
-    protected void NormalizePermissionGroup()
+    protected virtual void NormalizePermissionGroup(bool checkDisabledPermissions = true)
     {
         _selectAllDisabled = _groups.All(IsPermissionGroupDisabled);
 
         _grantedPermissionCount = 0;
         _notGrantedPermissionCount = 0;
-        _disabledPermissions.Clear();
+        if (checkDisabledPermissions)
+        {
+            _disabledPermissions.Clear();
+        }
+       
         foreach (var permission in _groups.SelectMany(x => x.Permissions))
         {
-            if (permission.IsGranted && permission.GrantedProviders.All(x => x.ProviderName != _providerName))
+            if (checkDisabledPermissions && permission.IsGranted && permission.GrantedProviders.All(x => x.ProviderName != _providerName))
             {
                 _disabledPermissions.Add(permission);
                 continue;
@@ -269,19 +275,19 @@ public partial class PermissionManagementModal
         permission.IsGranted = value;
     }
 
-    protected PermissionGrantInfoDto GetParentPermission(PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
+    protected virtual PermissionGrantInfoDto GetParentPermission(PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
     {
         return permissionGroup.Permissions.First(x => x.Name == permission.ParentName);
     }
 
-    protected List<PermissionGrantInfoDto> GetChildPermissions(PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
+    protected virtual List<PermissionGrantInfoDto> GetChildPermissions(PermissionGroupDto permissionGroup, PermissionGrantInfoDto permission)
     {
         var childPermissions = new List<PermissionGrantInfoDto>();
         GetChildPermissions(childPermissions, permissionGroup.Permissions, permission);
         return childPermissions;
     }
 
-    protected void GetChildPermissions(List<PermissionGrantInfoDto> allChildPermissions, List<PermissionGrantInfoDto> permissions, PermissionGrantInfoDto permission)
+    protected virtual void GetChildPermissions(List<PermissionGrantInfoDto> allChildPermissions, List<PermissionGrantInfoDto> permissions, PermissionGrantInfoDto permission)
     {
         var childPermissions = permissions.Where(x => x.ParentName == permission.Name).ToList();
         if (childPermissions.Count == 0)
@@ -297,7 +303,7 @@ public partial class PermissionManagementModal
         }
     }
 
-    protected bool IsDisabledPermission(PermissionGrantInfoDto permissionGrantInfo)
+    protected virtual bool IsDisabledPermission(PermissionGrantInfoDto permissionGrantInfo)
     {
         return _disabledPermissions.Any(x => x == permissionGrantInfo);
     }
@@ -341,9 +347,9 @@ public partial class PermissionManagementModal
         }
         
         _permissionGroupSearchText = value;
-        _groups = _permissionGroupSearchText.IsNullOrWhiteSpace() ? _allGroups : _allGroups.Where(x => x.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase) || x.Permissions.Any(permission => permission.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase))).ToList();
+        _groups = _permissionGroupSearchText.IsNullOrWhiteSpace() ? _allGroups.ToList() : _allGroups.Where(x => x.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase) || x.Permissions.Any(permission => permission.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase))).ToList();
             
-        NormalizePermissionGroup();
+        NormalizePermissionGroup(false);
 
         await InvokeAsync(StateHasChanged);
     }

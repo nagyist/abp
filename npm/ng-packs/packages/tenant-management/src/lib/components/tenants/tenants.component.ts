@@ -13,6 +13,7 @@ import { finalize } from 'rxjs/operators';
 import { eTenantManagementComponents } from '../../enums/components';
 
 @Component({
+  standalone: false,
   selector: 'abp-tenants',
   templateUrl: './tenants.component.html',
   providers: [

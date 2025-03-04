@@ -232,7 +232,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         );
 
         return await query.IncludeDetails(includeDetails)
-            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.CreationTime) + " desc" : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

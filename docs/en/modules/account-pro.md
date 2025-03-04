@@ -362,3 +362,4 @@ This module doesn't define any additional distributed event. See the [standard d
 * [Impersonation](./account/impersonation.md)
 * [Linked Accounts](./account/linkedaccounts.md)
 * [Session Management](./account/session-management.md)
+* [Idle Session Timeout](./account/idle-session-timeout.md)

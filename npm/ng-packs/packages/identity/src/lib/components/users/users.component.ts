@@ -36,6 +36,7 @@ import { finalize, switchMap, tap } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
 
 @Component({
+  standalone: false,
   selector: 'abp-users',
   templateUrl: './users.component.html',
   providers: [

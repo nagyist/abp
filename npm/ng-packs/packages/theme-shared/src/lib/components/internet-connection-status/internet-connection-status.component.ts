@@ -4,7 +4,6 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'abp-internet-status',
-  standalone: true,
   imports: [LocalizationModule, NgbTooltip],
   template: `
     @if (!isOnline()) {
@@ -12,7 +11,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
         <i
           ngbTooltip="{{ 'AbpUi::InternetConnectionInfo' | abpLocalization }}"
           container="body"
-          placement="left-top" 
+          placement="left-top"
           class="fa fa-wifi text-blinking blink"
         >
         </i>

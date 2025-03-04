@@ -11,6 +11,7 @@ import { getRedirectUrl } from '../../utils/auth-utils';
 const { maxLength, required, email } = Validators;
 
 @Component({
+  standalone: false,
   selector: 'abp-register',
   templateUrl: './register.component.html',
 })

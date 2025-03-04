@@ -34,6 +34,7 @@ type PermissionWithGroupName = PermissionGrantInfoDto & {
 };
 
 @Component({
+  standalone: false,
   selector: 'abp-permission-management',
   templateUrl: './permission-management.component.html',
   exportAs: 'abpPermissionManagement',
@@ -163,6 +164,7 @@ export class PermissionManagementComponent
     let groups = this.permissionGroupSignal();
 
     if (!search) {
+      this.setSelectedGroup(groups[0]);
       return groups;
     }
 
@@ -175,9 +177,7 @@ export class PermissionManagementComponent
 
     if (groups.length) {
       this.setSelectedGroup(groups[0]);
-      this.disabledSelectAllInAllTabs = false;
     } else {
-      this.disabledSelectAllInAllTabs = true;
       this.selectedGroupPermissions = [];
     }
 
@@ -322,6 +322,9 @@ export class PermissionManagementComponent
     );
     const selectedPermissions = selectablePermissions.filter(per => per.isGranted);
     const element = document.querySelector('#select-all-in-this-tabs') as any;
+    if (!element) {
+      return;
+    }
 
     if (selectedPermissions.length === selectablePermissions.length) {
       element.indeterminate = false;
@@ -372,7 +375,7 @@ export class PermissionManagementComponent
   onClickSelectAll() {
     if (this.filter()) {
       this.filter.set('');
-    } 
+    }
 
     this.permissions = this.permissions.map(permission => ({
       ...permission,

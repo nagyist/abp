@@ -40,6 +40,8 @@ public class MenuItem : AuditedAggregateRoot<Guid>, IMultiTenant
     public Guid? PageId { get; protected set; }
 
     public Guid? TenantId { get; protected set; }
+    
+    public string RequiredPermissionName { get; set; }
 
     protected MenuItem()
     {
@@ -55,7 +57,8 @@ public class MenuItem : AuditedAggregateRoot<Guid>, IMultiTenant
                     [CanBeNull] string target = null,
                     [CanBeNull] string elementId = null,
                     [CanBeNull] string cssClass = null,
-                    [CanBeNull] Guid? tenantId = null)
+                    [CanBeNull] Guid? tenantId = null,
+                    [CanBeNull] string requiredPermissionName = null)
         : base(id)
     {
         SetDisplayName(displayName);
@@ -68,6 +71,7 @@ public class MenuItem : AuditedAggregateRoot<Guid>, IMultiTenant
         ElementId = elementId;
         CssClass = cssClass;
         TenantId = tenantId;
+        RequiredPermissionName = requiredPermissionName;
     }
 
     public void SetDisplayName([NotNull] string displayName)

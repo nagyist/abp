@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({
+  standalone: false,
   selector: 'abp-languages',
   template: `
     @if (((dropdownLanguages$ | async)?.length || 0) > 0) {

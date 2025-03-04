@@ -27,7 +27,6 @@ enum ValueTypes {
 }
 
 @Component({
-  standalone: true,
   selector: 'abp-feature-management',
   templateUrl: './feature-management.component.html',
   exportAs: 'abpFeatureManagement',
