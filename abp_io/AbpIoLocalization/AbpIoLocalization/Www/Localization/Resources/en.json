@@ -1875,6 +1875,8 @@
     "RcStableDifferenceExplanation3": "Use the RC version for testing and early adoption but use the Stable version for production deployment.",
     "AddToCalendar": "Add To Calendar",
     "AddToGoogleCalendar": "Add To Google Calendar",
-    "DownloadICSFile": "Download ICS File"
+    "DownloadICSFile": "Download ICS File",
+    "AddToAppleCalendar": "Add To Apple Calendar",
+    "AddToOutlookCalendar": "Add To Outlook Calendar"
   }
 }
