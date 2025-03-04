@@ -3,7 +3,7 @@
 @inherits AbpFeatureManagementComponentBase
 
 <Modal @ref="Modal" Closing="@ClosingModal">
-    <ModalContent Size="ModalSize.Large" Centered="true">
+    <ModalContent Size="ModalSize.Large">
         <ModalHeader>
             <ModalTitle>@L["Features"]@ProviderKeyDisplayName</ModalTitle>
             <CloseButton Clicked="CloseModal" />
@@ -14,7 +14,7 @@
         }
         else
         {
-            <ModalBody MaxHeight="50">
+            <ModalBody>
                 <Tabs TabPosition="TabPosition.Start" Pills="true" @bind-SelectedTab="@SelectedTabName">
                     <Items>
                         @foreach (var group in Groups)
