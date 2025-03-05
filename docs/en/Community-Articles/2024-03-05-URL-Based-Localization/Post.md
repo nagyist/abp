@@ -124,7 +124,7 @@ https://github.com/salihozkara/MultiLangRoute
 
 You can download the demo project at:
 
-[UrlLocalizationSampleProject.zip](UrlLocalizationSampleProject.zip)
+[UrlLocalizationSampleProject.zip](https://github.com/abpframework/abp/blob/634ff52fb07d0b1281640695dbeffccdc943ca53/docs/en/Community-Articles/2024-03-05-URL-Based-Localization/UrlLocalizationSampleProject.zip)
 
 
 
