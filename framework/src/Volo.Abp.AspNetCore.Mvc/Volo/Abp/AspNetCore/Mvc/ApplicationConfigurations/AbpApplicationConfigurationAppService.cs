@@ -4,7 +4,6 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -127,7 +126,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         return new CurrentTenantDto()
         {
             Id = CurrentTenant.Id,
-            Name = CurrentTenant.Name,
+            Name = CurrentTenant.Name!,
             IsAvailable = CurrentTenant.IsAvailable
         };
     }
@@ -158,7 +157,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             EmailVerified = _currentUser.EmailVerified,
             PhoneNumber = _currentUser.PhoneNumber,
             PhoneNumberVerified = _currentUser.PhoneNumberVerified,
-            Roles = _currentUser.Roles
+            Roles = _currentUser.Roles,
+            SessionId = _currentUser.FindSessionId()
         };
     }
 
@@ -258,38 +258,17 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
     private static CurrentCultureDto GetCurrentCultureInfo()
     {
-        return new CurrentCultureDto
-        {
-            Name = CultureInfo.CurrentUICulture.Name,
-            DisplayName = CultureInfo.CurrentUICulture.DisplayName,
-            EnglishName = CultureInfo.CurrentUICulture.EnglishName,
-            NativeName = CultureInfo.CurrentUICulture.NativeName,
-            IsRightToLeft = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft,
-            CultureName = CultureInfo.CurrentUICulture.TextInfo.CultureName,
-            TwoLetterIsoLanguageName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName,
-            ThreeLetterIsoLanguageName = CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName,
-            DateTimeFormat = new DateTimeFormatDto
-            {
-                CalendarAlgorithmType =
-                    CultureInfo.CurrentUICulture.DateTimeFormat.Calendar.AlgorithmType.ToString(),
-                DateTimeFormatLong = CultureInfo.CurrentUICulture.DateTimeFormat.LongDatePattern,
-                ShortDatePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern,
-                FullDateTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern,
-                DateSeparator = CultureInfo.CurrentUICulture.DateTimeFormat.DateSeparator,
-                ShortTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortTimePattern,
-                LongTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.LongTimePattern,
-            }
-        };
+        return CurrentCultureDto.Create();
     }
 
     private async Task<ApplicationSettingConfigurationDto> GetSettingConfigAsync()
     {
         var result = new ApplicationSettingConfigurationDto
         {
-            Values = new Dictionary<string, string>()
+            Values = new Dictionary<string, string?>()
         };
 
-        var settingDefinitions = _settingDefinitionManager.GetAll().Where(x => x.IsVisibleToClients);
+        var settingDefinitions = (await _settingDefinitionManager.GetAllAsync()).Where(x => x.IsVisibleToClients);
 
         var settingValues = await _settingProvider.GetAllAsync(settingDefinitions.Select(x => x.Name).ToArray());
 
@@ -346,7 +325,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
                 {
                     TimeZoneName = windowsTimeZoneId.IsNullOrWhiteSpace()
                         ? null
-                        : _timezoneProvider.WindowsToIana(windowsTimeZoneId)
+                        : _timezoneProvider.WindowsToIana(windowsTimeZoneId!)
                 }
             }
         };
@@ -356,7 +335,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     {
         return new ClockDto
         {
-            Kind = Enum.GetName(typeof(DateTimeKind), _abpClockOptions.Kind)
+            Kind = Enum.GetName(typeof(DateTimeKind), _abpClockOptions.Kind)!
         };
     }
 }

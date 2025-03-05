@@ -39,6 +39,7 @@
     "ExtraProperties": "خصائص اضافية",
     "MaxDuration": "الأعلى. مدة",
     "MinDuration": "دقيقة. مدة",
+    "MinMaxDuration": "المدة (الحد الأدنى - الحد الأقصى)",
     "{0}Milliseconds": "{0} مللي ثانية",
     "ExecutionTime": "زمن",
     "Parameters": "المعلمات",
@@ -66,6 +67,9 @@
     "EntityHistory": "تاريخ الكيان",
     "DaysAgoTitle": "{0} {1}.",
     "DaysAgoWithUserTitle": "{0} {1} بواسطة {2}.",
+    "MinutesAgo": "منذ {0} دقيقة",
+    "HoursAgo": "منذ {0} ساعة",
+    "DaysAgo": "منذ {0} يوم",
     "Created": "خلقت",
     "Updated": "محدث",
     "Deleted": "تم الحذف",
@@ -77,6 +81,7 @@
     "EndDate": "تاريخ الانتهاء",
     "Feature:AuditLoggingGroup": "تدوين التسجيل",
     "Feature:AuditLoggingEnable": "تمكين صفحة تسجيل التدقيق",
-    "Feature:AuditLoggingEnableDescription": "تفعيل صفحة تسجيل التدقيق في التطبيق."
+    "Feature:AuditLoggingEnableDescription": "تفعيل صفحة تسجيل التدقيق في التطبيق.",
+    "TenantId": "معرف المستأجر"
   }
 }

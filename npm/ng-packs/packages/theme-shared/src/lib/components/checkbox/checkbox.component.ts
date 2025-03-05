@@ -1,8 +1,9 @@
 import { AbstractNgModelComponent } from '@abp/ng.core';
-import { Component, EventEmitter, forwardRef, Injector, Input, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
+  standalone: false,
   selector: 'abp-checkbox',
   template: `
     <div class="mb-3">
@@ -16,9 +17,11 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
         (blur)="checkboxBlur.next()"
         (focus)="checkboxFocus.next()"
       />
-      <label *ngIf="label" [ngClass]="labelClass" [for]="checkboxId">
-        {{ label | abpLocalization }}
-      </label>
+      @if (label) {
+        <label [ngClass]="labelClass" [for]="checkboxId">
+          {{ label | abpLocalization }}
+        </label>
+      }
     </div>
   `,
   providers: [
@@ -43,8 +46,4 @@ export class FormCheckboxComponent extends AbstractNgModelComponent {
   @Input() checkboxReadonly = false;
   @Output() checkboxBlur = new EventEmitter<void>();
   @Output() checkboxFocus = new EventEmitter<void>();
-
-  constructor(injector: Injector) {
-    super(injector);
-  }
 }

@@ -17,6 +17,7 @@ const { required } = Validators;
 const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
 
 @Component({
+  standalone: false,
   selector: 'abp-change-password-form',
   templateUrl: './change-password.component.html',
   exportAs: 'abpChangePasswordForm',

@@ -8,6 +8,12 @@ export type StyleDefinition =
     }
   | string;
 
+export type ImportDefinition = {
+  path: string;
+  importName: string;
+  provider?: string;
+};
+
 export const styleMap = new Map<ThemeOptionsEnum, StyleDefinition[]>();
 
 styleMap.set(ThemeOptionsEnum.Basic, [
@@ -186,6 +192,16 @@ styleMap.set(ThemeOptionsEnum.LeptonX, [
     inject: false,
     bundleName: 'abp-bundle.rtl',
   },
+  {
+    input: 'node_modules/bootstrap-icons/font/bootstrap-icons.css',
+    inject: true,
+    bundleName: 'bootstrap-icons',
+  },
+  {
+    input: 'node_modules/ng-zorro-antd/tree/style/index.min.css',
+    inject: false,
+    bundleName: 'ng-zorro-antd-tree',
+  },
 ]);
 styleMap.set(ThemeOptionsEnum.LeptonXLite, [
   {
@@ -238,6 +254,55 @@ styleMap.set(ThemeOptionsEnum.LeptonXLite, [
     inject: false,
     bundleName: 'abp-bundle.rtl',
   },
+  {
+    input: 'node_modules/bootstrap-icons/font/bootstrap-icons.css',
+    inject: true,
+    bundleName: 'bootstrap-icons',
+  },
 ]);
 // the code written by Github co-pilot. thank go-pilot. You are the best sidekick.
 export const allStyles = Array.from(styleMap.values()).reduce((acc, val) => [...acc, ...val], []);
+
+export const importMap = new Map<ThemeOptionsEnum, ImportDefinition[]>();
+
+importMap.set(ThemeOptionsEnum.Basic, [
+  {
+    path: '@abp/ng.theme.basic',
+    importName: 'ThemeBasicModule',
+    provider: 'provideThemeBasicConfig',
+  },
+]);
+
+importMap.set(ThemeOptionsEnum.Lepton, [
+  {
+    path: '@volo/abp.ng.theme.lepton',
+    importName: 'ThemeLeptonModule',
+    provider: 'provideThemeLepton',
+  },
+]);
+
+importMap.set(ThemeOptionsEnum.LeptonXLite, [
+  {
+    path: '@abp/ng.theme.lepton-x',
+    importName: 'ThemeLeptonXModule.forRoot()',
+  },
+  {
+    path: '@abp/ng.theme.lepton-x/layouts',
+    importName: 'SideMenuLayoutModule.forRoot()',
+  },
+  {
+    path: '@abp/ng.theme.lepton-x/account',
+    importName: 'AccountLayoutModule.forRoot()',
+  },
+]);
+
+importMap.set(ThemeOptionsEnum.LeptonX, [
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x',
+    importName: 'ThemeLeptonXModule.forRoot()',
+  },
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x/layouts',
+    importName: 'SideMenuLayoutModule.forRoot()',
+  },
+]);

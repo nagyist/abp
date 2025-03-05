@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -19,19 +18,17 @@ public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<A
 
     }
 
-    protected override TagHelperOutput TagHelperOutput { get; set; }
+    protected override TagHelperOutput TagHelperOutput { get; set; } = default!;
 
-    [CanBeNull]
-    protected virtual InputTagHelper DateTagHelper { get; set; }
+    protected virtual InputTagHelper? DateTagHelper { get; set; }
 
-    [CanBeNull]
-    protected virtual TagHelperOutput DateTagHelperOutput { get; set; }
+    protected virtual TagHelperOutput? DateTagHelperOutput { get; set; }
     protected override string GetPropertyName()
     {
         return TagHelper.AspFor?.Name ?? string.Empty;
     }
 
-    protected override T GetAttributeAndModelExpression<T>(out ModelExpression modelExpression)
+    protected override T? GetAttributeAndModelExpression<T>(out ModelExpression? modelExpression) where T : class
     {
         modelExpression = TagHelper.AspFor;
         return modelExpression?.ModelExplorer.GetAttribute<T>();
@@ -63,26 +60,24 @@ public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<A
 
     protected override void AddBaseTagAttributes(TagHelperAttributeList attributes)
     {
-        if (TagHelper.AspFor != null && 
-            TagHelper.AspFor.Model != null && 
+        if (TagHelper.AspFor?.Model != null &&
             SupportedInputTypes.TryGetValue(TagHelper.AspFor.Metadata.ModelType, out var convertFunc))
         {
-            attributes.Add("data-date", convertFunc(TagHelper.AspFor.Model));
+            var convert = convertFunc(TagHelper.AspFor.Model);
+            if(!convert.IsNullOrWhiteSpace())
+            {
+                attributes.Add("data-date", convert);
+            }
         }
     }
 
-    protected override ModelExpression GetModelExpression()
+    protected override ModelExpression? GetModelExpression()
     {
         return TagHelper.AspFor;
     }
 
-    protected async override Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        return DateTagHelper != null ? await GetValidationAsHtmlByInputAsync(context, output, DateTagHelper) : string.Empty;
-    }
-
     protected override string GetExtraInputHtml(TagHelperContext context, TagHelperOutput output)
     {
-        return DateTagHelperOutput?.Render(Encoder);
+        return DateTagHelperOutput?.Render(Encoder)!;
     }
 }

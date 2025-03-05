@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions;
 
@@ -20,7 +19,7 @@ public class PermissionDefinitionContext : IPermissionDefinitionContext
 
     public virtual PermissionGroupDefinition AddGroup(
         string name,
-        ILocalizableString displayName = null)
+        ILocalizableString? displayName = null)
     {
         Check.NotNull(name, nameof(name));
 
@@ -45,7 +44,7 @@ public class PermissionDefinitionContext : IPermissionDefinitionContext
         return group;
     }
 
-    public virtual PermissionGroupDefinition GetGroupOrNull([NotNull] string name)
+    public virtual PermissionGroupDefinition? GetGroupOrNull([NotNull] string name)
     {
         Check.NotNull(name, nameof(name));
 
@@ -69,7 +68,7 @@ public class PermissionDefinitionContext : IPermissionDefinitionContext
         Groups.Remove(name);
     }
 
-    public virtual PermissionDefinition GetPermissionOrNull([NotNull] string name)
+    public virtual PermissionDefinition? GetPermissionOrNull([NotNull] string name)
     {
         Check.NotNull(name, nameof(name));
 

@@ -67,6 +67,9 @@
     "EntityHistory": "Entiteettihistoria",
     "DaysAgoTitle": "{0} {1}.",
     "DaysAgoWithUserTitle": "{0} {1} kirjoittanut {2}.",
+    "MinutesAgo": "{0} minuuttia sitten",
+    "HoursAgo": "{0} tuntia sitten",
+    "DaysAgo": "{0} päivää sitten",
     "Created": "Luotu",
     "Updated": "Päivitetty",
     "Deleted": "Poistettu",
@@ -78,6 +81,7 @@
     "EndDate": "Päättymispäivä",
     "Feature:AuditLoggingGroup": "Tarkastusten kirjaaminen",
     "Feature:AuditLoggingEnable": "Aktivoi auditointilokisivu",
-    "Feature:AuditLoggingEnableDescription": "Ota käyttöön tarkastuksen kirjaussivu sovelluksessa."
+    "Feature:AuditLoggingEnableDescription": "Ota käyttöön tarkastuksen kirjaussivu sovelluksessa.",
+    "TenantId": "Vuokralaisen tunnus"
   }
 }

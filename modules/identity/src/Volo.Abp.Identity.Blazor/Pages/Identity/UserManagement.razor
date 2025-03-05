@@ -130,9 +130,11 @@
                                         <Check TValue="bool" @bind-Checked="@NewEntity.IsActive">@L["DisplayName:IsActive"]</Check>
                                     </Field>
                                     <Field>
-                                        <Check TValue="bool" @bind-Checked="@NewEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
+                                        <Tooltip Text="@L["Description:LockoutEnabled"].Value" style="width: fit-content;" Placement="TooltipPlacement.Right" >
+                                            <Check TValue="bool" @bind-Checked="@NewEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"] <Icon Name="IconName.InfoCircle"/> </Check>
+                                        </Tooltip>
                                     </Field>
-                                    <ExtensionProperties TEntityType="IdentityUserCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH" />
+                                    <ExtensionProperties TEntityType="IdentityUserCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH" ModalType="ExtensionPropertyModalType.CreateModal" />
                                 </TabPanel>
                                 <TabPanel Name="Roles">
                                     @if (NewUserRoles != null)
@@ -151,7 +153,7 @@
                     </Validations>
                 </ModalBody>
                 <ModalFooter>
-                    <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                    <Button Color="Color.Primary" Outline Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
                     <SubmitButton Clicked="@CreateEntityAsync" />
                 </ModalFooter>
             </Form>
@@ -176,7 +178,10 @@
                         <Tabs @bind-SelectedTab="@EditModalSelectedTab">
                             <Items>
                                 <Tab Name="UserInformations">@L["UserInformations"]</Tab>
-                                <Tab Name="Roles">@L["Roles"]</Tab>
+                                @if (EditUserRoles != null && EditUserRoles.Any())
+                                {
+                                    <Tab Name="Roles">@L["Roles"]</Tab>
+                                }
                             </Items>
                             <Content>
                                 <TabPanel Name="UserInformations">
@@ -247,32 +252,40 @@
                                             </TextEdit>
                                         </Field>
                                     </Validation>
-                                    <Field>
-                                        <Check TValue="bool" @bind-Checked="EditingEntity.IsActive">@L["DisplayName:IsActive"]</Check>
-                                    </Field>
-                                    <Field>
-                                        <Check TValue="bool" @bind-Checked="EditingEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
-                                    </Field>
-                                    <ExtensionProperties TEntityType="IdentityUserUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH" />
-                                </TabPanel>
-                                <TabPanel Name="Roles">
-                                    @if (EditUserRoles != null)
+                                    @if (!IsEditCurrentUser)
                                     {
-                                        @foreach (var role in EditUserRoles)
-                                        {
-                                            <Field>
-                                                <input type="hidden" @bind-value="@role.Name" />
-                                                <Check TValue="bool" @bind-Checked="@role.IsAssigned">@role.Name</Check>
-                                            </Field>
-                                        }
+                                        <Field>
+                                            <Check TValue="bool" @bind-Checked="EditingEntity.IsActive">@L["DisplayName:IsActive"]</Check>
+                                        </Field>
                                     }
+                                    <Field>
+                                            <Tooltip Text="@L["Description:LockoutEnabled"].Value" style="width: fit-content;" Placement="TooltipPlacement.Right" >
+                                                <Check TValue="bool" @bind-Checked="EditingEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"] <Icon Name="IconName.InfoCircle"/> </Check>
+                                            </Tooltip>
+                                        </Field>
+                                    <ExtensionProperties TEntityType="IdentityUserUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH" ModalType="ExtensionPropertyModalType.EditModal" />
                                 </TabPanel>
+                                @if (EditUserRoles != null && EditUserRoles.Any())
+                                {
+                                    <TabPanel Name="Roles">
+                                        @if (EditUserRoles != null)
+                                        {
+                                            @foreach (var role in EditUserRoles)
+                                            {
+                                                <Field>
+                                                    <input type="hidden" @bind-value="@role.Name" />
+                                                    <Check TValue="bool" @bind-Checked="@role.IsAssigned">@role.Name</Check>
+                                                </Field>
+                                            }
+                                        }
+                                    </TabPanel>
+                                }
                             </Content>
                         </Tabs>
                     </Validations>
                 </ModalBody>
                 <ModalFooter>
-                    <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                    <Button Color="Color.Primary" Outline Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
                     <SubmitButton Clicked="@UpdateEntityAsync" />
                 </ModalFooter>
             </Form>

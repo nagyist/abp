@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.Guids;
@@ -21,8 +22,10 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         IOpenIddictScopeRepository repository,
         IUnitOfWorkManager unitOfWorkManager,
         IGuidGenerator guidGenerator,
-        AbpOpenIddictIdentifierConverter identifierConverter)
-        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter)
+        AbpOpenIddictIdentifierConverter identifierConverter,
+        IOpenIddictDbConcurrencyExceptionHandler concurrencyExceptionHandler,
+        IOptions<AbpOpenIddictStoreOptions> storeOptions)
+        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter, concurrencyExceptionHandler, storeOptions)
     {
 
     }
@@ -57,6 +60,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
        catch (AbpDbConcurrencyException e)
        {
            Logger.LogException(e);
+           await ConcurrencyExceptionHandler.HandleAsync(e);
            throw new OpenIddictExceptions.ConcurrencyException(e.Message, e.InnerException);
        }
    }
@@ -402,6 +406,7 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
         catch (AbpDbConcurrencyException e)
         {
             Logger.LogException(e);
+            await ConcurrencyExceptionHandler.HandleAsync(e);
             throw new OpenIddictExceptions.ConcurrencyException(e.Message, e.InnerException);
         }
 

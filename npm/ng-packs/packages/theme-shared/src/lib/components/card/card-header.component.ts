@@ -1,6 +1,7 @@
 import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'abp-card-header',
   template: `
     <div [ngClass]="cardHeaderClass" [ngStyle]="cardHeaderStyle">

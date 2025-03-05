@@ -24,6 +24,10 @@ public class AbpAuditingTestModule : AbpModule
         context.Services.AddAbpDbContext<AbpAuditingTestDbContext>(options =>
         {
             options.AddDefaultRepositories(true);
+            options.Entity<AppEntityWithNavigations>(opt =>
+            {
+                opt.DefaultWithDetailsFunc = q => q.Include(p => p.OneToOne).Include(p => p.OneToMany).Include(p => p.ManyToMany);
+            });
         });
 
         var sqliteConnection = CreateDatabaseAndGetConnection();
@@ -62,11 +66,11 @@ public class AbpAuditingTestModule : AbpModule
 
     private static SqliteConnection CreateDatabaseAndGetConnection()
     {
-        var connection = new SqliteConnection("Data Source=:memory:");
+        var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
         connection.Open();
 
         using (var context = new AbpAuditingTestDbContext(new DbContextOptionsBuilder<AbpAuditingTestDbContext>()
-            .UseSqlite(connection).Options))
+            .UseSqlite(connection).AddAbpDbContextOptionsExtension().Options))
         {
             context.GetService<IRelationalDatabaseCreator>().CreateTables();
         }

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Volo.Abp.Cli.Version;
 
-internal static class CommercialPackages
+static internal class CommercialPackages
 {
-    private static readonly HashSet<string> Packages = new()
+    private readonly static HashSet<string> Packages = new()
     {
         "volo.abp.suite"
         //other PRO packages can be added to this list...

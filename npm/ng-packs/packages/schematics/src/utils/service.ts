@@ -18,6 +18,7 @@ import {
   createTypeAdapter,
   createTypeParser,
   createTypesToImportsReducer,
+  getTypeForEnumList,
   removeTypeModifiers,
 } from './type';
 import { eBindingSourceId } from '../enums';
@@ -55,9 +56,12 @@ export function createControllerToServiceMapper({
 
 function getTypesWithoutIRemoteStreamContent(types: Record<string, Type>) {
   const newType = { ...types };
-  delete newType[VOLO_REMOTE_STREAM_CONTENT];
+  VOLO_REMOTE_STREAM_CONTENT.forEach(fileType => {
+    delete newType[fileType];
+  });
   return newType;
 }
+
 function sortMethods(methods: Method[]) {
   methods.sort((a, b) => (a.signature.name > b.signature.name ? 1 : -1));
 }
@@ -77,7 +81,19 @@ export function createActionToBodyMapper() {
   const adaptType = createTypeAdapter();
 
   return ({ httpMethod, parameters, returnValue, url }: Action) => {
-    const responseType = adaptType(returnValue.typeSimple);
+    let responseType = adaptType(returnValue.typeSimple);
+    if (responseType.includes('enum')) {
+      const type = returnValue.typeSimple.replace('enum', returnValue.type);
+
+      if (responseType === 'enum') {
+        responseType = adaptType(type);
+      }
+
+      if (responseType === 'enum[]') {
+        const normalizedType = getTypeForEnumList(type);
+        responseType = adaptType(normalizedType);
+      }
+    }
     const responseTypeWithNamespace = returnValue.typeSimple;
     const body = new Body({ method: httpMethod, responseType, url, responseTypeWithNamespace });
 
@@ -99,8 +115,19 @@ export function createActionToSignatureMapper() {
       ...action.parametersOnMethod,
       ...(versionParameter ? [versionParameter] : []),
     ];
+
     signature.parameters = parameters.map(p => {
-      const type = adaptType(p.typeSimple);
+      const isFormData = isRemoteStreamContent(p.type);
+      const isFormArray = isRemoteStreamContentArray(p.type);
+      if (isFormData || isFormArray) {
+        return new Property({ name: p.name, type: 'FormData' });
+      }
+
+      let type = adaptType(p.typeSimple);
+      if (p.typeSimple === 'enum' || p.typeSimple === '[enum]') {
+        type = adaptType(p.type);
+      }
+
       const parameter = new Property({ name: p.name, type });
       parameter.setDefault(p.defaultValue);
       parameter.setOptional(p.isOptional);
@@ -110,6 +137,14 @@ export function createActionToSignatureMapper() {
 
     return signature;
   };
+}
+
+export function isRemoteStreamContent(type: string) {
+  return VOLO_REMOTE_STREAM_CONTENT.some(x => x === type);
+}
+
+export function isRemoteStreamContentArray(type: string) {
+  return VOLO_REMOTE_STREAM_CONTENT.map(x => `${x}[]`).some(x => x === type);
 }
 
 function getMethodNameFromAction(action: Action): string {
@@ -166,7 +201,9 @@ function createActionToImportsReducer(
           parseGenerics(paramType)
             .toGenerics()
             .forEach(type => {
-              if (types[type]) acc.push({ type, isEnum: types[type].isEnum });
+              if (types[type]) {
+                acc.push({ type, isEnum: types[type].isEnum });
+              }
             }),
         );
 

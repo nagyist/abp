@@ -39,6 +39,7 @@
     "ExtraProperties": "Proprietà extra",
     "MaxDuration": "Max. Durata",
     "MinDuration": "Min. Durata",
+    "MinMaxDuration": "Durata (Min. - Max.)",
     "{0}Milliseconds": "{0} millisecondi",
     "ExecutionTime": "Orario",
     "Parameters": "Parametri",
@@ -66,6 +67,9 @@
     "EntityHistory": "Storia dell'entità",
     "DaysAgoTitle": "{0} {1}.",
     "DaysAgoWithUserTitle": "{0} {1} di {2}.",
+    "MinutesAgo": "{0} minuti fa",
+    "HoursAgo": "{0} ore fa",
+    "DaysAgo": "{0} giorni fa",
     "Created": "Creato",
     "Updated": "Aggiornato",
     "Deleted": "Eliminato",
@@ -77,6 +81,7 @@
     "EndDate": "Data di fine",
     "Feature:AuditLoggingGroup": "Registrazione di controllo",
     "Feature:AuditLoggingEnable": "Pagina di registrazione di controllo abilitata",
-    "Feature:AuditLoggingEnableDescription": "Abilita la pagina di registrazione dell'audit nell'applicazione."
+    "Feature:AuditLoggingEnableDescription": "Abilita la pagina di registrazione dell'audit nell'applicazione.",
+    "TenantId": "ID inquilino"
   }
 }

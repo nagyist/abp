@@ -39,10 +39,24 @@ public partial class SettingManagement
         {
             await contributor.ConfigureAsync(SettingComponentCreationContext);
         }
-
+        SettingComponentCreationContext.Normalize();
         SettingItemRenders.Clear();
 
-        SelectedGroup = GetNormalizedString(SettingComponentCreationContext.Groups.First().Id);
+        if (SettingComponentCreationContext.Groups.Any())
+        {
+            SelectedGroup = GetNormalizedString(SettingComponentCreationContext.Groups.First().Id);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Yield();
+            await InvokeAsync(StateHasChanged);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     protected virtual string GetNormalizedString(string value)

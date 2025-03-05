@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Nito.AsyncEx;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
@@ -17,15 +19,15 @@ namespace Volo.Blogging.Posts
         {
         }
 
-        public async Task<List<Post>> GetPostsByBlogId(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Post>> GetPostsByBlogId(Guid id, CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken)).Where(p => p.BlogId == id).OrderByDescending(p => p.CreationTime).ToListAsync(GetCancellationToken(cancellationToken));
+            return await (await GetQueryableAsync(cancellationToken)).Where(p => p.BlogId == id).OrderByDescending(p => p.CreationTime).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
 
-        public async Task<bool> IsPostUrlInUseAsync(Guid blogId, string url, Guid? excludingPostId = null, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> IsPostUrlInUseAsync(Guid blogId, string url, Guid? excludingPostId = null, CancellationToken cancellationToken = default)
         {
-            var query = (await GetMongoQueryableAsync(cancellationToken)).Where(p => blogId == p.BlogId && p.Url == url);
+            var query = (await GetQueryableAsync(cancellationToken)).Where(p => blogId == p.BlogId && p.Url == url);
 
             if (excludingPostId != null)
             {
@@ -35,9 +37,9 @@ namespace Volo.Blogging.Posts
             return await query.AnyAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<Post> GetPostByUrl(Guid blogId, string url, CancellationToken cancellationToken = default)
+        public virtual async Task<Post> GetPostByUrl(Guid blogId, string url, CancellationToken cancellationToken = default)
         {
-            var post = await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url, GetCancellationToken(cancellationToken));
+            var post = await (await GetQueryableAsync(cancellationToken)).FirstOrDefaultAsync(p => p.BlogId == blogId && p.Url == url, GetCancellationToken(cancellationToken));
 
             if (post == null)
             {
@@ -47,9 +49,9 @@ namespace Volo.Blogging.Posts
             return post;
         }
 
-        public async Task<List<Post>> GetOrderedList(Guid blogId, bool @descending = false, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Post>> GetOrderedList(Guid blogId, bool @descending = false, CancellationToken cancellationToken = default)
         {
-            var query =  (await GetMongoQueryableAsync(cancellationToken)).Where(x => x.BlogId == blogId);
+            var query =  (await GetQueryableAsync(cancellationToken)).Where(x => x.BlogId == blogId);
 
             if (!descending)
             {
@@ -57,6 +59,23 @@ namespace Volo.Blogging.Posts
             }
 
             return await query.OrderByDescending(x => x.CreationTime).ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<List<Post>> GetListByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+        {
+            var query = (await GetQueryableAsync(cancellationToken)).Where(x => x.CreatorId == userId)
+                .OrderByDescending(x => x.CreationTime);
+            
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<List<Post>> GetLatestBlogPostsAsync(Guid blogId, int count, CancellationToken cancellationToken = default)
+        {
+            var query = (await GetQueryableAsync(cancellationToken)).Where(x => x.BlogId == blogId)
+                .OrderByDescending(x => x.CreationTime)
+                .Take(count);
+            
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

@@ -6,25 +6,37 @@ import {
   IdentityUserService,
 } from '@abp/ng.identity/proxy';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import {Confirmation, ConfirmationService, eFormComponets, ToasterService} from '@abp/ng.theme.shared';
+import {
+  Confirmation,
+  ConfirmationService,
+  eFormComponets,
+  ToasterService,
+} from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 import {
   Component,
+  inject,
   Injector,
   OnInit,
   TemplateRef,
   TrackByFunction,
   ViewChild,
 } from '@angular/core';
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
 
 @Component({
+  standalone: false,
   selector: 'abp-users',
   templateUrl: './users.component.html',
   providers: [
@@ -36,6 +48,13 @@ import { eIdentityComponents } from '../../enums/components';
   ],
 })
 export class UsersComponent implements OnInit {
+  protected readonly list = inject(ListService<GetIdentityUsersInput>);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly service = inject(IdentityUserService);
+  protected readonly toasterService = inject(ToasterService);
+  private readonly fb = inject(UntypedFormBuilder);
+  private readonly injector = inject(Injector);
+
   data: PagedResultDto<IdentityUserDto> = { items: [], totalCount: 0 };
 
   @ViewChild('modalContent', { static: false })
@@ -60,8 +79,8 @@ export class UsersComponent implements OnInit {
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
   entityDisplayName: string;
-  
-  inputKey=eFormComponets.FormCheckboxComponent
+
+  inputKey = eFormComponets.FormCheckboxComponent;
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
@@ -72,15 +91,6 @@ export class UsersComponent implements OnInit {
   get roleGroups(): UntypedFormGroup[] {
     return ((this.form.get('roleNames') as UntypedFormArray)?.controls as UntypedFormGroup[]) || [];
   }
-
-  constructor(
-    public readonly list: ListService<GetIdentityUsersInput>,
-    protected confirmationService: ConfirmationService,
-    protected service: IdentityUserService,
-    private toasterService: ToasterService,
-    protected fb: UntypedFormBuilder,
-    protected injector: Injector,
-  ) {}
 
   ngOnInit() {
     this.hookToQuery();
@@ -158,6 +168,7 @@ export class UsersComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
+        this.toasterService.success('AbpUi::SavedSuccessfully');
         this.list.get();
       });
   }
@@ -170,7 +181,7 @@ export class UsersComponent implements OnInit {
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
           this.service.delete(id).subscribe(() => {
-            this.toasterService.success('AbpUi::SuccessfullyDeleted');
+            this.toasterService.success('AbpUi::DeletedSuccessfully');
             this.list.get();
           });
         }

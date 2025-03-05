@@ -29,7 +29,7 @@ public class ChannelPool : IChannelPool, ISingletonDependency
         Logger = NullLogger<ChannelPool>.Instance;
     }
 
-    public virtual IChannelAccessor Acquire(string channelName = null, string connectionName = null)
+    public virtual IChannelAccessor Acquire(string? channelName = null, string? connectionName = null)
     {
         CheckDisposed();
 
@@ -42,6 +42,18 @@ public class ChannelPool : IChannelPool, ISingletonDependency
 
         poolItem.Acquire();
 
+        if (poolItem.Channel.IsClosed)
+        {
+            poolItem.Dispose();
+            Channels.TryRemove(channelName, out _);
+            poolItem = Channels.GetOrAdd(
+                channelName,
+                _ => new ChannelPoolItem(CreateChannel(channelName, connectionName))
+            );
+            
+            poolItem.Acquire();
+        }
+
         return new ChannelAccessor(
             poolItem.Channel,
             channelName,
@@ -49,7 +61,7 @@ public class ChannelPool : IChannelPool, ISingletonDependency
         );
     }
 
-    protected virtual IModel CreateChannel(string channelName, string connectionName)
+    protected virtual IModel CreateChannel(string channelName, string? connectionName)
     {
         return ConnectionPool
             .Get(connectionName)

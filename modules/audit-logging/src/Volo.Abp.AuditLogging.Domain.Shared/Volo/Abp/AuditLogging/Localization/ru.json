@@ -39,6 +39,7 @@
     "ExtraProperties": "Дополнительные свойства",
     "MaxDuration": "Максимум. Продолжительность",
     "MinDuration": "Мин. Продолжительность",
+    "MinMaxDuration": "Продолжительность (Мин.-Макс.)",
     "{0}Milliseconds": "{0} миллисекунд",
     "ExecutionTime": "Время",
     "Parameters": "Параметры",
@@ -66,6 +67,9 @@
     "EntityHistory": "История объекта",
     "DaysAgoTitle": "{0} {1}.",
     "DaysAgoWithUserTitle": "{0} {1} от {2}.",
+    "MinutesAgo": "{0} минут назад",
+    "HoursAgo": "{0} часов назад",
+    "DaysAgo": "{0} дней назад",
     "Created": "Созданный",
     "Updated": "Обновлено",
     "Deleted": "Удалено",
@@ -77,6 +81,7 @@
     "EndDate": "Дата окончания",
     "Feature:AuditLoggingGroup": "Ведение журнала аудита",
     "Feature:AuditLoggingEnable": "Включенная страница ведения журнала аудита",
-    "Feature:AuditLoggingEnableDescription": "Включить страницу ведения журнала аудита в приложении."
+    "Feature:AuditLoggingEnableDescription": "Включить страницу ведения журнала аудита в приложении.",
+    "TenantId": "Идентификатор арендатора"
   }
 }

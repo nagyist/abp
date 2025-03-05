@@ -39,6 +39,7 @@
     "ExtraProperties": "額外屬性",
     "MaxDuration": "最大持續時間",
     "MinDuration": "最小持續時間",
+    "MinMaxDuration": "持續時間（最短-最長）",
     "{0}Milliseconds": "{0} 毫秒",
     "ExecutionTime": "時間",
     "Parameters": "參數",
@@ -66,6 +67,9 @@
     "EntityHistory": "實體歷史",
     "DaysAgoTitle": "{0} {1}.",
     "DaysAgoWithUserTitle": "{0} {1} 通過 {2}.",
+    "MinutesAgo": "{0}分鐘前",
+    "HoursAgo": "{0}小時前",
+    "DaysAgo": "{0}天前",
     "Created": "建立",
     "Updated": "更新",
     "Deleted": "已刪除",
@@ -77,6 +81,7 @@
     "EndDate": "結束時間",
     "Feature:AuditLoggingGroup": "審計日誌",
     "Feature:AuditLoggingEnable": "啟用審計日誌頁面",
-    "Feature:AuditLoggingEnableDescription": "在應用程序中啟用審計日誌頁面."
+    "Feature:AuditLoggingEnableDescription": "在應用程序中啟用審計日誌頁面.",
+    "TenantId": "租戶 ID"
   }
 }
