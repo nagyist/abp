@@ -255,6 +255,6 @@
     "MetaTwitterCard": "summary_large_image",
     "IPAddress": "IP Address",
     "LicenseBanner:InfoText": "Your license will <b>expire in {0} days.</b>",
-    "LicenseBanner:CallToAction": "Please <a href=\"https://www.abp.io/my-organizations\" class=\"text-decoration-underline\">extend your license.</a>"
+    "LicenseBanner:CallToAction": "Please <a href=\"/my-organizations/{0}\" class=\"text-decoration-underline\">extend your license.</a>"
   }
 }
